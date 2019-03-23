@@ -139,7 +139,7 @@ class PathHelper {
         let pathFragments = [];
         let splitted = path.split('.');
 
-        let regex = /^([^\[]*)((?:\[[\{\}0-9a-z]*)+])/g;
+        let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
 
         let fragments = [];
 

@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "mocha test/path.Helper.Spec.js --reporter dot",
+    "test-explode": "mocha test/path.Helper.Spec.js --reporter dot --fgrep explode"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/robertdumitrescu/pathHelper.git"
