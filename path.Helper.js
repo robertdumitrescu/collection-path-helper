@@ -1,5 +1,5 @@
 const Lodash = require('lodash');
-let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
+// let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 /**
  * @class ObjectHelper
@@ -140,7 +140,8 @@ class PathHelper {
         let pathFragments = [];
         let splitted = path.split('.');
 
-        let regex = /^([\{\[\(\w]{1}[a-z\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
+        // let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g; // non recursive grouping 18/20
+        let regex = /^([^\[]*)((?:\[[\{\}0-9a-z]*)+])/g // recursive grouping 5/20
 
         let fragments = [];
 

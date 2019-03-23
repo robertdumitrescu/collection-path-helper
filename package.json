@@ -1,0 +1,30 @@
+{
+  "name": "pathhelper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "path.Helper.js",
+  "scripts": {
+    "test": "mocha test/path.Helper.Spec.js --reporter dot",
+    "test-explode": "mocha test/path.Helper.Spec.js --reporter dot --fgrep explode"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertdumitrescu/pathHelper.git"
+  },
+  "keywords": [
+    "path",
+    "regex",
+    "parse"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robertdumitrescu/pathHelper/issues"
+  },
+  "homepage": "https://github.com/robertdumitrescu/pathHelper#readme",
+  "dependencies": {
+    "chai": "*",
+    "mocha": "*",
+    "lodash": "*"
+  }
+}

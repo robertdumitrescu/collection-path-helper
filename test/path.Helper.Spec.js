@@ -1,13 +1,12 @@
 'use strict';
 
 const expect = require('chai').expect;
-let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 describe('PathHelper', () => {
 
     let PathHelper;
     before(() => {
-        PathHelper = require('./path.Helper');
+        PathHelper = require('../path.Helper');
     });
 
     describe('-> getStartType', () => {
