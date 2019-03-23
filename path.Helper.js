@@ -1,5 +1,4 @@
 const Lodash = require('lodash');
-let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 /**
  * @class ObjectHelper
@@ -140,7 +139,7 @@ class PathHelper {
         let pathFragments = [];
         let splitted = path.split('.');
 
-        let regex = /^([\{\[\(\w]{1}[a-z\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
+        let regex = /^([^\[]*)((?:\[[\{\}0-9a-z]*)+])/g;
 
         let fragments = [];
 

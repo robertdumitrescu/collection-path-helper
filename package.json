@@ -1,0 +1,24 @@
+{
+  "name": "path-helper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertdumitrescu/pathHelper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robertdumitrescu/pathHelper/issues"
+  },
+  "homepage": "https://github.com/robertdumitrescu/pathHelper#readme",
+  "dependencies": {
+    "lodash": "4.17.5"
+  },
+  "devDependencies": {
+    "benchmark": "2.1.4",
+    "mocha": "5.2.0"
+  }
+}
