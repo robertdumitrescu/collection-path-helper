@@ -1,5 +1,4 @@
 const Lodash = require('lodash');
-let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 /**
  * @class ObjectHelper
@@ -12,21 +11,9 @@ class PathHelper {
      * an object is a RegExp Javascript object or not
      * This is the simplified, portable version of the objectIsRegExp validator {@link BoolValidator.objectIsRegExp}
      * @param {*} property
-     * @param {Object=} options
-     * @param {Boolean=} options.failWithMsg
-     * @param {String=} options.path
-     * @param {String=} options.validator
-     * @param {String=} options.varName
      * @return {boolean|String}
      */
-    static objectIsRegExp(property, options) {
-        let defaultOptions = {
-            failWithMsg: false,
-            path: 'property',
-            validator: 'objectIsRegExp',
-            varName: 'property',
-        };
-
+    static objectIsRegExp(property) {
         if (!(typeof property === 'object' && property !== null)) {
             return false;
         }
@@ -37,6 +24,34 @@ class PathHelper {
 
         return property.constructor.name === 'RegExp';
     }
+
+    /**
+     * If the path is a string, convert it to an array
+     * @param  {String|Array} path - The path
+     * @return {Array}             The path array
+     */
+    static stringToPath(path) {
+
+        // If the path isn't a string, return it
+        if (typeof path !== 'string') return path;
+        // Create new array
+        let output = [];
+        // Split to an array with dot notation
+        let splittedByObjectNotation = path.split('.');
+
+        for (let t = 0; t < splittedByObjectNotation.length; t++) {
+            // Split to an array with bracket notation
+            let splittedByArrayNotation = splittedByObjectNotation[t].split(/\[([^}]+)\]/g);
+            for (let n = 0; n < splittedByArrayNotation.length; n++) {
+                if (splittedByArrayNotation[n].length > 0) {
+                    output.push(splittedByArrayNotation[n]);
+                }
+            }
+        }
+
+        return output;
+
+    };
 
     /**
      * Method that returns either a boolean (true|false) either an error message as a string when
@@ -154,10 +169,10 @@ class PathHelper {
             while (partial.indexOf('[', 1) > -1) {
                 let newFragment = partial.substr(0, partial.indexOf('[', 1));
                 splittedByArray.push(newFragment);
-                partial = PathHelper.getRemainingString(partial, {discardedStrings:[newFragment]});
+                partial = PathHelper.getRemainingString(partial, {discardedStrings: [newFragment]});
             }
             splittedByArray.push(partial);
-            /** Overwriting the elements which was splitted further*/
+            /** Overwriting the elements which was splitted further */
             splitted[x] = splittedByArray;
 
         }
@@ -165,7 +180,7 @@ class PathHelper {
         splitted = splitted.flat();
 
         let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
-        
+
         let fragments = [];
 
         for (let i = 0; i < splitted.length; i++) {
@@ -262,17 +277,35 @@ class PathHelper {
      * Get By path
      * @param collection
      * @param path
+     * @param def
      * @returns {*}
      */
-    static get(collection, path) {
-        if (!(BoolValidator.stringIsPopulated(path) || BoolValidator.arrayIsPopulated(path))) {
+    static get(collection, path, def) {
+        if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
             return collection;
         }
-        if (BoolValidator.isString(path) && path.startsWith('.')) {
+        if ((typeof path === 'string' || path instanceof String) && path.startsWith('.')) {
             path = path.replace('.', '');
         }
 
-        return Lodash.get(collection, path, 'undefined');
+        // Get the path as an array
+        path = PathHelper.stringToPath(path);
+
+        // Cache the current object
+        let current = collection;
+
+        // For each item in the path, dig into the object
+        for (let i = 0; i < path.length; i++) {
+
+            // If the item isn't found, return the default (or null)
+            if (!current[path[i]]) return def;
+
+            // Otherwise, update the current  value
+            current = current[path[i]];
+
+        }
+
+        return current;
     }
 
     /**
@@ -295,6 +328,74 @@ class PathHelper {
         }
 
         return Lodash.set(collection, path, value);
+    }
+
+    /**
+     * This method will get all possible subpaths out of one path
+     * For a path like 'lorem.ipsum[2][1].foo' the subpaths would be:
+     * ['', 'lorem', 'lorem.ipsum', 'lorem.ipsum[2]', 'lorem.ipsum[2][1]', 'lorem.ipsum[2][1].foo']
+     * @param {String} property
+     * @param {Object=} options
+     * @param {Boolean=} options.ignoreRoot - This would ignore the empty string at the beginning. (Default false)
+     * @param {Boolean=} options.ignoreFull - This would ignore the full path and the end. (Default false)
+     * @return {String[]}
+     */
+    static getSubPaths(property, options) {
+        let defaultOptions = {
+            ignoreRoot: false,
+            ignoreFull: false
+        };
+
+        options = {...defaultOptions, ...options};
+
+        let result = [];
+
+        if (!(typeof property === 'string' || property instanceof String)) {
+            return result;
+        }
+
+
+        if (!options.ignoreRoot) {
+            result.push('');
+        }
+
+        let explodedProperty = PathHelper.explodePath(property);
+
+        for (let i = 0; i < explodedProperty.length; i++) {
+            result.push(PathHelper.implodePath(explodedProperty.slice(0, i + 1)));
+        }
+
+        if (result.length > 0 && options.ignoreFull) {
+            result.pop();
+        }
+
+        return result;
+
+    }
+
+    /**
+     * This method replaces the array notations within a path with a certain string defined under options.string argument
+     * @param {String} property
+     * @param {Object=} options
+     * @param {String} options.string - the string which would be put in place of arrays
+     * @return {String}
+     */
+    static replacePathArraysWithString(property, options) {
+        let defaultOptions = {
+            string: '',
+        };
+
+        options = {...defaultOptions, ...options};
+
+        let explodedPath = PathHelper.explodePath(property);
+
+        for (let i = 0; i < explodedPath.length; i++) {
+            if (PathHelper.getStartType(explodedPath[i]) === 'array') {
+                explodedPath[i] = options.string;
+            }
+        }
+
+        return PathHelper.implodePath(explodedPath);
     }
 }
 

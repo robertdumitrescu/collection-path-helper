@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('chai').expect;
-let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 describe('PathHelper', () => {
 
@@ -13,184 +12,184 @@ describe('PathHelper', () => {
     describe('-> getStartType', () => {
         it('should return array (simple path) - with dynamic element', async () => {
 
-            let path = '[{{x}}].randomArrayOfObjects[2]';
+            let initial = '[{{x}}].randomArrayOfObjects[2]';
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return object (complex path) (1)', async () => {
 
-            let path = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+            let initial = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return object (complex path) (2)', async () => {
 
-            let path = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+            let initial = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return array (complex path) (3) - multiple arrays', async () => {
 
-            let path = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+            let initial = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return object (complex path) (4) - multiple objects', async () => {
 
-            let path = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should get the type for the path start when is starting with an object property', async () => {
 
-            let path = 'randomArrayOfObjects[2]';
+            let initial = 'randomArrayOfObjects[2]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an object property (with dot)', async () => {
 
-            let path = '.randomArrayOfObjects[2]';
+            let initial = '.randomArrayOfObjects[2]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an semi-closed interval start', async () => {
 
-            let path = '[2, 3)';
+            let initial = '[2, 3)';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an semi-closed interval end', async () => {
 
-            let path = '(2, 3]';
+            let initial = '(2, 3]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an open interval', async () => {
 
-            let path = '(2, 3)';
+            let initial = '(2, 3)';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an closed interval', async () => {
 
-            let path = '[2, 3]';
+            let initial = '[2, 3]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an semi-closed interval start - no blank', async () => {
 
-            let path = '[2,3)';
+            let initial = '[2,3)';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an semi-closed interval end - no blank', async () => {
 
-            let path = '(2,3]';
+            let initial = '(2,3]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an open interval - no blank', async () => {
 
-            let path = '(2,3)';
+            let initial = '(2,3)';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an closed interval - no blank', async () => {
 
-            let path = '[2,3]';
+            let initial = '[2,3]';
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should get the type for the path start when is starting with an array', async () => {
 
-            let path = '[2].randomArrayOfObjects[2]';
+            let initial = '[2].randomArrayOfObjects[2]';
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should get the type for the path start when is starting with an array (wtih dynamic values)', async () => {
 
-            let path = '[{{x}}].randomArrayOfObjects[2]';
+            let initial = '[{{x}}].randomArrayOfObjects[2]';
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should get the type for the path when path is an empty string', async () => {
 
-            let path = '';
+            let initial = '';
 
             let expected = 'unknown';
 
-            let actual = PathHelper.getStartType(path);
+            let actual = PathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -199,208 +198,208 @@ describe('PathHelper', () => {
     describe('-> explodePath', () => {
         it('should return an exploded path (simple path) - with dynamic element', async () => {
 
-            let path = '[{{x}}].randomArrayOfObjects[2]';
+            let initial = '[{{x}}].randomArrayOfObjects[2]';
 
             let expected = ['[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (complex path) (1)', async () => {
 
-            let path = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+            let initial = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
 
             let expected = ['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (complex path) (2)', async () => {
 
-            let path = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+            let initial = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
             let expected = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (complex path) (3) - multiple arrays', async () => {
 
-            let path = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+            let initial = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
 
             let expected = ['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (complex path) (4) - multiple objects', async () => {
 
-            let path = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
             let expected = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with semi-closed interval end', async () => {
 
-            let path = 'id3.(2, 3]';
+            let initial = 'id3.(2, 3]';
 
             let expected = ['id3', '(2, 3]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with semi-closed interval start', async () => {
 
-            let path = 'id3.[2, 3)';
+            let initial = 'id3.[2, 3)';
 
             let expected = ['id3', '[2, 3)'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with open interval', async () => {
 
-            let path = 'id3.(2, 3)';
+            let initial = 'id3.(2, 3)';
 
             let expected = ['id3', '(2, 3)'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with closed interval', async () => {
 
-            let path = 'id3.[2, 3]';
+            let initial = 'id3.[2, 3]';
 
             let expected = ['id3', '[2, 3]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with semi-closed interval end - no blank', async () => {
 
-            let path = 'id3.(2,3]';
+            let initial = 'id3.(2,3]';
 
             let expected = ['id3', '(2,3]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with semi-closed interval start - no blank', async () => {
 
-            let path = 'id3.[2,3)';
+            let initial = 'id3.[2,3)';
 
             let expected = ['id3', '[2,3)'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with open interval - no blank', async () => {
 
-            let path = 'id3.(2,3)';
+            let initial = 'id3.(2,3)';
 
             let expected = ['id3', '(2,3)'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with closed interval - no blank', async () => {
 
-            let path = 'id3.[2,3]';
+            let initial = 'id3.[2,3]';
 
             let expected = ['id3', '[2,3]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
         it('should return an exploded path (simple path) - with dynamic element (starting with object)', async () => {
 
-            let path = 'lorem[{{x}}].randomArrayOfObjects[2]';
+            let initial = 'lorem[{{x}}].randomArrayOfObjects[2]';
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (simple path) - with dynamic element (starting with object) and having 2 arrays in a row', async () => {
 
-            let path = 'lorem[{{x}}].randomArrayOfObjects[2][5]';
+            let initial = 'lorem[{{x}}].randomArrayOfObjects[2][5]';
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]', '[5]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (simple path) - with dynamic element (starting with object with dot)', async () => {
 
-            let path = '.lorem[{{x}}].randomArrayOfObjects[2]';
+            let initial = '.lorem[{{x}}].randomArrayOfObjects[2]';
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (simple path) - with dynamic elements (starting with object with dot)', async () => {
 
-            let path = '.{{y}}[{{x}}].randomArrayOfObjects[2]';
+            let initial = '.{{y}}[{{x}}].randomArrayOfObjects[2]';
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (simple path) - with dynamic elements (starting with object)', async () => {
 
-            let path = '{{y}}[{{x}}].randomArrayOfObjects[2]';
+            let initial = '{{y}}[{{x}}].randomArrayOfObjects[2]';
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an exploded path (complex path) - with dynamic elements (starting with object)', async () => {
 
-            let path = '{{y}}[{{x}}].randomArrayOfObjects[2].{{z}}.{{t}}.lorem[{{n}}]';
+            let initial = '{{y}}[{{x}}].randomArrayOfObjects[2].{{z}}.{{t}}.lorem[{{n}}]';
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]', '{{z}}', '{{t}}', 'lorem', '[{{n}}]'];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return an empty array if path is an empty string', async () => {
 
-            let path = '';
+            let initial = '';
 
             let expected = [];
 
-            let actual = PathHelper.explodePath(path);
+            let actual = PathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -445,7 +444,7 @@ describe('PathHelper', () => {
             let initial = ['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]'];
 
             let expected = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
-            
+
             let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
@@ -453,14 +452,14 @@ describe('PathHelper', () => {
         it('should return an imploded path (complex path) (4) - multiple objects', async () => {
 
             let initial = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
-            
+
             let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
             let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
-        
+
         it('should return an imploded path (simple path) - with semi-closed interval start', async () => {
 
             let expected = '[2].[2, 3)';
@@ -822,32 +821,32 @@ describe('PathHelper', () => {
     describe('-> getFirstDynamicVariableName', () => {
         it('should return "x"', async () => {
 
-            let path = 'randomArrayOfObjects[2].{{x}}[1]';
+            let initial = 'randomArrayOfObjects[2].{{x}}[1]';
 
             let expected = 'x';
 
-            let actual = PathHelper.getFirstDynamicVariableName(path);
+            let actual = PathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
         it('should return "blabla"', async () => {
 
-            let path = '[2].randomArrayOfObjects[2].nanan[{{blabla}}]';
+            let initial = '[2].randomArrayOfObjects[2].nanan[{{blabla}}]';
 
             let expected = 'blabla';
 
-            let actual = PathHelper.getFirstDynamicVariableName(path);
+            let actual = PathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
         });
 
         it('should return "lorem"', async () => {
 
-            let path = '[2].randomArrayOfObjects[{{lorem}}].nanan[{{blabla}}]';
+            let initial = '[2].randomArrayOfObjects[{{lorem}}].nanan[{{blabla}}]';
 
             let expected = 'lorem';
 
-            let actual = PathHelper.getFirstDynamicVariableName(path);
+            let actual = PathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
         });
     });
@@ -855,65 +854,65 @@ describe('PathHelper', () => {
     describe('-> isPathStartDynamic', () => {
         it('should return true if the start is an object and is dynamic', async () => {
 
-            let path = '{{x}}[1].bla';
+            let initial = '{{x}}[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
         it('should return true if the start is an object (with dot) and is dynamic', async () => {
 
-            let path = '.{{x}}[1].bla';
+            let initial = '.{{x}}[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
         it('should return true if the start is an array and is dynamic', async () => {
 
-            let path = '[{{x}}][1].bla';
+            let initial = '[{{x}}][1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
         it('should return false if the start is an object and is not dynamic', async () => {
 
-            let path = 'lorem[1].bla';
+            let initial = 'lorem[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
         it('should return false if the start is an object (with dot) and is not dynamic', async () => {
 
-            let path = '.bla[1].bla';
+            let initial = '.bla[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
         it('should return false if the start is an array and is not dynamic', async () => {
 
-            let path = '[2][1].bla';
+            let initial = '[2][1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
         it('should return false if the start is an array and is not dynamic but path has dynamic fragments', async () => {
 
-            let path = '[2][1].bla[{{x}}]';
+            let initial = '[2][1].bla[{{x}}]';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
         it('should return false if the start is an object and is not dynamic but path has dynamic fragments', async () => {
 
-            let path = 'bla[1].bla[{{x}}]';
+            let initial = 'bla[1].bla[{{x}}]';
 
-            let actual = PathHelper.isPathStartDynamic(path);
+            let actual = PathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
     });
@@ -921,63 +920,63 @@ describe('PathHelper', () => {
     describe('-> get', () => {
         it('should a specific property from an object', async () => {
 
-            let initialCollection = {id: 3, id2: 'nana'};
+            let initial = {id: 3, id2: 'nana'};
 
-            let expectedResult = 'nana';
+            let expected = 'nana';
 
-            let result = PathHelper.get(initialCollection, 'id2');
-            expect(result).to.deep.equal(expectedResult);
+            let result = PathHelper.get(initial, 'id2');
+            expect(result).to.deep.equal(expected);
 
         });
 
         it('should get for a path with special characters', async () => {
 
-            let initialCollection = {id: 3, id3: {'(2, 3]': 'bla'}};
+            let initial = {id: 3, id3: {'(2, 3]': 'bla'}};
 
-            let expectedResult = 'bla';
+            let expected = 'bla';
 
-            let result = PathHelper.get(initialCollection, 'id3.(2, 3]');
-            expect(result).to.deep.equal(expectedResult);
+            let result = PathHelper.get(initial, 'id3.(2, 3]');
+            expect(result).to.deep.equal(expected);
 
         });
 
         it('should a specific property from an object even when it starts with dot (.)', async () => {
 
-            let initialCollection = {id: 3, id2: 'nana'};
+            let initial = {id: 3, id2: 'nana'};
 
-            let expectedResult = 'nana';
+            let expected = 'nana';
 
-            let result = PathHelper.get(initialCollection, '.id2');
-            expect(result).to.deep.equal(expectedResult);
+            let result = PathHelper.get(initial, '.id2');
+            expect(result).to.deep.equal(expected);
 
         });
         it('should a specific object from a collection', async () => {
 
-            let initialCollection = [
+            let initial = [
                 {id: 1},
                 {id: 'bla bla'},
                 {id: 3, id2: 5},
                 {id: 3, id2: 'nana'}
             ];
 
-            let expectedResult = {id: 3, id2: 'nana'};
+            let expected = {id: 3, id2: 'nana'};
 
-            let result = PathHelper.get(initialCollection, '[3]');
-            expect(result).to.deep.equal(expectedResult);
+            let result = PathHelper.get(initial, '[3]');
+            expect(result).to.deep.equal(expected);
         });
         it('should get the collection if the path is an empty String', async () => {
 
-            let initialCollection = [
+            let initial = [
                 {id: 1},
                 {id: 'bla bla'},
                 {id: 3, id2: 5},
                 {id: 3, id2: 'nana'}
             ];
 
-            let expectedResult = initialCollection;
+            let expected = initial;
 
-            let result = PathHelper.get(initialCollection, '');
-            expect(result).to.deep.equal(expectedResult);
+            let result = PathHelper.get(initial, '');
+            expect(result).to.deep.equal(expected);
         });
     });
 
@@ -987,10 +986,10 @@ describe('PathHelper', () => {
             let collection = {id: 3, id2: 'nana'};
             let value = [1, 2, 3];
 
-            let expectedResult = [1, 2, 3];
+            let expected = [1, 2, 3];
 
             let result = PathHelper.set(collection, '', value);
-            expect(result).to.deep.equal(expectedResult);
+            expect(result).to.deep.equal(expected);
         });
 
         it('should set a specific path on object', async () => {
@@ -998,10 +997,10 @@ describe('PathHelper', () => {
             let collection = {id: 3, id2: 'nana'};
             let value = [1, 2, 3];
 
-            let expectedResult = {id: 3, id2: [1, 2, 3]};
+            let expected = {id: 3, id2: [1, 2, 3]};
 
             let result = PathHelper.set(collection, 'id2', value);
-            expect(result).to.deep.equal(expectedResult);
+            expect(result).to.deep.equal(expected);
         });
 
         it('should set a specific path on array', async () => {
@@ -1009,10 +1008,10 @@ describe('PathHelper', () => {
             let collection = [1, 2, 3];
             let value = {id: 3, id2: 'nana'};
 
-            let expectedResult = [1, 2, {id: 3, id2: 'nana'}];
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
 
             let result = PathHelper.set(collection, '[2]', value);
-            expect(result).to.deep.equal(expectedResult);
+            expect(result).to.deep.equal(expected);
         });
 
         it('should set a a real life collection', async () => {
@@ -1063,10 +1062,334 @@ describe('PathHelper', () => {
                 }
             };
 
-            let expectedResult = [1, 2, {id: 3, id2: 'nana'}];
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
 
             let result = PathHelper.set(collection, ['iterator'], value);
-            expect(result).to.deep.equal(expectedResult);
+            expect(result).to.deep.equal(expected);
+        });
+    });
+
+    describe('-> getSubPaths', () => {
+        it('should return an empty array if the property is not a string (number)', async () => {
+
+            let property = 2;
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an empty array if the property is not a string (null)', async () => {
+
+            let property = null;
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an empty array if the property is not a string (boolean)', async () => {
+
+            let property = false;
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with an empty string if the property is an empty string', async () => {
+
+            let property = '';
+            let expected = [''];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an empty array if the property is an empty string and ignoreRoot set to true', async () => {
+
+            let property = '';
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an empty array if the property is an empty string and ignoreFull set to true', async () => {
+
+            let property = '';
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreFull: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an empty array if the property is an empty string and ignoreRoot and ignoreFull set to true', async () => {
+
+            let property = '';
+            let expected = [];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (1 element)', async () => {
+
+            let property = 'lorem';
+            let expected = ['', 'lorem'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (1 element with dot at the start)', async () => {
+
+            let property = '.lorem';
+            let expected = ['', 'lorem'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (2 element - double object)', async () => {
+
+            let property = 'lorem.ipsum';
+            let expected = ['', 'lorem', 'lorem.ipsum'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (2 element - starting with array)', async () => {
+
+            let property = '[2].ipsum';
+            let expected = ['', '[2]', '[2].ipsum'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (2 element - double array)', async () => {
+
+            let property = '[2][3]';
+            let expected = ['', '[2]', '[2][3]'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (complex path with interpolations)', async () => {
+
+            let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
+            let expected = ['', 'lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]'];
+
+            let actual = PathHelper.getSubPaths(property);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (complex path with interpolations) - ignoreRoot set to true', async () => {
+
+            let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
+            let expected = ['lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]'];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (complex path with interpolations) - ignoreFull set to true', async () => {
+
+            let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
+            let expected = ['', 'lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]'];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreFull: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array with subpaths if path passed (complex path with interpolations) - ignoreRoot and ignoreFull set to true', async () => {
+
+            let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
+            let expected = ['lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]'];
+
+            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return an array of subpaths (complex path) (1)', async () => {
+
+            let initial = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let expected = [
+                '',
+                'lorem',
+                'lorem[2]',
+                'lorem[2].{{ipsum}}',
+                'lorem[2].{{ipsum}}[3]',
+                'lorem[2].{{ipsum}}[3].dolor',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}]',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2]',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3)',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3]',
+                'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'
+            ];
+
+            let actual = PathHelper.getSubPaths(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return an array of subpaths (complex path) (2)', async () => {
+
+            let initial = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = [
+                '',
+                'loremIpsum',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3)',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'
+            ];
+
+            let actual = PathHelper.getSubPaths(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should return an array of subpaths (complex path) (3)', async () => {
+
+            let initial = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+
+            let expected = [
+                '',
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[{{123loremIpsum_dolor34SitAmet567}}][3]',
+                '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}]',
+                '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5]',
+                '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'
+            ];
+
+            let actual = PathHelper.getSubPaths(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return an array of subpaths (complex path) (4)', async () => {
+
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = [
+                '',
+                'loremIpsum',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3)',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3]',
+                'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'
+            ];
+
+            let actual = PathHelper.getSubPaths(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        describe(' -> replacePathArraysWithString', () => {
+            it('should not do anything if what was passed is an empty string', () => {
+
+                let initial = '';
+
+                let expected = '';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should not do anything to a path of only objects starting with dot', () => {
+
+                let initial = '.bla';
+
+                let expected = 'bla';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should not do anything to a path of only objects', () => {
+
+                let initial = 'bla';
+
+                let expected = 'bla';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (path with dot)', () => {
+
+                let initial = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+                let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (normal path)', () => {
+
+                let initial = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+                let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (path with multiple consecutive arrays)', () => {
+
+                let initial = 'bla[0][2].randomArrayOfObjects[2].randomSubArray[1]';
+
+                let expected = 'bla.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (path with interpolations)', () => {
+
+                let initial = 'randomArrayOfObjects[2].{{y}}[1].lorem';
+
+                let expected = 'randomArrayOfObjects.lorem.{{y}}.lorem.lorem';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (path with interpolations in array)', () => {
+
+                let initial = 'randomSubArray[{{x}}].{{y}}';
+
+                let expected = 'randomSubArray.lorem.{{y}}';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
+
+            it('should replace all arrays occurrences with a certain string (path starting with array)', () => {
+
+                let initial = '[0][1][3].randomArrayOfObjects[2].randomSubArray[1]';
+
+                let expected = 'lorem.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+
+                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                expect(actual).to.deep.equal(expected);
+            });
         });
     });
 });
