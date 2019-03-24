@@ -1,5 +1,7 @@
 'use strict';
+
 const expect = require('chai').expect;
+let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 describe('PathHelper', () => {
 
@@ -9,6 +11,57 @@ describe('PathHelper', () => {
     });
 
     describe('-> getStartType', () => {
+        it('should return array (simple path) - with dynamic element', async () => {
+
+            let path = '[{{x}}].randomArrayOfObjects[2]';
+
+            let expected = 'array';
+
+            let actual = PathHelper.getStartType(path);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return object (complex path) (1)', async () => {
+
+            let path = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let expected = 'object';
+
+            let actual = PathHelper.getStartType(path);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return object (complex path) (2)', async () => {
+
+            let path = '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'object';
+
+            let actual = PathHelper.getStartType(path);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should return array (complex path) (3) - multiple arrays', async () => {
+
+            let path = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+
+            let expected = 'array';
+
+            let actual = PathHelper.getStartType(path);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return object (complex path) (4) - multiple objects', async () => {
+
+            let path = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'object';
+
+            let actual = PathHelper.getStartType(path);
+            expect(actual).to.deep.equal(expected);
+
+        });
         it('should get the type for the path start when is starting with an object property', async () => {
 
             let path = 'randomArrayOfObjects[2]';
@@ -358,20 +411,63 @@ describe('PathHelper', () => {
 
             let expected = '[{{x}}].randomArrayOfObjects[2]';
 
-            let pathFragments = ['[{{x}}]', 'randomArrayOfObjects', '[2]'];
+            let initial = ['[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
 
+        it('should return an imploded path (complex path) (1)', async () => {
+
+            let initial = ['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]'];
+
+            let expected = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.implodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return an imploded path (complex path) (2)', async () => {
+
+
+            let initial = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
+
+            let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.implodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should return an imploded path (complex path) (3) - multiple arrays', async () => {
+
+            let initial = ['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]'];
+
+            let expected = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+            
+            let actual = PathHelper.implodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return an imploded path (complex path) (4) - multiple objects', async () => {
+
+            let initial = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
+            
+            let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.implodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        
         it('should return an imploded path (simple path) - with semi-closed interval start', async () => {
 
             let expected = '[2].[2, 3)';
 
-            let pathFragments = ['[2]', '[2, 3)'];
+            let initial = ['[2]', '[2, 3)'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -379,9 +475,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].(2, 3]';
 
-            let pathFragments = ['[2]', '(2, 3]'];
+            let initial = ['[2]', '(2, 3]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -389,9 +485,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].(2, 3)';
 
-            let pathFragments = ['[2]', '(2, 3)'];
+            let initial = ['[2]', '(2, 3)'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -399,9 +495,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].[2, 3]';
 
-            let pathFragments = ['[2]', '[2, 3]'];
+            let initial = ['[2]', '[2, 3]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -409,9 +505,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].[2,3)';
 
-            let pathFragments = ['[2]', '[2,3)'];
+            let initial = ['[2]', '[2,3)'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -419,9 +515,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].(2,3]';
 
-            let pathFragments = ['[2]', '(2,3]'];
+            let initial = ['[2]', '(2,3]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -429,9 +525,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].(2,3)';
 
-            let pathFragments = ['[2]', '(2,3)'];
+            let initial = ['[2]', '(2,3)'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -439,9 +535,9 @@ describe('PathHelper', () => {
 
             let expected = '[2].[2,3]';
 
-            let pathFragments = ['[2]', '[2,3]'];
+            let initial = ['[2]', '[2,3]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -449,9 +545,9 @@ describe('PathHelper', () => {
 
             let expected = 'lorem[{{x}}].randomArrayOfObjects[2]';
 
-            let pathFragments = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
+            let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -460,9 +556,9 @@ describe('PathHelper', () => {
 
             let expected = 'lorem[{{x}}].randomArrayOfObjects[2][5]';
 
-            let pathFragments = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]', '[5]'];
+            let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]', '[5]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -471,9 +567,9 @@ describe('PathHelper', () => {
 
             let expected = 'lorem[{{x}}].randomArrayOfObjects[2]';
 
-            let pathFragments = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
+            let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -482,9 +578,9 @@ describe('PathHelper', () => {
 
             let expected = '{{y}}[{{x}}].randomArrayOfObjects[2]';
 
-            let pathFragments = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
+            let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -493,9 +589,9 @@ describe('PathHelper', () => {
 
             let expected = '{{y}}[{{x}}].randomArrayOfObjects[2]';
 
-            let pathFragments = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
+            let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -504,9 +600,9 @@ describe('PathHelper', () => {
 
             let expected = '{{y}}[{{x}}].randomArrayOfObjects[2].{{z}}.{{t}}.lorem[{{n}}]';
 
-            let pathFragments = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]', '{{z}}', '{{t}}', 'lorem', '[{{n}}]'];
+            let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]', '{{z}}', '{{t}}', 'lorem', '[{{n}}]'];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -515,9 +611,9 @@ describe('PathHelper', () => {
 
             let expected = '';
 
-            let pathFragments = [];
+            let initial = [];
 
-            let actual = PathHelper.implodePath(pathFragments);
+            let actual = PathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -532,6 +628,94 @@ describe('PathHelper', () => {
 
             let result = PathHelper.removePathLevels(initial);
             expect(result).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the end (complex path) (1)', async () => {
+
+            let initial = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let expected = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3]';
+
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (1)', async () => {
+
+            let initial = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let expected = '[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (2)', async () => {
+
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3]';
+
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (2)', async () => {
+
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (3)', async () => {
+
+            let initial = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+
+            let expected = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5]';
+
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (3)', async () => {
+
+            let initial = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
+
+            let expected = '[3][{{x_nx_23}}][5][loremIpsum]';
+
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (4)', async () => {
+
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3]';
+
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (4)', async () => {
+
+            let initial = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let expected = 'lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
+
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
         });
 
         it('should remove one level from the end if options are not specified when last level is object', async () => {

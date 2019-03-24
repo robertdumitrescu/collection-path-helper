@@ -10,20 +10,62 @@ const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
 let execs = [];
 
 // add tests
-// suite.add('PathHelper.getStartType (empty string)', () => {
-//     PathHelper.getStartType('');
-// });
-// suite.add('PathHelper.getStartType (object start)', () => {
-//     PathHelper.getStartType('prop');
-// });
-// suite.add('PathHelper.getStartType (array start)', () => {
-//     PathHelper.getStartType('[1]');
-// });
-suite.add('PathHelper.explodePath (simple path - dynamic)', () => {
-    PathHelper.explodePath('[{{x}}].randomArrayOfObjects[2]');
+suite.add('PathHelper.getStartType (empty string)', () => {
+    PathHelper.getStartType('');
 });
-suite.add('PathHelper.explodePath (simple path - dynamic - start with object)', () => {
-    PathHelper.explodePath('lorem[{{x}}].randomArrayOfObjects[2]');
+suite.add('PathHelper.getStartType (object start)', () => {
+    PathHelper.getStartType('prop');
+});
+suite.add('PathHelper.getStartType (array start)', () => {
+    PathHelper.getStartType('[1]');
+});
+suite.add('PathHelper.getStartType (complex path) (1)', () => {
+    PathHelper.getStartType('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.getStartType (complex path) (2)', () => {
+    PathHelper.getStartType('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.getStartType (complex path) (3)', () => {
+    PathHelper.getStartType('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('PathHelper.getStartType (complex path) (4)', () => {
+    PathHelper.getStartType('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.explodePath (complex path) (1)', () => {
+    PathHelper.explodePath('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.explodePath (complex path) (2)', () => {
+    PathHelper.explodePath('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.explodePath (complex path) (3)', () => {
+    PathHelper.explodePath('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('PathHelper.explodePath (complex path) (4)', () => {
+    PathHelper.explodePath('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.implodePath (complex path) (1)', () => {
+    PathHelper.implodePath(['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]']);
+});
+suite.add('PathHelper.implodePath (complex path) (2)', () => {
+    PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
+});
+suite.add('PathHelper.implodePath (complex path) (3)', () => {
+    PathHelper.implodePath(['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]']);
+});
+suite.add('PathHelper.implodePath (complex path) (4)', () => {
+    PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
+});
+suite.add('PathHelper.removePathLevels (complex path) (1)', () => {
+    PathHelper.removePathLevels('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.removePathLevels (complex path) (2)', () => {
+    PathHelper.removePathLevels('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('PathHelper.explodePath (complex path) (3)', () => {
+    PathHelper.removePathLevels('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('PathHelper.explodePath (complex path) (4)', () => {
+    PathHelper.removePathLevels('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
 });
 // suite.add('Lodash.get', () => {
 //     let collection = {id: 3, id2: {id3: [1, 'nana']}};
@@ -31,14 +73,7 @@ suite.add('PathHelper.explodePath (simple path - dynamic - start with object)', 
 // });
 // add listeners
 suite.on('cycle', (event) => {
-    console.log('====================================================================');
-    console.log(String(event.target));
-    console.log(event.target.name);
-    console.log(`${event.target.name} RME:                 ${event.target.stats.rme}`);
-    console.log(`${event.target.name} Sample length:       ${event.target.stats.sample.length}`);
-    console.log(`${event.target.name} tests executed:      ${event.target.count}`); // The number of times a test was executed.
-    console.log(`${event.target.name} Cycles count:        ${event.target.cycles}`); // The number of cycles performed while benchmarking.
-    console.log(`${event.target.name} Execs/s:             ${event.target.hz}`); // The number of executions per second.
+    console.log(`Executed for "${event.target.name}" for ${event.target.count} times (Cycles: ${event.target.cycles}) (Length: ${event.target.stats.sample.length}): ${event.target.hz} ops/s ±${event.target.stats.rme}%`);
     execs.push(event.target.hz);
 });
 suite.on('complete', () => {
@@ -46,7 +81,6 @@ suite.on('complete', () => {
         console.log(this[i].hz + ' ops/sec');
         console.log(this[i].stats.sample.length);
     }
-    console.log(execs);
     console.log(`Average execs/s for class ${average(execs)}`);
     console.log('Complete');
 });

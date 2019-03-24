@@ -1,4 +1,5 @@
 const Lodash = require('lodash');
+let BoolValidator = process.nextTick(() => BoolValidator = require('./bool.Validator'));
 
 /**
  * @class ObjectHelper
@@ -121,7 +122,11 @@ class PathHelper {
     static getStartType(path) {
         if ((typeof path === 'string' || path instanceof String) && path.length > 0) {
             if (path.charAt(0) === '[') {
-                return 'array';
+                let idx = path.indexOf(']', 1);
+                let subPath = path.substring(0, idx);
+                if (subPath.indexOf(',') === -1 && idx > -1) {
+                    return 'array';
+                }
             }
             return 'object';
 
@@ -137,10 +142,30 @@ class PathHelper {
      */
     static explodePath(path) {
         let pathFragments = [];
-        let splitted = path.split('.');
+        let splitted = [];
+        let splittedByDot = path.split('.');
+
+        splitted.concat(splittedByDot);
+
+        /** @TODO This might be deleted when the regex improves */
+        for (let x = 0; x < splittedByDot.length; x++) {
+            let splittedByArray = [];
+            let partial = splittedByDot[x];
+            while (partial.indexOf('[', 1) > -1) {
+                let newFragment = partial.substr(0, partial.indexOf('[', 1));
+                splittedByArray.push(newFragment);
+                partial = PathHelper.getRemainingString(partial, {discardedStrings:[newFragment]});
+            }
+            splittedByArray.push(partial);
+            /** Overwriting the elements which was splitted further*/
+            splitted[x] = splittedByArray;
+
+        }
+
+        splitted = splitted.flat();
 
         let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
-
+        
         let fragments = [];
 
         for (let i = 0; i < splitted.length; i++) {
@@ -157,68 +182,6 @@ class PathHelper {
             }
         }
 
-
-        // let pathFragments = [];
-        // let remainingPath = path;
-        // let initialPath = Lodash.cloneDeep(path);
-        // let startingIndex = 0;
-        // let fragment = '';
-        // if (PathHelper.stringStartsWith(remainingPath, {needle: /^[1-9a-zA-Z]/})) {
-        //     startingIndex = 0;
-        //     let dotSeparatorIndex = remainingPath.indexOf('.');
-        //     let squareBracketSeparatorIndex = remainingPath.indexOf('[');
-        //     let cuttingIndex = remainingPath.length;
-        //     if (dotSeparatorIndex > -1) {
-        //         cuttingIndex = dotSeparatorIndex;
-        //     }
-        //
-        //     if (squareBracketSeparatorIndex > -1 && squareBracketSeparatorIndex < cuttingIndex) {
-        //         cuttingIndex = squareBracketSeparatorIndex;
-        //     }
-        //
-        //     fragment = remainingPath.slice(startingIndex, cuttingIndex);
-        //     pathFragments.push(fragment);
-        //     remainingPath = PathHelper.getRemainingString(remainingPath, {discardedStrings: [fragment]});
-        // } else if (PathHelper.stringStartsWith(remainingPath, {needle: '.'})) {
-        //     remainingPath = PathHelper.getRemainingString(remainingPath, {discardedStrings: ['.']});
-        // } else if (PathHelper.stringStartsWith(remainingPath, {needle: '{{'})) {
-        //     startingIndex = 0;
-        //     let dotSeparatorIndex = remainingPath.indexOf('.');
-        //     let squareBracketSeparatorIndex = remainingPath.indexOf('[');
-        //     let cuttingIndex = remainingPath.length;
-        //     if (dotSeparatorIndex > -1) {
-        //         cuttingIndex = dotSeparatorIndex;
-        //     }
-        //
-        //     if (squareBracketSeparatorIndex > -1 && squareBracketSeparatorIndex < cuttingIndex) {
-        //         cuttingIndex = squareBracketSeparatorIndex;
-        //     }
-        //
-        //     fragment = remainingPath.slice(startingIndex, cuttingIndex);
-        //     pathFragments.push(fragment);
-        //     remainingPath = PathHelper.getRemainingString(remainingPath, {discardedStrings: [fragment]});
-        // } else if (PathHelper.stringStartsWith(remainingPath, {needle: '['})) {
-        //     startingIndex = 0;
-        //     let dotSeparatorIndex = remainingPath.indexOf('.');
-        //     let squareBracketSeparatorIndex = PathHelper.getRemainingString(remainingPath, {discardedStrings: '['}).indexOf('[');
-        //     let cuttingIndex = remainingPath.length;
-        //     if (dotSeparatorIndex > -1) {
-        //         cuttingIndex = dotSeparatorIndex;
-        //     }
-        //
-        //     if (squareBracketSeparatorIndex > -1 && squareBracketSeparatorIndex < cuttingIndex) {
-        //         cuttingIndex = squareBracketSeparatorIndex + 1;
-        //     }
-        //
-        //     fragment = remainingPath.slice(startingIndex, cuttingIndex);
-        //     pathFragments.push(fragment);
-        //     remainingPath = PathHelper.getRemainingString(remainingPath, {discardedStrings: [fragment]});
-        // }
-        //
-        // if (((typeof remainingPath === 'string' || remainingPath instanceof String) && remainingPath.length > 0) && remainingPath !== initialPath) {
-        //     pathFragments = pathFragments.concat(PathHelper.explodePath(remainingPath));
-        // }
-        //
         return pathFragments;
 
 
