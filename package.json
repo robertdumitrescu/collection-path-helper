@@ -1,22 +1,26 @@
 {
   "name": "path-helper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Library for manipulating collection paths. Used mainly for iterating over nested collection and extracting data.",
+  "keywords": [
+    "collection path",
+    "path",
+    "path manipulator"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/path.Helper.Spec.js --reporter dot",
-    "test-explode": "mocha test/path.Helper.Spec.js --reporter dot --fgrep explode"
+    "test": "mocha test/path.Helper.Spec.js --reporter dot"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robertdumitrescu/pathHelper.git"
+    "url": "git+https://github.com/robertdumitrescu/path-helper.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/robertdumitrescu/pathHelper/issues"
+    "url": "https://github.com/robertdumitrescu/path-helper/issues"
   },
-  "homepage": "https://github.com/robertdumitrescu/pathHelper#readme",
+  "homepage": "https://github.com/robertdumitrescu/path-helper#readme",
   "dependencies": {
     "lodash": "4.17.5"
   },

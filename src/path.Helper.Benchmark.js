@@ -5,7 +5,7 @@ const Benchmark = require('benchmark');
 const Lodash = require('lodash');
 const suite = new Benchmark.Suite;
 
-const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
 
 let execs = [];
 

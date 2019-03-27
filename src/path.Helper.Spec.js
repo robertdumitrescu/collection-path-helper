@@ -625,8 +625,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let result = PathHelper.removePathLevels(initial);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove one level from the end (complex path) (1)', async () => {
@@ -723,8 +723,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let result = PathHelper.removePathLevels(initial);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove one level from the end if options are not specified when last level is dynamic object property', async () => {
@@ -733,8 +733,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let result = PathHelper.removePathLevels(initial);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove two levels from the end when last level is dynamic object property', async () => {
@@ -743,8 +743,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let result = PathHelper.removePathLevels(initial, {count: 2});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {count: 2});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove two levels from the end when last 2 levels are dynamic', async () => {
@@ -753,8 +753,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let result = PathHelper.removePathLevels(initial, {count: 2});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {count: 2});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove one level from the start if options are not specified when first level is array', async () => {
@@ -763,8 +763,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let result = PathHelper.removePathLevels(initial, {termination: 'start'});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove one level from the start if options are not specified when first level is object', async () => {
@@ -773,8 +773,8 @@ describe('PathHelper', () => {
 
             let expected = '[2].randomSubArray[1].lorem';
 
-            let result = PathHelper.removePathLevels(initial, {termination: 'start'});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove one level from the start if options are not specified when first level is dynamic object property', async () => {
@@ -783,8 +783,8 @@ describe('PathHelper', () => {
 
             let expected = '[2].randomSubArray[1].{{y}}';
 
-            let result = PathHelper.removePathLevels(initial, {termination: 'start'});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove two levels from the start when first level is dynamic object property', async () => {
@@ -793,8 +793,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomSubArray[1].{{y}}';
 
-            let result = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should remove two levels from the start when last 2 levels are dynamic', async () => {
@@ -803,8 +803,8 @@ describe('PathHelper', () => {
 
             let expected = 'randomSubArray[{{x}}].{{y}}';
 
-            let result = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should act on a real life example', async () => {
@@ -813,8 +813,8 @@ describe('PathHelper', () => {
 
             let expected = '[0]';
 
-            let result = PathHelper.removePathLevels(initial);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
         });
     });
 
@@ -924,8 +924,8 @@ describe('PathHelper', () => {
 
             let expected = 'nana';
 
-            let result = PathHelper.get(initial, 'id2');
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.get(initial, 'id2');
+            expect(actual).to.deep.equal(expected);
 
         });
 
@@ -935,8 +935,8 @@ describe('PathHelper', () => {
 
             let expected = 'bla';
 
-            let result = PathHelper.get(initial, 'id3.(2, 3]');
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.get(initial, 'id3.(2, 3]');
+            expect(actual).to.deep.equal(expected);
 
         });
 
@@ -946,8 +946,8 @@ describe('PathHelper', () => {
 
             let expected = 'nana';
 
-            let result = PathHelper.get(initial, '.id2');
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.get(initial, '.id2');
+            expect(actual).to.deep.equal(expected);
 
         });
         it('should a specific object from a collection', async () => {
@@ -961,8 +961,8 @@ describe('PathHelper', () => {
 
             let expected = {id: 3, id2: 'nana'};
 
-            let result = PathHelper.get(initial, '[3]');
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.get(initial, '[3]');
+            expect(actual).to.deep.equal(expected);
         });
         it('should get the collection if the path is an empty String', async () => {
 
@@ -975,8 +975,8 @@ describe('PathHelper', () => {
 
             let expected = initial;
 
-            let result = PathHelper.get(initial, '');
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.get(initial, '');
+            expect(actual).to.deep.equal(expected);
         });
     });
 
@@ -988,8 +988,8 @@ describe('PathHelper', () => {
 
             let expected = [1, 2, 3];
 
-            let result = PathHelper.set(collection, '', value);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.set(collection, '', value);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should set a specific path on object', async () => {
@@ -999,8 +999,8 @@ describe('PathHelper', () => {
 
             let expected = {id: 3, id2: [1, 2, 3]};
 
-            let result = PathHelper.set(collection, 'id2', value);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.set(collection, 'id2', value);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should set a specific path on array', async () => {
@@ -1010,8 +1010,8 @@ describe('PathHelper', () => {
 
             let expected = [1, 2, {id: 3, id2: 'nana'}];
 
-            let result = PathHelper.set(collection, '[2]', value);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.set(collection, '[2]', value);
+            expect(actual).to.deep.equal(expected);
         });
 
         it('should set a a real life collection', async () => {
@@ -1062,10 +1062,32 @@ describe('PathHelper', () => {
                 }
             };
 
-            let expected = [1, 2, {id: 3, id2: 'nana'}];
+            let expected = {
+                isArray: true,
+                '[0]': {
+                    isArray: true
+                },
+                iterator: {
+                    isArray: true,
+                    '[0, 2]': {
+                        isArray: true,
+                        '(0, #>[0][1]<#]': {
+                            stringProp: {
+                                stringIsEmail: true
+                            }
+                        }
+                    },
+                    '[0]': {
+                        isNull: true
+                    }
+                },
+                '(1, 2]': {
+                    isArray: true
+                }
+            };
 
-            let result = PathHelper.set(collection, ['iterator'], value);
-            expect(result).to.deep.equal(expected);
+            let actual = PathHelper.set(collection, ['iterator'], value);
+            expect(actual).to.deep.equal(expected);
         });
     });
 

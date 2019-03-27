@@ -26,34 +26,6 @@ class PathHelper {
     }
 
     /**
-     * If the path is a string, convert it to an array
-     * @param  {String|Array} path - The path
-     * @return {Array}             The path array
-     */
-    static stringToPath(path) {
-
-        // If the path isn't a string, return it
-        if (typeof path !== 'string') return path;
-        // Create new array
-        let output = [];
-        // Split to an array with dot notation
-        let splittedByObjectNotation = path.split('.');
-
-        for (let t = 0; t < splittedByObjectNotation.length; t++) {
-            // Split to an array with bracket notation
-            let splittedByArrayNotation = splittedByObjectNotation[t].split(/\[([^}]+)\]/g);
-            for (let n = 0; n < splittedByArrayNotation.length; n++) {
-                if (splittedByArrayNotation[n].length > 0) {
-                    output.push(splittedByArrayNotation[n]);
-                }
-            }
-        }
-
-        return output;
-
-    };
-
-    /**
      * Method that returns either a boolean (true|false) either an error message as a string when
      * a string starts with a certain template defined under "needle" argument
      * This is the simplified, portable version of the stringStartsWith validator {@link BoolValidator.stringStartsWith}
@@ -288,24 +260,15 @@ class PathHelper {
             path = path.replace('.', '');
         }
 
-        // Get the path as an array
-        path = PathHelper.stringToPath(path);
+        let result = Lodash.get(collection, path, 'undefined');
 
-        // Cache the current object
-        let current = collection;
+        if (result === 'undefined') {
+            path = PathHelper.explodePath(path);
 
-        // For each item in the path, dig into the object
-        for (let i = 0; i < path.length; i++) {
-
-            // If the item isn't found, return the default (or null)
-            if (!current[path[i]]) return def;
-
-            // Otherwise, update the current  value
-            current = current[path[i]];
-
+            result = Lodash.get(collection, path, 'undefined');
         }
 
-        return current;
+        return result;
     }
 
     /**
