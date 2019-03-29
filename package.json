@@ -1,5 +1,5 @@
 {
-  "name": "path-helper",
+  "name": "collection-path-helper",
   "version": "1.0.0",
   "description": "Library for manipulating collection paths. Used mainly for iterating over nested collection and extracting data.",
   "keywords": [
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robertdumitrescu/path-helper.git"
+    "url": "git+https://github.com/robertdumitrescu/collection-path-helper.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/robertdumitrescu/path-helper/issues"
+    "url": "https://github.com/robertdumitrescu/collection-path-helper/issues"
   },
-  "homepage": "https://github.com/robertdumitrescu/path-helper#readme",
+  "homepage": "https://github.com/robertdumitrescu/collection-path-helper#readme",
   "dependencies": {
     "lodash": "4.17.11"
   },

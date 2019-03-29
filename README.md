@@ -1,10 +1,26 @@
 # path-helper
 
-[![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
+[![GitHub version](https://badge.fury.io/gh/robertdumitrescu%2Fcollection-path-helper.svg)](https://github.com/robertdumitrescu/collection-path-helper)
+[![npm version](https://badge.fury.io/js/collection-path-helper.svg)](https://www.npmjs.com/package/collection-path-helper)
+[![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg?style=flat-square)](https://github-tools.github.io/github-release-notes/)
 
 ## Overview
 
 Library for collection path manipulation. Blazing fast, lightweight and reliable. See [Benchmarks](#benchmarks)
+
+#### Install
+
+##### Via NPM
+To install via Node Package Manager (NPM) use the following command:
+```bash
+npm i collection-path-helper
+```
+
+##### Via Yarn
+To install via Yarn use the following command:
+```bash
+yarn add collection-path-helper
+```
 
 #### Available methods
 - [getStartType](#getStartType) - Returns either "object", "array" or "unknown" based on the first element of the path.
@@ -75,3 +91,6 @@ Lodash.get                                      6034730.3    1.01   318754      
 get                                             4410790.6    0.53   230011      5       93    
 Average                                         82712807.52  1.2    4183504.39  5.29    92.61 
 ```
+
+## Badges:
+[Badges](https://badge.fury.io/for/gh/robertdumitrescu/collection-path-helper)
