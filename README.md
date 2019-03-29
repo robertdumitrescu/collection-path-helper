@@ -92,5 +92,10 @@ get                                             4410790.6    0.53   230011      
 Average                                         82712807.52  1.2    4183504.39  5.29    92.61 
 ```
 
-## Badges:
+## Where did it come from?
+Proudly built with sweat and dedication in European Union (E.U) by
+- Robert Dumitrescu [GitHub](https://github.com/robertdumitrescu) / [LinkedIn](https://www.linkedin.com/in/robertdumitrescu/) / [Twitter](https://twitter.com/rodumitrescu)
+- Bogdan Dumitrescu [GitHub](https://github.com/practiseo) / [LinkedIn](https://www.linkedin.com/in/bodudev/)
+
+## Miscellaneous:
 [Badges](https://badge.fury.io/for/gh/robertdumitrescu/collection-path-helper)
