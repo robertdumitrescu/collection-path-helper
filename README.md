@@ -21,6 +21,13 @@ TBC
 #### implodePath
 TBC
 
+## License
+
+### Commercial license
+TBC
+### Open-source license
+This library is free for personal and non-commercial use under the GNU AGPLv3.
+
 ## Benchmarks:
 
 The following results were obtained running the benchmarks on the following configuration:
