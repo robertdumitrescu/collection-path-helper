@@ -1,7 +1,6 @@
 # Changelog
 
-## Initial release (29/03/2019)
-# v1.0.0
+## v1.0.0 (29/03/2019)
 ## Features
 Added the following methods: 
 - **getStartType** - Returns either "object", "array" or "unknown" based on the first element of the path.
