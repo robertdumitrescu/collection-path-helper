@@ -29,6 +29,7 @@
     "chai": "4.2.0",
     "github-release-notes": "0.17.0",
     "mocha": "5.2.0",
-    "npm-cli-login": "0.1.1"
+    "npm-cli-login": "0.1.1",
+    "semantic-release": "^15.13.3"
   }
 }

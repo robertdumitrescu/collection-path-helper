@@ -33,7 +33,7 @@ jobs:
         command: ./getNPMVersion.sh
     - run:
         name: Update NPM version
-        command: npm version patch
+        command: npm version from-git
     - run:
         name: Retrieve new NPM package version
         command: ./getNPMVersion.sh
