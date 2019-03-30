@@ -9,7 +9,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/path.Helper.Spec.js --reporter dot"
+    "test": "mocha src/path.Helper.Spec.js --reporter dot"
   },
   "repository": {
     "type": "git",
