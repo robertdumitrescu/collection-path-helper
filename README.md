@@ -32,6 +32,7 @@ yarn add collection-path-helper
 
 ## Methods
 
+
 #### getStartType
 TBC
 #### explodePath
