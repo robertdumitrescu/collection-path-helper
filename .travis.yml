@@ -4,7 +4,7 @@ node_js:
 jobs:
   include:
   - script: echo "Running unit tests (1)"
-  - script: git tag v1.0.1 && git push origin --tags && git push origin master
+#  - script: git tag v1.0.1 && git push origin --tags && git push origin master
   - stage: GitHub Release
     script: echo "Deploying to GitHub releases ..."
     before_deploy:
