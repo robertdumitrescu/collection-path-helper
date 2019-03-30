@@ -56,16 +56,16 @@ if [ -f VERSION ]; then
     fi
     echo -e "${NOTICE_FLAG} Will set new version to be ${WHITE}$INPUT_STRING"
     echo $INPUT_STRING > VERSION
-    echo "## $INPUT_STRING ($NOW)" > tmpfile
-    git log --pretty=format:"  - %s" "v$BASE_STRING"...HEAD >> tmpfile
-    echo "" >> tmpfile
-    echo "" >> tmpfile
-    cat CHANGELOG.md >> tmpfile
-    mv tmpfile CHANGELOG.md
-    echo -e "$ADJUSTMENTS_MSG"
-    read
+#    echo "## $INPUT_STRING ($NOW)" > tmpfile
+#    git log --pretty=format:"  - %s" "v$BASE_STRING"...HEAD >> tmpfile
+#    echo "" >> tmpfile
+#    echo "" >> tmpfile
+#    cat CHANGELOG.md >> tmpfile
+#    mv tmpfile CHANGELOG.md
+#    echo -e "$ADJUSTMENTS_MSG"
+#    read
     echo -e "$PUSHING_MSG"
-    git add CHANGELOG.md VERSION
+#    git add CHANGELOG.md VERSION
     git commit -m "Bump version to ${INPUT_STRING}."
     git tag -a -m "Tag version ${INPUT_STRING}." "v$INPUT_STRING"
     git push origin --tags
@@ -80,14 +80,14 @@ else
     if [ "$RESPONSE" = "YES" ]; then RESPONSE="y"; fi
     if [ "$RESPONSE" = "y" ]; then
         echo "0.1.0" > VERSION
-        echo "## 0.1.0 ($NOW)" > CHANGELOG.md
-        git log --pretty=format:"  - %s" >> CHANGELOG.md
-        echo "" >> CHANGELOG.md
-        echo "" >> CHANGELOG.md
+#        echo "## 0.1.0 ($NOW)" > CHANGELOG.md
+#        git log --pretty=format:"  - %s" >> CHANGELOG.md
+#        echo "" >> CHANGELOG.md
+#        echo "" >> CHANGELOG.md
         echo -e "$ADJUSTMENTS_MSG"
         read
         echo -e "$PUSHING_MSG"
-        git add VERSION CHANGELOG.md
+#        git add VERSION CHANGELOG.md
         git commit -m "Add VERSION and CHANGELOG.md files, Bump version to v0.1.0."
         git tag -a -m "Tag version 0.1.0." "v0.1.0"
         git push origin --tags
