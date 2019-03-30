@@ -3,33 +3,9 @@ version: 2
 defaults: &defaults
 #  working_directory: ~/project
   docker:
-  - image: circleci/node:8.9.1
+  - image: circleci/node:11.9.0
 
 jobs:
-#  test:
-#    <<: *defaults
-#    steps:
-#    - checkout
-#
-#    - restore_cache:
-#        keys:
-#        - v1-dependencies-{{ checksum "package.json" }}
-#        - v1-dependencies-
-#
-#    - run: npm install
-#    - run:
-#        name: Run tests
-#        command: npm test
-#
-#    - save_cache:
-#        paths:
-#        - node_modules
-#        key: v1-dependencies-{{ checksum "package.json" }}
-#
-#    - persist_to_workspace:
-#        root: ~/repo
-#        paths: .
-
   deploy:
     <<: *defaults
     steps:
@@ -41,14 +17,11 @@ jobs:
         name: List
         command: ls -all
     - run:
-        name: List
-        command: ls -all /
+        name: NPM install
+        command: npm install
     - run:
-        name: List
-        command: ls -all ~
-    - run:
-        name: Install npm-cli-login
-        command: npm install npm-cli-login --save-dev
+        name: Run tests
+        command: npm test
     - run:
         name: Authenticate with registry
         command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u ${NPM_USERNAME} -p ${NPM_PASSWORD} -e ${NPM_EMAIL}
