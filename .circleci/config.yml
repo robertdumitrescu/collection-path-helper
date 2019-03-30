@@ -6,10 +6,10 @@ defaults: &defaults
   - image: circleci/node:8.9.1
 
 jobs:
-  test:
-    <<: *defaults
-    steps:
-    - checkout
+#  test:
+#    <<: *defaults
+#    steps:
+#    - checkout
 #
 #    - restore_cache:
 #        keys:
@@ -33,6 +33,7 @@ jobs:
   deploy:
     <<: *defaults
     steps:
+    - checkout
     - run:
         name: Print Work Directory
         command: pwd
@@ -59,7 +60,7 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-    - test
+#    - test
     - deploy:
         requires:
-        - test
+#        - test
