@@ -20,6 +20,26 @@ describe('PathHelper', () => {
             expect(actual).to.deep.equal(expected);
 
         });
+        it('should return object for path fragment with array notation', async () => {
+
+            let initial = '[2]';
+
+            let expected = 'array';
+
+            let actual = PathHelper.getStartType(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+        it('should return object for path fragment with object notation', async () => {
+
+            let initial = '.randomArrayOfObjects';
+
+            let expected = 'object';
+
+            let actual = PathHelper.getStartType(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
         it('should return array (simple path) - with dynamic element', async () => {
 
             let initial = '[{{x}}].randomArrayOfObjects[2]';
@@ -216,6 +236,29 @@ describe('PathHelper', () => {
             expect(actual).to.deep.equal(expected);
 
         });
+
+        it('should return an exploded path (simple path) - consecutive object notations', async () => {
+
+            let initial = '.lorem.ipsum.dolor.sit.amet';
+
+            let expected = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
+
+            let actual = PathHelper.explodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should return an exploded path (simple path) - consecutive array notations', async () => {
+
+            let initial = '[0][0][2][3][5]';
+
+            let expected = ['[0]', '[0]', '[2]', '[3]', '[5]'];
+
+            let actual = PathHelper.explodePath(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
         it('should return an exploded path (complex path) (1)', async () => {
 
             let initial = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';

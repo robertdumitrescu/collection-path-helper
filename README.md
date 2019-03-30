@@ -120,9 +120,63 @@ let result = PathHelper.getStartType(path);
 console.log(result);
 // =>>>> It will return "object"
 ```
-TBC
 ### explodePath
-TBC
+For a given collection path, it returns an array of exploded path fragments. 
+This is mainly based on the Lodash internal stringToPath method which can be found here: [stringToPath](https://github.com/lodash/lodash/blob/master/.internal/stringToPath.js)
+The big difference between the two is that this one supports string interpolations and mathematical notations such as intervals (inclusion, exclusion and mixed ones) whereas theirs don't.
+Also if the path is not defined or is an empty string, an empty array will be returned.
+
+##### Arguments
+
+- {String} (Default: "") path
+
+##### Returns
+
+It returns as a {String[]} path fragments.
+
+##### Examples
+
+###### Empty string path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '';
+let result = PathHelper.explodePath(path);
+console.log(result);
+// =>>>> It will return []
+```
+
+###### Multiple consecutive object notations path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '.lorem.ipsum.dolor.sit.amet';
+let result = PathHelper.explodePath(path);
+console.log(result);
+// =>>>> It will return ['lorem', 'ipsum', 'dolor', 'sit', 'amet']
+```
+
+###### Multiple consecutive array notations path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '[0][0][2][3][5]';
+let result = PathHelper.explodePath(path);
+console.log(result);
+// =>>>> It will return ['[0]', '[0]', '[2]', '[3]', '[5]']
+```
+
+###### Complex path with mixed notations, interpolations and mathematical notations
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+let result = PathHelper.explodePath(path);
+console.log(result);
+// =>>>> It will return ['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]']
+```
+
+
 ### implodePath
 TBC
 
@@ -134,6 +188,7 @@ Although my libraries are completely free, if you are making the big bucks out o
 - [Donate on Patreon](https://www.patreon.com/robertdumitrescu)
 ### Open-source license
 This library is free for personal and non-commercial use under the GNU AGPLv3.
+
 ## Benchmarks:
 
 The following results were obtained running the benchmarks on the following configuration:
