@@ -1,6 +1,6 @@
 {
   "name": "collection-path-helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library for manipulating collection paths. Used mainly for iterating over nested collection and extracting data.",
   "keywords": [
     "collection path",
