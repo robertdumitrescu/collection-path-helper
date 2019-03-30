@@ -24,13 +24,13 @@ jobs:
         command: npm test
     - run:
         name: Retrieve old NPM package version
-        command: OLD_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+        command: OLD_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' /| sed 's/[",]//g' /| tr -d '[[:space:]]')
     - run:
         name: Update NPM version
         command: npm version patch
     - run:
         name: Retrieve new NPM package version
-        command: NEW_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+        command: NEW_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' /| sed 's/[",]//g' /| tr -d '[[:space:]]')
     - run:
         name: Version change line
         command: echo "Versioned changed in NPM from $OLD_PACKAGE_VERSION to $NEW_PACKAGE_VERSION"
