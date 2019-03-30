@@ -7,6 +7,7 @@
 ## Overview
 
 Library for collection path manipulation. Blazing fast, lightweight and reliable. See [Benchmarks](#benchmarks). This library is mainly designed to work with path that are build based on Lodash get/set methods.
+
 Example of path that would work with this library:
 
 ```text
@@ -40,6 +41,9 @@ yarn add collection-path-helper
     - "unknown" This is returned when the passed path is an empty string. Although, an empty string is a valid path which points to the root object, we can't say certainly what the type is.
 - [explodePath](#explodePath) - Explodes a path in path fragments. (E.g Given "lorem[2].ipsum", it will return ['lorem', '[2]', 'ipsum'])
 - [implodePath](#implodePath) - Implodes an array of pathFragments into an string path (E.g Given ['lorem', '[2]', 'ipsum'], it will return "lorem[2].ipsum")
+- [removePathLevels](#removePathLevels) - Removes from a collection string path certain level(s) or object properties either from the beginning or from the end based on arguments [EXPERIMENTAL]
+- [getSubPaths](#getSubPaths) - For a given path, outputs an array with all the possible sub paths with the option to ignore the first or the last one [EXPERIMENTAL]
+- [replacePathArraysWithString](#replacePathArraysWithString) - Replaces all the array notations within a path with a chosen string. Particularly useful when this is used with string interpolations. [EXPERIMENTAL]
 
 ## Methods
 
@@ -178,6 +182,15 @@ console.log(result);
 
 
 ### implodePath
+TBC
+
+### removePathLevels
+TBC
+
+### getSubPaths
+TBC
+
+### replacePathArraysWithString
 TBC
 
 

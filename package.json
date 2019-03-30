@@ -5,7 +5,12 @@
   "keywords": [
     "collection path",
     "path",
-    "path manipulator"
+    "path manipulator",
+    "object",
+    "array",
+    "object property",
+    "string manipulation",
+    "helper"
   ],
   "main": "index.js",
   "scripts": {
@@ -27,7 +32,6 @@
   "devDependencies": {
     "benchmark": "2.1.4",
     "chai": "4.2.0",
-    "github-release-notes": "0.17.0",
     "mocha": "5.2.0",
     "npm-cli-login": "0.1.1"
   }
