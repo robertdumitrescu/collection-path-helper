@@ -23,6 +23,12 @@ jobs:
         name: Run tests
         command: npm test
     - run:
+        name: Set git global user.email
+        command: git config --global user.email ${GIT_EMAIL}
+    - run:
+        name: Set git global user.name
+        command: git config --global user.name ${GIT_NAME}
+    - run:
         name: Retrieve old NPM package version
         command: OLD_PACKAGE_VERSION=./getNPMVersion.sh
     - run:
