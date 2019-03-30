@@ -36,11 +36,11 @@ jobs:
     - attach_workspace:
         at: ~/repo
     - run:
-        name: Set registry URL
-        command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
+        name: PWD
+        command: pwd
     - run:
         name: Authenticate with registry
-        command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+        command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u 'robertdumitrescu' -p 'bla' -e 'robertdumdd01@gmail.com'
     - run:
         name: Publish package
         command: npm publish
@@ -53,8 +53,3 @@ workflows:
     - deploy:
         requires:
 #        - test
-        filters:
-          tags:
-            only: /^v.*/
-          branches:
-            ignore: /.*/
