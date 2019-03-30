@@ -35,7 +35,7 @@ yarn add collection-path-helper
 ```
 
 #### Available methods
-- [getStartType](#getStartType) - Returns either "object", "array" or "unknown" based on the first element of the path.
+- [getStartType](#getstarttype) - Returns either "object", "array" or "unknown" based on the first element of the path.
     - "object" if the first element of the path is an object notation. (E.g "lorem[2].ipsum" -> lorem is an object representation, therefore, it will return "object")
     - "array" if the first element of the path is an array notation. (E.g "[2].lorem.ipsum" -> [2] is an array representation, therefore, it will return "array")
     - "unknown" This is returned when the passed path is an empty string. Although, an empty string is a valid path which points to the root object, we can't say certainly what the type is.
