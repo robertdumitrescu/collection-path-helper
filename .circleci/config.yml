@@ -6,10 +6,10 @@ defaults: &defaults
   - image: circleci/node:8.9.1
 
 jobs:
-#  test:
-#    <<: *defaults
-#    steps:
-#    - checkout
+  test:
+    <<: *defaults
+    steps:
+    - checkout
 #
 #    - restore_cache:
 #        keys:
