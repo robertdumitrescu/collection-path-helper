@@ -28,5 +28,5 @@ workflows:
   version: 2
   default_workflow:
     jobs:
-    - test:
-    - publish-github-release:
+    - test
+    - publish-github-release
