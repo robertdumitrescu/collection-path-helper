@@ -30,13 +30,13 @@ jobs:
         command: git config --global user.name ${GIT_NAME}
     - run:
         name: Retrieve old NPM package version
-        command: OLD_PACKAGE_VERSION=./getNPMVersion.sh
+        command: OLD_PACKAGE_VERSION=$(./getNPMVersion.sh)
     - run:
         name: Update NPM version
         command: npm version patch
     - run:
         name: Retrieve new NPM package version
-        command: NEW_PACKAGE_VERSION=./getNPMVersion.sh
+        command: NEW_PACKAGE_VERSION=$(./getNPMVersion.sh)
     - run:
         name: Version change line
         command: echo "Versioned changed in NPM from $OLD_PACKAGE_VERSION to $NEW_PACKAGE_VERSION"
