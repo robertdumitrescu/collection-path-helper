@@ -103,7 +103,7 @@ class PathHelper {
 
     /**
      * For a given path string, it will return the type of the first fragment within the path
-     * @param {String} path
+     * @param {String} path - the path that would be exploded and evaluated
      * @returns {String}
      */
     static getStartType(path) {

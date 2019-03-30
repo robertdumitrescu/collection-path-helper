@@ -1,12 +1,23 @@
 # path-helper
-
+[![CircleCI](https://circleci.com/gh/robertdumitrescu/collection-path-helper.svg?style=svg)](https://circleci.com/gh/robertdumitrescu/collection-path-helper)
 [![GitHub version](https://badge.fury.io/gh/robertdumitrescu%2Fcollection-path-helper.svg)](https://github.com/robertdumitrescu/collection-path-helper)
 [![npm version](https://badge.fury.io/js/collection-path-helper.svg)](https://www.npmjs.com/package/collection-path-helper)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg?style=flat-square)](https://github-tools.github.io/github-release-notes/)
 
 ## Overview
 
-Library for collection path manipulation. Blazing fast, lightweight and reliable. See [Benchmarks](#benchmarks)
+Library for collection path manipulation. Blazing fast, lightweight and reliable. See [Benchmarks](#benchmarks). This library is mainly designed to work with path that are build based on Lodash get/set methods.
+Example of path that would work with this library:
+
+```text
+[2].randomArrayOfObjects[2] - normal path
+[2].(2, 5][2] - path with mathematical interval - exclusion start and inclustion end
+[2].[2, 5][2] - path with mathematical interval - inclustion start and inclustion end
+[{{x}}].randomArrayOfObjects[2] - path with interpolations
+.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}] - complex path with multiple interpolations and mathematical intervals
+```
+
+Also it would work with empty paths ("") since those are valid collection paths that are pointing to the root object/array/* in the collection.
 
 #### Install
 
@@ -33,21 +44,96 @@ yarn add collection-path-helper
 ## Methods
 
 
-#### getStartType
+### getStartType
+For a given collection path or for a string path fragment it will return the type of it or the type of the first fragment within the path. 
+It uses path explosion to separate various elements and then evaluates what type is the fragment in cause.
+
+##### Arguments
+
+- {String} (Default: "") path
+
+##### Returns
+
+It returns as a {String} one of the following values: 
+- "object" if the first fragment is pointing to an object
+- "array" if the first fragment is pointing to an array
+- "unknown" if path is not a string, or if the path is an empty string
+
+##### Examples
+
+###### Undefined path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = undefined;
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "unknown"
+```
+
+###### Empty string path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '';
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "unknown"
+```
+
+###### Path starting with array notation
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '[2].randomArrayOfObjects[2]';
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "array"
+```
+
+###### Path starting with object notation
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '.randomArrayOfObjects[2]';
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "object"
+```
+
+###### Path fragment which is array notation
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '[2]';
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "array"
+```
+
+###### Path fragment which is object notation
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const path = '.randomArrayOfObjects';
+let result = PathHelper.getStartType(path);
+console.log(result);
+// =>>>> It will return "object"
+```
 TBC
-#### explodePath
+### explodePath
 TBC
-#### implodePath
+### implodePath
 TBC
 
 
 ## License
 
 ### Commercial license
-TBC
+Although my libraries are completely free, if you are making the big bucks out of them, please consider donating to keep them free for the future. You can do this via the following methods:
+- [Donate on Patreon](https://www.patreon.com/robertdumitrescu)
 ### Open-source license
 This library is free for personal and non-commercial use under the GNU AGPLv3.
-
 ## Benchmarks:
 
 The following results were obtained running the benchmarks on the following configuration:
@@ -93,7 +179,6 @@ Lodash.get                                      6034730.3    1.01   318754      
 get                                             4410790.6    0.53   230011      5       93    
 Average                                         82712807.52  1.2    4183504.39  5.29    92.61 
 ```
-
 
 ## Where did it come from?
 Proudly built with sweat and dedication in European Union (E.U) by

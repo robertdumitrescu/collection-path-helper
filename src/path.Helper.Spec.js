@@ -10,6 +10,16 @@ describe('PathHelper', () => {
     });
 
     describe('-> getStartType', () => {
+        it('should return unknown for undefined', async () => {
+
+            let initial = undefined;
+
+            let expected = 'unknown';
+
+            let actual = PathHelper.getStartType(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
         it('should return array (simple path) - with dynamic element', async () => {
 
             let initial = '[{{x}}].randomArrayOfObjects[2]';
