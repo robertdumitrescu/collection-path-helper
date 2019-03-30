@@ -5,6 +5,8 @@ jobs:
   include:
   - script: echo "Running unit tests (1)"
   - script: echo "Running unit tests (2)"
+  - script: export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+  - script: git tag $TRAVIS_TAG
   - stage: GitHub Release
     script: echo "Deploying to GitHub releases ..."
     deploy:
