@@ -40,10 +40,10 @@ jobs:
         command: pwd
     - run:
         name: Install npm-cli-login
-        command: npm install -g npm-cli-login
+        command: npm install npm-cli-login --save-dev
     - run:
         name: Authenticate with registry
-        command: npm-cli-login -u 'robertdumitrescu' -p 'bla' -e 'robertdumdd01@gmail.com'
+        command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u 'robertdumitrescu' -p 'bla' -e 'robertdumdd01@gmail.com'
     - run:
         name: Publish package
         command: npm publish
