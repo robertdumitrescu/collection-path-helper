@@ -1,3 +1,6 @@
+## 0.2.0 (March 30, 2019)
+
+
 ## 0.1.0 (March 30, 2019)
   - [CHORE] CircleCI test 8
   - [CHORE] CircleCI test 8
