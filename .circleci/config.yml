@@ -1,6 +1,7 @@
 version: 2
 
 defaults: &defaults
+  working_directory: ~/project
   docker:
   - image: circleci/node:8.9.1
 
@@ -30,6 +31,7 @@ jobs:
 #        paths: .
 
   deploy:
+    <<: *defaults
     steps:
     - run:
         name: Print Work Directory
