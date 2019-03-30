@@ -42,6 +42,12 @@ jobs:
         name: List
         command: ls -all
     - run:
+        name: List
+        command: ls -all /
+    - run:
+        name: List
+        command: ls -all ~
+    - run:
         name: Install npm-cli-login
         command: npm install npm-cli-login --save-dev
     - run:
