@@ -1,3 +1,57 @@
+## 1.1.0 (March 30, 2019)
+  - Bump version to 0.2.0.
+  - Add VERSION and CHANGELOG.md files, Bump version to v0.1.0.
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - 1.0.1
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 8
+  - [CHORE] CircleCI test 7
+  - [CHORE] Test CircleCI 7
+  - [CHORE] Test CircleCI 7
+  - [CHORE] Test CircleCI 6
+  - [CHORE] Test CircleCI 6
+  - [CHORE] Test CircleCI 6
+  - [CHORE] Test CircleCI 5
+  - [CHORE] Test CircleCI 4
+  - [CHORE] Test CircleCI 4
+  - [CHORE] Test CircleCI 4
+  - [CHORE] Test CircleCI 3
+  - [CHORE] Test CircleCI 2
+  - [CHORE] Test CircleCI 1
+  - [CHORE] Test Travis 4
+  - [CHORE] Test Travis 4
+  - [CHORE] Test Travis 4
+  - [CHORE] Test Travis 3
+  - [CHORE] Test Travis 2
+  - [CHORE] Test Travis 2
+  - [CHORE] added chai as a dependency
+  - [CHORE] added chai as a dependency
+  - [CHORE] added a proper node.js version
+  - [CHORE] corrected package.json scripts
+  - [CHORE] Test Travis 1
+  - [CHORE] Added travis.yml file
+  - [DOCS] Added authors
+  - [DOCS] Added Badges
+  - [DOCS] Added CHANGELOG.md
+  - [FEATURE] Added filter by object schema
+
 ## 0.2.0 (March 30, 2019)
 
 
