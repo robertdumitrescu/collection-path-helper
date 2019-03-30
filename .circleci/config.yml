@@ -23,6 +23,18 @@ jobs:
         name: Run tests
         command: npm test
     - run:
+        name: Retrieve old NPM package version
+        command: OLD_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+    - run:
+        name: Update NPM version
+        command: npm version patch
+    - run:
+        name: Retrieve new NPM package version
+        command: NEW_PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+    - run:
+        name: Version change line
+        command: echo "Versioned changed in NPM from $OLD_PACKAGE_VERSION to $NEW_PACKAGE_VERSION"
+    - run:
         name: Authenticate with registry
         command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u ${NPM_USERNAME} -p ${NPM_PASSWORD} -e ${NPM_EMAIL}
     - run:
