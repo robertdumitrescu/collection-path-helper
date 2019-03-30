@@ -13,13 +13,19 @@ jobs:
     docker:
     - image: circleci/golang:1.8
     steps:
-    - attach_workspace:
-        at: ./artifacts
-    - run:
-        name: "Publish Release on GitHub"
-        command: |
-          go get github.com/tcnksm/ghrs
-          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+      dependencies:
+        pre:
+        - go get github.com/tcnksm/ghr
+
+      compile:
+        override:
+        - ant package
+
+      deployment:
+        release:
+          tag: /(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)/
+          commands:
+          - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --replace `git describe --tags` output/
 
 
 
