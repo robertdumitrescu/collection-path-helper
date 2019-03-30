@@ -43,7 +43,7 @@ jobs:
         command: npm install npm-cli-login --save-dev
     - run:
         name: Authenticate with registry
-        command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u 'robertdumitrescu' -p 'bla' -e 'robertdumdd01@gmail.com'
+        command: node node_modules/npm-cli-login/bin/npm-cli-login.js -u '${NPM_USERNAME}' -p '${NPM_PASSWORD}' -e '${NPM_EMAIL}'
     - run:
         name: Publish package
         command: npm publish
