@@ -36,8 +36,11 @@ jobs:
     - attach_workspace:
         at: ~/repo
     - run:
-        name: PWD
+        name: Print Work Directory
         command: pwd
+    - run:
+        name: List
+        command: ls -all
     - run:
         name: Install npm-cli-login
         command: npm install npm-cli-login --save-dev
