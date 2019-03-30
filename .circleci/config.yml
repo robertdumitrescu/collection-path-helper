@@ -52,7 +52,7 @@ workflows:
 #    - test
     - deploy:
         requires:
-        - test
+#        - test
         filters:
           tags:
             only: /^v.*/
