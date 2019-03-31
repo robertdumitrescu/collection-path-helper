@@ -39,11 +39,11 @@ yarn add collection-path-helper
     - "object" if the first element of the path is an object notation. (E.g "lorem[2].ipsum" -> lorem is an object representation, therefore, it will return "object")
     - "array" if the first element of the path is an array notation. (E.g "[2].lorem.ipsum" -> [2] is an array representation, therefore, it will return "array")
     - "unknown" This is returned when the passed path is an empty string. Although, an empty string is a valid path which points to the root object, we can't say certainly what the type is.
-- [explodePath](#explodePath) - Explodes a path in path fragments. (E.g Given "lorem[2].ipsum", it will return ['lorem', '[2]', 'ipsum'])
-- [implodePath](#implodePath) - Implodes an array of pathFragments into an string path (E.g Given ['lorem', '[2]', 'ipsum'], it will return "lorem[2].ipsum")
-- [removePathLevels](#removePathLevels) - Removes from a collection string path certain level(s) or object properties either from the beginning or from the end based on arguments [EXPERIMENTAL]
-- [getSubPaths](#getSubPaths) - For a given path, outputs an array with all the possible sub paths with the option to ignore the first or the last one [EXPERIMENTAL]
-- [replacePathArraysWithString](#replacePathArraysWithString) - Replaces all the array notations within a path with a chosen string. Particularly useful when this is used with string interpolations. [EXPERIMENTAL]
+- [explodePath](#explodepath) - Explodes a path in path fragments. (E.g Given "lorem[2].ipsum", it will return ['lorem', '[2]', 'ipsum'])
+- [implodePath](#implodepath) - Implodes an array of pathFragments into an string path (E.g Given ['lorem', '[2]', 'ipsum'], it will return "lorem[2].ipsum")
+- [removePathLevels](#removepathlevels) - Removes from a collection string path certain level(s) or object properties either from the beginning or from the end based on arguments [EXPERIMENTAL]
+- [getSubPaths](#getsubpaths) - For a given path, outputs an array with all the possible sub paths with the option to ignore the first or the last one [EXPERIMENTAL]
+- [replacePathArraysWithString](#replacepatharrayswithstring) - Replaces all the array notations within a path with a chosen string. Particularly useful when this is used with string interpolations. [EXPERIMENTAL]
 
 ## Methods
 
@@ -182,7 +182,60 @@ console.log(result);
 
 
 ### implodePath
-TBC
+Literally the opposite of [explodePath](#explodepath). For a given array of path fragments, it will return a composed (imploded) collection route/path.
+INFO: If you pass a path like this '.lorem.ipsum.dolor' to explodePath and you get ['lorem', 'ipsum', 'dolor'], and pass this array back to implodePath, the method will return "lorem.ipsum.dolor". 
+This happens because the dot at the start is usually a parsing shortcoming rather than being part of the standard way of defining collection routes.
+
+##### Arguments
+
+- {String[]} (Default: "") pathFragments
+
+##### Returns
+
+It returns a path as a {String}.
+
+##### Examples
+
+###### Empty string path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const pathFragments = [];
+let result = PathHelper.implodePath(pathFragments);
+console.log(result);
+// =>>>> It will return ""
+```
+
+###### Multiple consecutive object notations path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const pathFragments = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
+let result = PathHelper.implodePath(pathFragments);
+console.log(result);
+// =>>>> It will return "lorem.ipsum.dolor.sit.amet"
+```
+
+###### Multiple consecutive array notations path
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const pathFragments = ['[0]', '[0]', '[2]', '[3]', '[5]'];
+let result = PathHelper.implodePath(pathFragments);
+console.log(result);
+// =>>>> It will return "[0][0][2][3][5]"
+```
+
+###### Complex path with mixed notations, interpolations and mathematical notations
+```javascript
+const PathHelper = require('collection-path-helper').PathHelper;
+
+const pathFragments = ['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]'];
+let result = PathHelper.implodePath(pathFragments);
+console.log(result);
+// =>>>> It will return "lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]"
+```
+
 
 ### removePathLevels
 TBC
