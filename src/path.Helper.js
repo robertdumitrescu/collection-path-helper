@@ -4,7 +4,7 @@ const Lodash = require('lodash');
  * @class ObjectHelper
  * @constructor
  */
-class PathHelper {
+class CollectionPathHelper {
 
     /**
      * Method that returns a boolean (true|false) when
@@ -56,7 +56,7 @@ class PathHelper {
             if (!property.startsWith(options.needle)) {
                 return false;
             }
-        } else if (PathHelper.objectIsRegExp(options.needle)) {
+        } else if (CollectionPathHelper.objectIsRegExp(options.needle)) {
             if (!options.needle.test(property)) {
                 return false;
             }
@@ -141,7 +141,7 @@ class PathHelper {
             while (partial.indexOf('[', 1) > -1) {
                 let newFragment = partial.substr(0, partial.indexOf('[', 1));
                 splittedByArray.push(newFragment);
-                partial = PathHelper.getRemainingString(partial, {discardedStrings: [newFragment]});
+                partial = CollectionPathHelper.getRemainingString(partial, {discardedStrings: [newFragment]});
             }
             splittedByArray.push(partial);
             /** Overwriting the elements which was splitted further */
@@ -182,13 +182,13 @@ class PathHelper {
     static implodePath(pathFragments) {
         let path = '';
         for (let i = 0; i < pathFragments.length; i++) {
-            if (PathHelper.getStartType(pathFragments[i]) === 'object') {
+            if (CollectionPathHelper.getStartType(pathFragments[i]) === 'object') {
                 if (path === '') {
                     path = `${path}${pathFragments[i]}`;
                 } else {
                     path = `${path}.${pathFragments[i]}`;
                 }
-            } else if (PathHelper.getStartType(pathFragments[i]) === 'array') {
+            } else if (CollectionPathHelper.getStartType(pathFragments[i]) === 'array') {
                 path = `${path}${pathFragments[i]}`;
             }
         }
@@ -213,7 +213,7 @@ class PathHelper {
 
         options = {...defaultOptions, ...options};
 
-        let pathFragments = PathHelper.explodePath(path);
+        let pathFragments = CollectionPathHelper.explodePath(path);
 
         if (options.termination === 'end') {
             pathFragments.splice(pathFragments.length - options.count, options.count);
@@ -221,7 +221,7 @@ class PathHelper {
             pathFragments.splice(0, options.count);
         }
 
-        return PathHelper.implodePath(pathFragments);
+        return CollectionPathHelper.implodePath(pathFragments);
     }
 
     /**
@@ -263,7 +263,7 @@ class PathHelper {
         let result = Lodash.get(collection, path, 'undefined');
 
         if (result === 'undefined') {
-            path = PathHelper.explodePath(path);
+            path = CollectionPathHelper.explodePath(path);
 
             result = Lodash.get(collection, path, 'undefined');
         }
@@ -322,10 +322,10 @@ class PathHelper {
             result.push('');
         }
 
-        let explodedProperty = PathHelper.explodePath(property);
+        let explodedProperty = CollectionPathHelper.explodePath(property);
 
         for (let i = 0; i < explodedProperty.length; i++) {
-            result.push(PathHelper.implodePath(explodedProperty.slice(0, i + 1)));
+            result.push(CollectionPathHelper.implodePath(explodedProperty.slice(0, i + 1)));
         }
 
         if (result.length > 0 && options.ignoreFull) {
@@ -350,16 +350,16 @@ class PathHelper {
 
         options = {...defaultOptions, ...options};
 
-        let explodedPath = PathHelper.explodePath(property);
+        let explodedPath = CollectionPathHelper.explodePath(property);
 
         for (let i = 0; i < explodedPath.length; i++) {
-            if (PathHelper.getStartType(explodedPath[i]) === 'array') {
+            if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
                 explodedPath[i] = options.string;
             }
         }
 
-        return PathHelper.implodePath(explodedPath);
+        return CollectionPathHelper.implodePath(explodedPath);
     }
 }
 
-if (typeof module !== 'undefined' && module.exports) { module.exports = PathHelper; }
+if (typeof module !== 'undefined' && module.exports) { module.exports = CollectionPathHelper; }

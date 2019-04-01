@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Browser spec for UMD support</title>
+    <script src="./../dist/collection-path-helper.js"></script>
+    <script>
+        var complexPath = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
+        console.log(`Initial path: ${complexPath}`);
+        console.log(collectionPathHelper.getStartType(complexPath));
+        let pathFragments = collectionPathHelper.explodePath(complexPath);
+        console.log(pathFragments);
+        let restoredPath = collectionPathHelper.implodePath(pathFragments);
+        console.log(restoredPath);
+    </script>
+</head>
+<body>
+</body>
+</html>

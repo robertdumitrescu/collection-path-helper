@@ -1,1 +1,1 @@
-module.exports.PathHelper = require('./src/path.Helper');
+module.exports = require('./src/path.Helper');

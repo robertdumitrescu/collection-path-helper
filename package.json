@@ -10,17 +10,36 @@
     "array",
     "object property",
     "string manipulation",
-    "helper"
+    "helper",
+    "util",
+    "functional",
+    "server"
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/path.Helper.Spec.js --reporter dot"
+    "test": "mocha src/path.Helper.Spec.js --reporter dot",
+    "test-umd-browser": "mocha src/path.Helper.Spec.js --reporter dot",
+    "test-umd-node": "node tests/node.spec.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/robertdumitrescu/collection-path-helper.git"
   },
-  "author": "",
+  "engines": {
+    "node": ">=11.10.0"
+  },
+  "author": {
+    "name": "Robert Dumitrescu",
+    "email": "robertdum01@gmail.com",
+    "url": "http://rdumitrescu.com"
+  },
+  "contributors": [
+    {
+      "name": "Bogdan Dumitrescu",
+      "email": "",
+      "url": ""
+    }
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/robertdumitrescu/collection-path-helper/issues"
@@ -30,9 +49,16 @@
     "lodash": "4.17.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
     "benchmark": "2.1.4",
     "chai": "4.2.0",
     "mocha": "5.2.0",
-    "npm-cli-login": "0.1.1"
+    "npm-cli-login": "0.1.1",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   }
 }

@@ -2,11 +2,11 @@
 
 const expect = require('chai').expect;
 
-describe('PathHelper', () => {
+describe('CollectionPathHelper', () => {
 
-    let PathHelper;
+    let CollectionPathHelper;
     before(() => {
-        PathHelper = require('./path.Helper');
+        CollectionPathHelper = require('./../dist/collection-path-helper');
     });
 
     describe('-> getStartType', () => {
@@ -16,7 +16,7 @@ describe('PathHelper', () => {
 
             let expected = 'unknown';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -26,7 +26,7 @@ describe('PathHelper', () => {
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -36,7 +36,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -46,7 +46,7 @@ describe('PathHelper', () => {
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -56,7 +56,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -66,7 +66,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -77,7 +77,7 @@ describe('PathHelper', () => {
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -87,7 +87,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -97,7 +97,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -107,7 +107,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -117,7 +117,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -127,7 +127,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -137,7 +137,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -147,7 +147,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -157,7 +157,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -167,7 +167,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -177,7 +177,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -187,7 +187,7 @@ describe('PathHelper', () => {
 
             let expected = 'object';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -197,7 +197,7 @@ describe('PathHelper', () => {
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -208,7 +208,7 @@ describe('PathHelper', () => {
 
             let expected = 'array';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -219,7 +219,7 @@ describe('PathHelper', () => {
 
             let expected = 'unknown';
 
-            let actual = PathHelper.getStartType(initial);
+            let actual = CollectionPathHelper.getStartType(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -232,7 +232,7 @@ describe('PathHelper', () => {
 
             let expected = ['[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -243,7 +243,7 @@ describe('PathHelper', () => {
 
             let expected = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -254,7 +254,7 @@ describe('PathHelper', () => {
 
             let expected = ['[0]', '[0]', '[2]', '[3]', '[5]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -265,7 +265,7 @@ describe('PathHelper', () => {
 
             let expected = ['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -275,7 +275,7 @@ describe('PathHelper', () => {
 
             let expected = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -286,7 +286,7 @@ describe('PathHelper', () => {
 
             let expected = ['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -296,7 +296,7 @@ describe('PathHelper', () => {
 
             let expected = ['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -306,7 +306,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '(2, 3]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -316,7 +316,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '[2, 3)'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -326,7 +326,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '(2, 3)'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -336,7 +336,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '[2, 3]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -346,7 +346,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '(2,3]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -356,7 +356,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '[2,3)'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -366,7 +366,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '(2,3)'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -376,7 +376,7 @@ describe('PathHelper', () => {
 
             let expected = ['id3', '[2,3]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -386,7 +386,7 @@ describe('PathHelper', () => {
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -397,7 +397,7 @@ describe('PathHelper', () => {
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]', '[5]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -408,7 +408,7 @@ describe('PathHelper', () => {
 
             let expected = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -419,7 +419,7 @@ describe('PathHelper', () => {
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -430,7 +430,7 @@ describe('PathHelper', () => {
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -441,7 +441,7 @@ describe('PathHelper', () => {
 
             let expected = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]', '{{z}}', '{{t}}', 'lorem', '[{{n}}]'];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -452,7 +452,7 @@ describe('PathHelper', () => {
 
             let expected = [];
 
-            let actual = PathHelper.explodePath(initial);
+            let actual = CollectionPathHelper.explodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -465,7 +465,7 @@ describe('PathHelper', () => {
 
             let initial = ['[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -476,7 +476,7 @@ describe('PathHelper', () => {
 
             let expected = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -487,7 +487,7 @@ describe('PathHelper', () => {
 
             let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -498,7 +498,7 @@ describe('PathHelper', () => {
 
             let expected = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]';
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -508,7 +508,7 @@ describe('PathHelper', () => {
 
             let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -519,7 +519,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '[2, 3)'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -529,7 +529,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '(2, 3]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -539,7 +539,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '(2, 3)'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -549,7 +549,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '[2, 3]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -559,7 +559,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '[2,3)'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -569,7 +569,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '(2,3]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -579,7 +579,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '(2,3)'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -589,7 +589,7 @@ describe('PathHelper', () => {
 
             let initial = ['[2]', '[2,3]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -599,7 +599,7 @@ describe('PathHelper', () => {
 
             let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -610,7 +610,7 @@ describe('PathHelper', () => {
 
             let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]', '[5]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -621,7 +621,7 @@ describe('PathHelper', () => {
 
             let initial = ['lorem', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -632,7 +632,7 @@ describe('PathHelper', () => {
 
             let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -643,7 +643,7 @@ describe('PathHelper', () => {
 
             let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -654,7 +654,7 @@ describe('PathHelper', () => {
 
             let initial = ['{{y}}', '[{{x}}]', 'randomArrayOfObjects', '[2]', '{{z}}', '{{t}}', 'lorem', '[{{n}}]'];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -665,7 +665,7 @@ describe('PathHelper', () => {
 
             let initial = [];
 
-            let actual = PathHelper.implodePath(initial);
+            let actual = CollectionPathHelper.implodePath(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -678,7 +678,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -688,7 +688,7 @@ describe('PathHelper', () => {
 
             let expected = 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -699,7 +699,7 @@ describe('PathHelper', () => {
 
             let expected = '[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
 
         });
@@ -710,7 +710,7 @@ describe('PathHelper', () => {
 
             let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -721,7 +721,7 @@ describe('PathHelper', () => {
 
             let expected = 'lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
 
         });
@@ -732,7 +732,7 @@ describe('PathHelper', () => {
 
             let expected = '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -743,7 +743,7 @@ describe('PathHelper', () => {
 
             let expected = '[3][{{x_nx_23}}][5][loremIpsum]';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
 
         });
@@ -754,7 +754,7 @@ describe('PathHelper', () => {
 
             let expected = 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -765,7 +765,7 @@ describe('PathHelper', () => {
 
             let expected = 'lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
 
         });
@@ -776,7 +776,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -786,7 +786,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -796,7 +796,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let actual = PathHelper.removePathLevels(initial, {count: 2});
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -806,7 +806,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray';
 
-            let actual = PathHelper.removePathLevels(initial, {count: 2});
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -816,7 +816,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomArrayOfObjects[2].randomSubArray[1]';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -826,7 +826,7 @@ describe('PathHelper', () => {
 
             let expected = '[2].randomSubArray[1].lorem';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -836,7 +836,7 @@ describe('PathHelper', () => {
 
             let expected = '[2].randomSubArray[1].{{y}}';
 
-            let actual = PathHelper.removePathLevels(initial, {termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -846,7 +846,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomSubArray[1].{{y}}';
 
-            let actual = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -856,7 +856,7 @@ describe('PathHelper', () => {
 
             let expected = 'randomSubArray[{{x}}].{{y}}';
 
-            let actual = PathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -866,7 +866,7 @@ describe('PathHelper', () => {
 
             let expected = '[0]';
 
-            let actual = PathHelper.removePathLevels(initial);
+            let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
         });
     });
@@ -878,7 +878,7 @@ describe('PathHelper', () => {
 
             let expected = 'x';
 
-            let actual = PathHelper.getFirstDynamicVariableName(initial);
+            let actual = CollectionPathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -889,7 +889,7 @@ describe('PathHelper', () => {
 
             let expected = 'blabla';
 
-            let actual = PathHelper.getFirstDynamicVariableName(initial);
+            let actual = CollectionPathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -899,7 +899,7 @@ describe('PathHelper', () => {
 
             let expected = 'lorem';
 
-            let actual = PathHelper.getFirstDynamicVariableName(initial);
+            let actual = CollectionPathHelper.getFirstDynamicVariableName(initial);
             expect(actual).to.deep.equal(expected);
         });
     });
@@ -909,7 +909,7 @@ describe('PathHelper', () => {
 
             let initial = '{{x}}[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
@@ -917,7 +917,7 @@ describe('PathHelper', () => {
 
             let initial = '.{{x}}[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
@@ -925,7 +925,7 @@ describe('PathHelper', () => {
 
             let initial = '[{{x}}][1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(true);
         });
 
@@ -933,7 +933,7 @@ describe('PathHelper', () => {
 
             let initial = 'lorem[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
@@ -941,7 +941,7 @@ describe('PathHelper', () => {
 
             let initial = '.bla[1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
@@ -949,7 +949,7 @@ describe('PathHelper', () => {
 
             let initial = '[2][1].bla';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
@@ -957,7 +957,7 @@ describe('PathHelper', () => {
 
             let initial = '[2][1].bla[{{x}}]';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
 
@@ -965,7 +965,7 @@ describe('PathHelper', () => {
 
             let initial = 'bla[1].bla[{{x}}]';
 
-            let actual = PathHelper.isPathStartDynamic(initial);
+            let actual = CollectionPathHelper.isPathStartDynamic(initial);
             expect(actual).to.deep.equal(false);
         });
     });
@@ -977,7 +977,7 @@ describe('PathHelper', () => {
 
             let expected = 'nana';
 
-            let actual = PathHelper.get(initial, 'id2');
+            let actual = CollectionPathHelper.get(initial, 'id2');
             expect(actual).to.deep.equal(expected);
 
         });
@@ -988,7 +988,7 @@ describe('PathHelper', () => {
 
             let expected = 'bla';
 
-            let actual = PathHelper.get(initial, 'id3.(2, 3]');
+            let actual = CollectionPathHelper.get(initial, 'id3.(2, 3]');
             expect(actual).to.deep.equal(expected);
 
         });
@@ -999,7 +999,7 @@ describe('PathHelper', () => {
 
             let expected = 'nana';
 
-            let actual = PathHelper.get(initial, '.id2');
+            let actual = CollectionPathHelper.get(initial, '.id2');
             expect(actual).to.deep.equal(expected);
 
         });
@@ -1014,7 +1014,7 @@ describe('PathHelper', () => {
 
             let expected = {id: 3, id2: 'nana'};
 
-            let actual = PathHelper.get(initial, '[3]');
+            let actual = CollectionPathHelper.get(initial, '[3]');
             expect(actual).to.deep.equal(expected);
         });
         it('should get the collection if the path is an empty String', async () => {
@@ -1028,7 +1028,7 @@ describe('PathHelper', () => {
 
             let expected = initial;
 
-            let actual = PathHelper.get(initial, '');
+            let actual = CollectionPathHelper.get(initial, '');
             expect(actual).to.deep.equal(expected);
         });
     });
@@ -1041,7 +1041,7 @@ describe('PathHelper', () => {
 
             let expected = [1, 2, 3];
 
-            let actual = PathHelper.set(collection, '', value);
+            let actual = CollectionPathHelper.set(collection, '', value);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1052,7 +1052,7 @@ describe('PathHelper', () => {
 
             let expected = {id: 3, id2: [1, 2, 3]};
 
-            let actual = PathHelper.set(collection, 'id2', value);
+            let actual = CollectionPathHelper.set(collection, 'id2', value);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1063,7 +1063,7 @@ describe('PathHelper', () => {
 
             let expected = [1, 2, {id: 3, id2: 'nana'}];
 
-            let actual = PathHelper.set(collection, '[2]', value);
+            let actual = CollectionPathHelper.set(collection, '[2]', value);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1139,7 +1139,7 @@ describe('PathHelper', () => {
                 }
             };
 
-            let actual = PathHelper.set(collection, ['iterator'], value);
+            let actual = CollectionPathHelper.set(collection, ['iterator'], value);
             expect(actual).to.deep.equal(expected);
         });
     });
@@ -1150,7 +1150,7 @@ describe('PathHelper', () => {
             let property = 2;
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1159,7 +1159,7 @@ describe('PathHelper', () => {
             let property = null;
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1168,7 +1168,7 @@ describe('PathHelper', () => {
             let property = false;
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1177,7 +1177,7 @@ describe('PathHelper', () => {
             let property = '';
             let expected = [''];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1186,7 +1186,7 @@ describe('PathHelper', () => {
             let property = '';
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreRoot: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1195,7 +1195,7 @@ describe('PathHelper', () => {
             let property = '';
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreFull: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreFull: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1204,7 +1204,7 @@ describe('PathHelper', () => {
             let property = '';
             let expected = [];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1213,7 +1213,7 @@ describe('PathHelper', () => {
             let property = 'lorem';
             let expected = ['', 'lorem'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1222,7 +1222,7 @@ describe('PathHelper', () => {
             let property = '.lorem';
             let expected = ['', 'lorem'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1231,7 +1231,7 @@ describe('PathHelper', () => {
             let property = 'lorem.ipsum';
             let expected = ['', 'lorem', 'lorem.ipsum'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1240,7 +1240,7 @@ describe('PathHelper', () => {
             let property = '[2].ipsum';
             let expected = ['', '[2]', '[2].ipsum'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1249,7 +1249,7 @@ describe('PathHelper', () => {
             let property = '[2][3]';
             let expected = ['', '[2]', '[2][3]'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1258,7 +1258,7 @@ describe('PathHelper', () => {
             let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
             let expected = ['', 'lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]'];
 
-            let actual = PathHelper.getSubPaths(property);
+            let actual = CollectionPathHelper.getSubPaths(property);
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1267,7 +1267,7 @@ describe('PathHelper', () => {
             let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
             let expected = ['lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]'];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreRoot: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1276,7 +1276,7 @@ describe('PathHelper', () => {
             let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
             let expected = ['', 'lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]'];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreFull: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreFull: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1285,7 +1285,7 @@ describe('PathHelper', () => {
             let property = 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2][5000]';
             let expected = ['lorem', 'lorem[2]', 'lorem[2][5]', 'lorem[2][5][{{aab}}]', 'lorem[2][5][{{aab}}].ipsum', 'lorem[2][5][{{aab}}].ipsum.foo', 'lorem[2][5][{{aab}}].ipsum.foo.bar', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}', 'lorem[2][5][{{aab}}].ipsum.foo.bar.{{aac}}[2]'];
 
-            let actual = PathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
+            let actual = CollectionPathHelper.getSubPaths(property, {ignoreRoot: true, ignoreFull: true});
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1308,7 +1308,7 @@ describe('PathHelper', () => {
                 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'
             ];
 
-            let actual = PathHelper.getSubPaths(initial);
+            let actual = CollectionPathHelper.getSubPaths(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -1332,7 +1332,7 @@ describe('PathHelper', () => {
                 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'
             ];
 
-            let actual = PathHelper.getSubPaths(initial);
+            let actual = CollectionPathHelper.getSubPaths(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -1350,7 +1350,7 @@ describe('PathHelper', () => {
                 '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'
             ];
 
-            let actual = PathHelper.getSubPaths(initial);
+            let actual = CollectionPathHelper.getSubPaths(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -1370,7 +1370,7 @@ describe('PathHelper', () => {
                 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'
             ];
 
-            let actual = PathHelper.getSubPaths(initial);
+            let actual = CollectionPathHelper.getSubPaths(initial);
             expect(actual).to.deep.equal(expected);
 
         });
@@ -1382,7 +1382,7 @@ describe('PathHelper', () => {
 
                 let expected = '';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1392,7 +1392,7 @@ describe('PathHelper', () => {
 
                 let expected = 'bla';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1402,7 +1402,7 @@ describe('PathHelper', () => {
 
                 let expected = 'bla';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1412,7 +1412,7 @@ describe('PathHelper', () => {
 
                 let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1422,7 +1422,7 @@ describe('PathHelper', () => {
 
                 let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1432,7 +1432,7 @@ describe('PathHelper', () => {
 
                 let expected = 'bla.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1442,7 +1442,7 @@ describe('PathHelper', () => {
 
                 let expected = 'randomArrayOfObjects.lorem.{{y}}.lorem.lorem';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1452,7 +1452,7 @@ describe('PathHelper', () => {
 
                 let expected = 'randomSubArray.lorem.{{y}}';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
 
@@ -1462,7 +1462,7 @@ describe('PathHelper', () => {
 
                 let expected = 'lorem.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = PathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
                 expect(actual).to.deep.equal(expected);
             });
         });
