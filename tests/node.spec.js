@@ -1,4 +1,5 @@
-const collectionPathHelper = require('./../dist/collection-path-helper');
+// const collectionPathHelper = require('./../dist/collection-path-helper');
+const collectionPathHelper = require('./../lib/path.Helper');
 var complexPath = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
 console.log(`Initial path: ${complexPath}`);
 console.log(collectionPathHelper.getStartType(complexPath));
