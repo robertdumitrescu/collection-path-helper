@@ -4,6 +4,11 @@
 [![npm version](https://badge.fury.io/js/collection-path-helper.svg)](https://www.npmjs.com/package/collection-path-helper)
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg?style=flat-square)](https://github-tools.github.io/github-release-notes/)
 
+##### Sizes: 
+
+[![Minified](https://flat.badgen.net/bundlephobia/min/collection-path-helper)](https://bundlephobia.com/result?p=collection-path-helper)
+[![Minified + GZIP](https://flat.badgen.net/bundlephobia/minzip/collection-path-helper)](https://bundlephobia.com/result?p=collection-path-helper)
+
 ## Overview
 
 Library for collection path manipulation. Blazing fast, lightweight and reliable. See [Benchmarks](#benchmarks). This library is mainly designed to work with path that are build based on Lodash get/set methods.
