@@ -5,17 +5,12 @@
 const { src, dest, parallel, series } = require('gulp');
 const del = require('del');
 const babel = require('@babel/core');
-// const es2015 = require('babel-core');
 const FileSystem = require('fs');
 const mkdirp = require('mkdirp');
 const webpack = require('webpack');
-// const UglifyJS = require('uglify-js');
 const Terser = require('terser');
 const util = require('util');
 const sleep = util.promisify(setTimeout);
-const merge = require('webpack-merge');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const ncp = require('ncp').ncp;
 const Glob = require('glob').Glob;
 
@@ -133,109 +128,6 @@ function buildInitial() {
     }));
 }
 
-function buildBrowserOptimized() {
-    return new Promise(((resolve, reject) => {
-
-        webpack({
-            mode: 'production',
-            stats: {
-                colors: false,
-                hash: true,
-                timings: true,
-                assets: true,
-                chunks: true,
-                chunkModules: true,
-                modules: true,
-                children: true,
-            },
-            entry: './dist/temp/path.Helper.js',
-            output: {
-                path: __dirname + '/dist',
-                globalObject: 'typeof self !== \'undefined\' ? self : this',
-                library: 'CollectionPathHelper',
-                filename: 'path.Helper.browser.js',
-                auxiliaryComment: 'Test Comment'
-            },
-            optimization: {
-                // minimizer: [
-                //     new UglifyJSPlugin({
-                //         sourceMap: true,
-                //         uglifyOptions: {
-                //             compress: {
-                //                 inline: false
-                //             }
-                //         }
-                //     })
-                // ],
-                runtimeChunk: false,
-                splitChunks: {
-                    cacheGroups: {
-                        default: false,
-                        commons: {
-                            test: /[\\/]node_modules[\\/]/,
-                            name: 'vendor_app',
-                            chunks: 'all',
-                            minChunks: 2
-                        }
-                    }
-                }
-            },
-            plugins: [
-                new webpack.DefinePlugin({
-                    'process.env': {
-                        NODE_ENV: JSON.stringify('production')
-                    },
-                }),
-                new CompressionPlugin({
-                    filename: '[path].gz[query]',
-                    algorithm: 'gzip',
-                    test: /\.js$|\.css$|\.html$/,
-                    threshold: 10240,
-                    minRatio: 0
-                })
-            ],
-        }, (err, stats) => { // Stats Object
-            if (err || stats.hasErrors()) {
-                console.log(err);
-                console.log(JSON.stringify(err));
-                console.log(stats);
-                reject({err: JSON.stringify(err), stats: stats});
-            }
-
-            resolve();
-        });
-
-    }));
-}
-
-function umdify() {
-    return new Promise(((resolve, reject) => {
-
-        webpack({
-            mode: 'production',
-            entry: './dist/path.Helper.js',
-            output: {
-                path: __dirname + '/dist',
-                globalObject: 'typeof self !== \'undefined\' ? self : this',
-                library: 'CollectionPathHelper',
-                libraryTarget: 'umd',
-                filename: 'path.Helper.js',
-                auxiliaryComment: 'Test Comment'
-            },
-            optimization: {
-                minimize: false
-            }
-        }, (err, stats) => { // Stats Object
-            if (err || stats.hasErrors()) {
-                reject({err: err, stats: stats});
-            }
-
-            resolve();
-        });
-
-    }));
-}
-
 async function cpInitialFiles() {
     let entitites = [
         {
@@ -280,8 +172,8 @@ async function babelify() {
                     targets: {
                         node: '6.17.0'
                     },
-                    useBuiltIns: 'usage',
-                    corejs: 3
+                    // useBuiltIns: 'usage',
+                    // corejs: 3
                 }
             ]
         ],
@@ -297,35 +189,6 @@ async function babelify() {
 }
 
 /**
- * Babelify file
- * @returns {*}
- */
-function babelifyBrowserOptimized() {
-
-    return new Promise(((resolve, reject) => {
-
-        let options = {
-            babelrc: true
-        };
-
-        let result = babel.transformFileSync('dist/path.Helper.js', options);
-
-        FileSystem.writeFileSync('dist/path.Helper.js', result.code, {encoding: 'utf8', flag: 'w'});
-
-        resolve();
-    }));
-}
-
-function sleepPromise() {
-    return new Promise((async (resolve, reject) => {
-
-        await sleep(1000);
-
-        resolve();
-    }));
-}
-
-/**
  * Uglify file
  * @returns {*}
  */
@@ -334,13 +197,9 @@ function uglify() {
     return new Promise(((resolve, reject) => {
 
         let options = {
-            // toplevel: true,
-            // compress: {
-            //     passes: 3
-            // },
-            // output: {
-            //     beautify: false,
-            // },
+            compress: {
+                passes: 3
+            },
             sourceMap: {
                 filename: 'path.Helper.min.js',
                 url: 'path.Helper.min.js.map'
@@ -360,45 +219,4 @@ function uglify() {
     }));
 }
 
-/**
- * Uglify file
- * @returns {*}
- */
-function uglifyBrowserOptimized() {
-
-    return new Promise(((resolve, reject) => {
-
-        let options = {
-            // toplevel: true,
-            // compress: {
-            //     passes: 3
-            // },
-            // output: {
-            //     beautify: false,
-            // },
-            sourceMap: {
-                filename: 'path.Helper.browser.js',
-                url: 'path.Helper.min.js.map'
-            }
-        };
-
-        let file = FileSystem.readFileSync('dist/path.Helper.browser.js', 'utf8');
-
-        var result = Terser.minify(file, options);
-
-        // console.log(result);
-
-        FileSystem.writeFileSync('dist/path.Helper.browser.js', result.code, {encoding: 'utf8', flag: 'w'});
-        // FileSystem.writeFileSync('dist/path.Helper.min.js.map', result.map, {encoding: 'utf8', flag: 'w'});
-
-        resolve();
-    }));
-}
-
-// async function main() {
-//     await GulpHelper.babelify('dist/temp/*');
-// }
-//
-// main();
-
-exports.default = series(clean, createFolderStructures, cpInitialFiles, babelify, buildInitial, buildBrowserOptimized, cpFiles, uglify, uglifyBrowserOptimized, cleanTemp);
+exports.default = series(clean, createFolderStructures, cpInitialFiles, babelify, buildInitial, cpFiles, uglify, cleanTemp);

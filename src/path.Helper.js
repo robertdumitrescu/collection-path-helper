@@ -1,3 +1,4 @@
+require('core-js/features/array/flat');
 const lodashGet = require('lodash/get');
 const lodashSet = require('lodash/set');
 
