@@ -119,6 +119,8 @@ function buildInitial() {
             }
         }, (err, stats) => { // Stats Object
             if (err || stats.hasErrors()) {
+                console.log(err);
+                console.log(stats);
                 reject({err: err, stats: stats});
             }
 
