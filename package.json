@@ -17,11 +17,10 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/path.Helper.Spec.js --reporter dot",
+    "test": "mocha src/path.Helper.spec.js --reporter dot",
     "benchmark": "mocha src/path.Helper.Spec.js --reporter dot",
     "test-umd-browser": "mocha src/path.Helper.Spec.js --reporter dot",
-    "test-umd-node": "node tests/node.spec.js",
-    "build": "node"
+    "test-umd-node": "node tests/node.spec.js"
   },
   "repository": {
     "type": "git",
