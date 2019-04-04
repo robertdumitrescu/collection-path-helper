@@ -6,7 +6,7 @@ describe('CollectionPathHelper', () => {
 
     let CollectionPathHelper;
     before(() => {
-        CollectionPathHelper = require('./../dist/collection-path-helper');
+        CollectionPathHelper = require('./path.Helper');
     });
 
     describe('-> getStartType', () => {

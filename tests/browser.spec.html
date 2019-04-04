@@ -1,14 +1,15 @@
 <html>
 <head>
     <title>Browser spec for UMD support</title>
-    <script src="./../dist/collection-path-helper.js"></script>
+    <!--<script src="./../dist/path.Helper.min.js"></script>-->
+    <script src="./../dist/path.Helper.browser.js"></script>
     <script>
         var complexPath = '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]';
         console.log(`Initial path: ${complexPath}`);
-        console.log(collectionPathHelper.getStartType(complexPath));
-        let pathFragments = collectionPathHelper.explodePath(complexPath);
+        console.log(CollectionPathHelper.getStartType(complexPath));
+        let pathFragments = CollectionPathHelper.explodePath(complexPath);
         console.log(pathFragments);
-        let restoredPath = collectionPathHelper.implodePath(pathFragments);
+        let restoredPath = CollectionPathHelper.implodePath(pathFragments);
         console.log(restoredPath);
     </script>
 </head>

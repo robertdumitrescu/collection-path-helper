@@ -1,4 +1,5 @@
-const Lodash = require('lodash');
+const lodashGet = require('lodash/get');
+const lodashSet = require('lodash/set');
 
 /**
  * @class ObjectHelper
@@ -260,12 +261,12 @@ class CollectionPathHelper {
             path = path.replace('.', '');
         }
 
-        let result = Lodash.get(collection, path, 'undefined');
+        let result = lodashGet(collection, path, 'undefined');
 
         if (result === 'undefined') {
             path = CollectionPathHelper.explodePath(path);
 
-            result = Lodash.get(collection, path, 'undefined');
+            result = lodashGet(collection, path, 'undefined');
         }
 
         return result;
@@ -290,7 +291,7 @@ class CollectionPathHelper {
             path = path.replace('.', '');
         }
 
-        return Lodash.set(collection, path, value);
+        return lodashSet(collection, path, value);
     }
 
     /**

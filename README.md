@@ -304,15 +304,6 @@ Average                                         82712807.52  1.2    4183504.39  
 ## Build
 TBC
 
-#Test
-```mermaid
-sequenceDiagram
-loop every day
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
-end
-```
-
 ## Where did it come from?
 Proudly built with sweat and dedication in European Union (E.U) by
 - Robert Dumitrescu [GitHub](https://github.com/robertdumitrescu) / [LinkedIn](https://www.linkedin.com/in/robertdumitrescu/) / [Twitter](https://twitter.com/rodumitrescu)
