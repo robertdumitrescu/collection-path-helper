@@ -1,4 +1,4 @@
-# collection-path-helper - Collection path manipulation library.
+# Collection Path Helper
 [![CircleCI](https://circleci.com/gh/robertdumitrescu/collection-path-helper.svg?style=svg)](https://circleci.com/gh/robertdumitrescu/collection-path-helper)
 [![GitHub version](https://badge.fury.io/gh/robertdumitrescu%2Fcollection-path-helper.svg)](https://github.com/robertdumitrescu/collection-path-helper)
 [![npm version](https://badge.fury.io/js/collection-path-helper.svg)](https://www.npmjs.com/package/collection-path-helper)
@@ -299,6 +299,18 @@ replacePathArraysWithString (complex path) (4)  269025.9     0.9    14154       
 Lodash.get                                      6034730.3    1.01   318754      6       93    
 get                                             4410790.6    0.53   230011      5       93    
 Average                                         82712807.52  1.2    4183504.39  5.29    92.61 
+```
+
+## Build
+TBC
+
+#Test
+```mermaid
+sequenceDiagram
+loop every day
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!
+end
 ```
 
 ## Where did it come from?
