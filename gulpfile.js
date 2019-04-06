@@ -173,9 +173,7 @@ async function babelify() {
                 {
                     targets: {
                         node: '6.17.0'
-                    },
-                    // useBuiltIns: 'usage',
-                    // corejs: 3
+                    }
                 }
             ]
         ],

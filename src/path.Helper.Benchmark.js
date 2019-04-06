@@ -15,29 +15,28 @@ let cycles = [];
 let length = [];
 let execs = [];
 
-
 // add tests
-// suite.add('getStartType (empty string)', () => {
-//     PathHelper.getStartType('');
-// });
-// suite.add('getStartType (object start)', () => {
-//     PathHelper.getStartType('prop');
-// });
-// suite.add('getStartType (array start)', () => {
-//     PathHelper.getStartType('[1]');
-// });
-// suite.add('getStartType (complex path) (1)', () => {
-//     PathHelper.getStartType('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
-// });
-// suite.add('getStartType (complex path) (2)', () => {
-//     PathHelper.getStartType('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
-// suite.add('getStartType (complex path) (3)', () => {
-//     PathHelper.getStartType('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
-// });
-// suite.add('getStartType (complex path) (4)', () => {
-//     PathHelper.getStartType('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
+suite.add('getStartType (empty string)', () => {
+    PathHelper.getStartType('');
+});
+suite.add('getStartType (object start)', () => {
+    PathHelper.getStartType('prop');
+});
+suite.add('getStartType (array start)', () => {
+    PathHelper.getStartType('[1]');
+});
+suite.add('getStartType (complex path) (1)', () => {
+    PathHelper.getStartType('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('getStartType (complex path) (2)', () => {
+    PathHelper.getStartType('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('getStartType (complex path) (3)', () => {
+    PathHelper.getStartType('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('getStartType (complex path) (4)', () => {
+    PathHelper.getStartType('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
 suite.add('explodePath (complex path) (1)', () => {
     PathHelper.explodePath('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
 });
@@ -50,68 +49,68 @@ suite.add('explodePath (complex path) (3)', () => {
 suite.add('explodePath (complex path) (4)', () => {
     PathHelper.explodePath('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
 });
-// suite.add('implodePath (complex path) (1)', () => {
-//     PathHelper.implodePath(['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]']);
-// });
-// suite.add('implodePath (complex path) (2)', () => {
-//     PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
-// });
-// suite.add('implodePath (complex path) (3)', () => {
-//     PathHelper.implodePath(['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]']);
-// });
-// suite.add('implodePath (complex path) (4)', () => {
-//     PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
-// });
-// suite.add('removePathLevels (complex path) (1)', () => {
-//     PathHelper.removePathLevels('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
-// });
-// suite.add('removePathLevels (complex path) (2)', () => {
-//     PathHelper.removePathLevels('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
-// suite.add('removePathLevels (complex path) (3)', () => {
-//     PathHelper.removePathLevels('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
-// });
-// suite.add('removePathLevels (complex path) (4)', () => {
-//     PathHelper.removePathLevels('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
-// suite.add('getSubPaths (complex path) (1)', () => {
-//     PathHelper.getSubPaths('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
-// });
-// suite.add('getSubPaths (complex path) (2)', () => {
-//     PathHelper.getSubPaths('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
-// suite.add('getSubPaths (complex path) (3)', () => {
-//     PathHelper.getSubPaths('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
-// });
-// suite.add('getSubPaths (complex path) (4)', () => {
-//     PathHelper.getSubPaths('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
-// });
-// suite.add('replacePathArraysWithString (simple path) (1)', () => {
-//     PathHelper.replacePathArraysWithString('[0][1][3].randomArrayOfObjects[2].randomSubArray[1]', {string: 'lorem'});
-// });
-// suite.add('replacePathArraysWithString (simple path) (2)', () => {
-//     PathHelper.replacePathArraysWithString('randomSubArray[{{x}}].{{y}}', {string: 'lorem'});
-// });
-// suite.add('replacePathArraysWithString (complex path) (1)', () => {
-//     PathHelper.replacePathArraysWithString('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', {string: 'lorem'});
-// });
-// suite.add('replacePathArraysWithString (complex path) (2)', () => {
-//     PathHelper.replacePathArraysWithString('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', {string: 'lorem'});
-// });
-// suite.add('replacePathArraysWithString (complex path) (3)', () => {
-//     PathHelper.replacePathArraysWithString('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', {string: 'lorem'});
-// });
-// suite.add('replacePathArraysWithString (complex path) (4)', () => {
-//     PathHelper.replacePathArraysWithString('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', {string: 'lorem'});
-// });
-// suite.add('Lodash.get', () => {
-//     let collection = {id: 3, id2: {id3: [1, 'nana']}};
-//     Lodash.get(collection, 'id2.id3[1]');
-// });
-// suite.add('get', () => {
-//     let collection = {id: 3, id2: {id3: [1, 'nana']}};
-//     PathHelper.get(collection, 'id2.id3[1]');
-// });
+suite.add('implodePath (complex path) (1)', () => {
+    PathHelper.implodePath(['lorem', '[2]', '{{ipsum}}', '[3]', 'dolor', '[{{sit}}]', '[2, 3)', '[2]', '(2, 3)', '({{consecteur}},3]', '[2, {{amet}}]']);
+});
+suite.add('implodePath (complex path) (2)', () => {
+    PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '[2]', '{{ipsum}}', '[3]', 'dolor', '[21{{dolorSit_Amet23}}32]', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '[{{n_2_x}}]', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
+});
+suite.add('implodePath (complex path) (3)', () => {
+    PathHelper.implodePath(['[{{123loremIpsum_dolor34SitAmet567}}]', '[3]', '[{{x_nx_23}}]', '[5]', '[loremIpsum]']);
+});
+suite.add('implodePath (complex path) (4)', () => {
+    PathHelper.implodePath(['loremIpsum', 'lor22_{{dolorSit33_Amet}}55em', '{{ipsum}}', 'dolor', '[{{123lorem_33ipsumDolor}}321, sitAmet)', '(2, 3)', '({{sitConsecteur34_dolor}},3]', '[2, {{amet}}]']);
+});
+suite.add('removePathLevels (complex path) (1)', () => {
+    PathHelper.removePathLevels('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('removePathLevels (complex path) (2)', () => {
+    PathHelper.removePathLevels('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('removePathLevels (complex path) (3)', () => {
+    PathHelper.removePathLevels('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('removePathLevels (complex path) (4)', () => {
+    PathHelper.removePathLevels('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('getSubPaths (complex path) (1)', () => {
+    PathHelper.getSubPaths('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]');
+});
+suite.add('getSubPaths (complex path) (2)', () => {
+    PathHelper.getSubPaths('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('getSubPaths (complex path) (3)', () => {
+    PathHelper.getSubPaths('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]');
+});
+suite.add('getSubPaths (complex path) (4)', () => {
+    PathHelper.getSubPaths('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]');
+});
+suite.add('replacePathArraysWithString (simple path) (1)', () => {
+    PathHelper.replacePathArraysWithString('[0][1][3].randomArrayOfObjects[2].randomSubArray[1]', {string: 'lorem'});
+});
+suite.add('replacePathArraysWithString (simple path) (2)', () => {
+    PathHelper.replacePathArraysWithString('randomSubArray[{{x}}].{{y}}', {string: 'lorem'});
+});
+suite.add('replacePathArraysWithString (complex path) (1)', () => {
+    PathHelper.replacePathArraysWithString('.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', {string: 'lorem'});
+});
+suite.add('replacePathArraysWithString (complex path) (2)', () => {
+    PathHelper.replacePathArraysWithString('.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', {string: 'lorem'});
+});
+suite.add('replacePathArraysWithString (complex path) (3)', () => {
+    PathHelper.replacePathArraysWithString('[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', {string: 'lorem'});
+});
+suite.add('replacePathArraysWithString (complex path) (4)', () => {
+    PathHelper.replacePathArraysWithString('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', {string: 'lorem'});
+});
+suite.add('Lodash.get', () => {
+    let collection = {id: 3, id2: {id3: [1, 'nana']}};
+    Lodash.get(collection, 'id2.id3[1]');
+});
+suite.add('get', () => {
+    let collection = {id: 3, id2: {id3: [1, 'nana']}};
+    PathHelper.get(collection, 'id2.id3[1]');
+});
 
 // add listeners
 suite.on('cycle', (event) => {

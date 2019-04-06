@@ -19,8 +19,8 @@
   "scripts": {
     "test": "mocha src/path.Helper.spec.js --reporter dot",
     "test-watch": "npm-watch",
-    "benchmark": "mocha src/path.Helper.Spec.js --reporter dot",
-    "test-umd-browser": "mocha src/path.Helper.Spec.js --reporter dot",
+    "build": "node node node_modules/gulp/bin/gulp.js",
+    "benchmark": "node src/path.Helper.Benchmark.js",
     "test-umd-node": "node tests/node.spec.js"
   },
   "repository": {
@@ -48,7 +48,6 @@
   },
   "homepage": "https://github.com/robertdumitrescu/collection-path-helper#readme",
   "dependencies": {
-    "core-js": "3.0.0",
     "lodash": "4.17.11"
   },
   "devDependencies": {
