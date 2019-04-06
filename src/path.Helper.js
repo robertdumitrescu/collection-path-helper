@@ -166,11 +166,7 @@ class CollectionPathHelper {
             fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
 
             if (fragments !== null) {
-                if (fragments[0] === fragments[1]) {
-                    pathFragments.push(fragments[0]);
-                } else {
-                    pathFragments.push(...fragments.slice(1))
-                }
+                pathFragments.push(fragments[0] === fragments[1] ? fragments[0] : fragments.slice(1));
             }
         })
 
