@@ -130,9 +130,11 @@ class CollectionPathHelper {
      * @returns {String[]}
      */
     static explodePath(path) {
+
         // https://jsperf.com/filter-map-vs-reduce/6
         return path.split('.').reduce((result, partial) => {
             var fragmentPartial;
+            // https://jsperf.com/slice-vs-substr-vs-substring-vs-split-vs-regexp/2
             while ((fragmentPartial = partial.indexOf('[', 1)) !== -1) {
                 var newFragment = partial.slice(0, fragmentPartial);
                 result.push(newFragment);
@@ -141,9 +143,9 @@ class CollectionPathHelper {
             result.push(partial);
             return result;
         }, []).reduce((result, split) => {
-            var fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
+            var fragments = /^[\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*/.exec(split);
             // https://jsperf.com/splice-vs-filter
-            !!fragments ? result.push(fragments.length > 0 ? split : fragments.filter((f, i) => f !== i)) : null;
+            !!fragments ? result.push(split) : undefined;
             return result;
         }, []);
     }
