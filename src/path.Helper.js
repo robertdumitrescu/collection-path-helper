@@ -133,8 +133,8 @@ class CollectionPathHelper {
         // https://jsperf.com/filter-map-vs-reduce/6
         return path.split('.').reduce((result, partial) => {
             var fragmentPartial;
-            while ((fragmentPartial = partial.indexOf('[', 1)) > -1) {
-                var newFragment = partial.substr(0, fragmentPartial);
+            while ((fragmentPartial = partial.indexOf('[', 1)) !== -1) {
+                var newFragment = partial.slice(0, fragmentPartial);
                 result.push(newFragment);
                 partial = CollectionPathHelper.getRemainingString(partial, { discardedStrings: [newFragment] });
             }
