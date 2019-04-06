@@ -142,9 +142,8 @@ class CollectionPathHelper {
             return result;
         }, []).reduce((result, split) => {
             var fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
-            if (fragments !== null) {
-                result.push(fragments.length > 0 ? split : fragments.slice(1));
-            }
+            // https://jsperf.com/splice-vs-filter
+            !!fragments ? result.push(fragments.length > 0 ? split : fragments.filter((f, i) => f !== i)) : null;
             return result;
         }, []);
     }
