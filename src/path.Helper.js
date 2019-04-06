@@ -131,7 +131,7 @@ class CollectionPathHelper {
      */
     static explodePath(path) {
         // https://jsperf.com/filter-map-vs-reduce/6
-        let splitted = path.split('.').reduce((result, partial) => {
+        return path.split('.').reduce((result, partial) => {
             var fragmentPartial;
             while ((fragmentPartial = partial.indexOf('[', 1)) > -1) {
                 var newFragment = partial.substr(0, fragmentPartial);
@@ -140,9 +140,7 @@ class CollectionPathHelper {
             }
             result.push(partial);
             return result;
-        }, []);
-
-        return splitted.reduce((result, split) => {
+        }, []).reduce((result, split) => {
             var fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
             if (fragments !== null) {
                 result.push(fragments.length > 0 ? split : fragments.slice(1));
