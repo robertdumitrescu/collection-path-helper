@@ -130,42 +130,51 @@ class CollectionPathHelper {
      * @returns {String[]}
      */
     static explodePath(path) {
-        let pathFragments = [];
+        var regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
 
+        // https://jsperf.com/filter-map-vs-reduce/6
         let splitted = path.split('.').reduce((result, partial) => {
-            let splittedByArray = [];
-
-            while (partial.indexOf('[', 1) > -1) {
-                let newFragment = partial.substr(0, partial.indexOf('[', 1));
-                splittedByArray.push(newFragment);
+            var fragmentPartial;
+            while ((fragmentPartial = partial.indexOf('[', 1)) > -1) {
+                var newFragment = partial.substr(0, fragmentPartial);
+                result.push(newFragment);
                 partial = CollectionPathHelper.getRemainingString(partial, { discardedStrings: [newFragment] });
             }
-            splittedByArray.push(partial);
-
-            return result.concat(...splittedByArray);
+            result.push(partial);
+            return result;
         }, []);
+            // .reduce((result, split) => {
+        //     fragments = regex.exec(split);
+        //     regex.lastIndex = 0;
+        //     if (fragments !== null) {
+        //         if (fragments[0] === fragments[1]) {
+        //             result.push(fragments[0]);
+        //         } else {
+        //             for (let t = 1; t < fragments.length; t++) {
+        //                 result.push(fragments[t]);
+        //             }
+        //         }
+        //         return result;
+        //     }
+        // }, []);
 
-        let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
 
+        let pathFragments = [];
         let fragments = [];
 
-        for (let i = 0; i < splitted.length; i++) {
-            fragments = regex.exec(splitted[i]);
-            regex.lastIndex = 0;
+        splitted.forEach(split => {
+            fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
+
             if (fragments !== null) {
                 if (fragments[0] === fragments[1]) {
                     pathFragments.push(fragments[0]);
                 } else {
-                    for (let t = 1; t < fragments.length; t++) {
-                        pathFragments.push(fragments[t]);
-                    }
+                    pathFragments.push(...fragments.slice(1))
                 }
             }
-        }
+        })
 
         return pathFragments;
-
-
     }
 
     /**
