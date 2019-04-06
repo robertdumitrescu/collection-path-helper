@@ -139,7 +139,7 @@ class CollectionPathHelper {
             }
             result.push(partial); return result;
         }, []).reduce((result, q) => {
-            if (!!/.{1}[\w\d]+/.test(q)) result.push(q); return result;
+            if (!!(q.slice(1))) result.push(q); return result;
         }, []);
     }
 
