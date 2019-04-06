@@ -160,13 +160,11 @@ class CollectionPathHelper {
 
 
         let pathFragments = [];
-        let fragments = [];
 
         splitted.forEach(split => {
-            fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
-
+            var fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
             if (fragments !== null) {
-                pathFragments.push(fragments[0] === fragments[1] ? fragments[0] : fragments.slice(1));
+                pathFragments.push(fragments.length > 0 ? split : fragments.slice(1));
             }
         })
 
