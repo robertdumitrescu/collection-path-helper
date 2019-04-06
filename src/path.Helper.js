@@ -138,8 +138,8 @@ class CollectionPathHelper {
                 partial = CollectionPathHelper.getRemainingString(partial, { discardedStrings: [newFragment] });
             }
             result.push(partial); return result;
-        }, []).reduce((result, split) => {
-            if(!!/^[\{\[\(\w]{1}[\w\_\{\}\d, \)\]]+/.test(split)) result.push(split); return result;
+        }, []).reduce((result, q) => {
+            if (!!/.{1}[\w\d]+/.test(q)) result.push(q); return result;
         }, []);
     }
 
