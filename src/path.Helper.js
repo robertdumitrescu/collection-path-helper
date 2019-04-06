@@ -131,25 +131,18 @@ class CollectionPathHelper {
      */
     static explodePath(path) {
         let pathFragments = [];
-        let splitted = [];
-        let splittedByDot = path.split('.');
-
-        splitted.concat(splittedByDot);
-
-        /** @TODO This might be deleted when the regex improves */
-        for (let x = 0; x < splittedByDot.length; x++) {
+        let splitted = path.split('.').map(partial => {
             let splittedByArray = [];
-            let partial = splittedByDot[x];
+
             while (partial.indexOf('[', 1) > -1) {
                 let newFragment = partial.substr(0, partial.indexOf('[', 1));
                 splittedByArray.push(newFragment);
-                partial = CollectionPathHelper.getRemainingString(partial, {discardedStrings: [newFragment]});
+                partial = CollectionPathHelper.getRemainingString(partial, { discardedStrings: [newFragment] });
             }
             splittedByArray.push(partial);
-            /** Overwriting the elements which was splitted further */
-            splitted[x] = splittedByArray;
 
-        }
+            return splittedByArray;
+        })
 
         splitted = splitted.flat();
 
