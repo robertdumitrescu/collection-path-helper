@@ -130,8 +130,6 @@ class CollectionPathHelper {
      * @returns {String[]}
      */
     static explodePath(path) {
-        var regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
-
         // https://jsperf.com/filter-map-vs-reduce/6
         let splitted = path.split('.').reduce((result, partial) => {
             var fragmentPartial;
@@ -143,32 +141,14 @@ class CollectionPathHelper {
             result.push(partial);
             return result;
         }, []);
-            // .reduce((result, split) => {
-        //     fragments = regex.exec(split);
-        //     regex.lastIndex = 0;
-        //     if (fragments !== null) {
-        //         if (fragments[0] === fragments[1]) {
-        //             result.push(fragments[0]);
-        //         } else {
-        //             for (let t = 1; t < fragments.length; t++) {
-        //                 result.push(fragments[t]);
-        //             }
-        //         }
-        //         return result;
-        //     }
-        // }, []);
 
-
-        let pathFragments = [];
-
-        splitted.forEach(split => {
+        return splitted.reduce((result, split) => {
             var fragments = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g.exec(split);
             if (fragments !== null) {
-                pathFragments.push(fragments.length > 0 ? split : fragments.slice(1));
+                result.push(fragments.length > 0 ? split : fragments.slice(1));
             }
-        })
-
-        return pathFragments;
+            return result;
+        }, []);
     }
 
     /**
