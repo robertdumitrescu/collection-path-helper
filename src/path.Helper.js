@@ -131,7 +131,8 @@ class CollectionPathHelper {
      */
     static explodePath(path) {
         let pathFragments = [];
-        let splitted = path.split('.').map(partial => {
+
+        let splitted = path.split('.').reduce((result, partial) => {
             let splittedByArray = [];
 
             while (partial.indexOf('[', 1) > -1) {
@@ -141,10 +142,8 @@ class CollectionPathHelper {
             }
             splittedByArray.push(partial);
 
-            return splittedByArray;
-        })
-
-        splitted = splitted.flat();
+            return result.concat(...splittedByArray);
+        }, []);
 
         let regex = /^([\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*)([\[]?.*[\]]?)/g;
 
