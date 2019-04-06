@@ -130,21 +130,16 @@ class CollectionPathHelper {
      * @returns {String[]}
      */
     static explodePath(path) {
-
-        // https://jsperf.com/filter-map-vs-reduce/6
         return path.split('.').reduce((result, partial) => {
             var fragmentPartial;
-            // https://jsperf.com/slice-vs-substr-vs-substring-vs-split-vs-regexp/2
             while ((fragmentPartial = partial.indexOf('[', 1)) !== -1) {
                 var newFragment = partial.slice(0, fragmentPartial);
                 result.push(newFragment);
                 partial = CollectionPathHelper.getRemainingString(partial, { discardedStrings: [newFragment] });
             }
-            result.push(partial);
-            return result;
+            result.push(partial); return result;
         }, []).reduce((result, split) => {
-            !!/^[\{\[\(\w]{1}[a-zA-Z\_\{\}0-9, \)\]]*/.test(split) ? result.push(split) : undefined;
-            return result;
+            if(!!/^[\{\[\(\w]{1}[\w\_\{\}\d, \)\]]+/.test(split)) result.push(split); return result;
         }, []);
     }
 
