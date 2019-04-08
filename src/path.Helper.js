@@ -80,25 +80,18 @@ class CollectionPathHelper {
      * @return {boolean|String}
      */
     static getRemainingString(property, options) {
-        let defaultOptions = {
+        options = {...{
             discardedStrings: [''],
             global: false
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options};
 
         if (typeof property === 'string' || property instanceof String) {
-            if (options.global) {
-                for (let i = 0; i < options.discardedStrings.length; i++) {
-                    property = property.split(options.discardedStrings[i]).join('');
-                }
-            } else {
-                for (let i = 0; i < options.discardedStrings.length; i++) {
-                    property = property.replace(options.discardedStrings[i], '');
-                }
+            for (let i = 0; i < options.discardedStrings.length; i++) {
+                property = options.global
+                    ? property.split(options.discardedStrings[i]).join("")
+                    : property.replace(options.discardedStrings[i], "");
             }
         }
-
         return property;
     }
 
@@ -272,36 +265,24 @@ class CollectionPathHelper {
      * @return {String[]}
      */
     static getSubPaths(property, options) {
-        let defaultOptions = {
+        options = {...{
             ignoreRoot: false,
             ignoreFull: false
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options};
 
         let result = [];
 
-        if (!(typeof property === 'string' || property instanceof String)) {
-            return result;
-        }
+        if (!(typeof property === 'string' || property instanceof String)) return result;
+        if (!options.ignoreRoot) result.push('');
 
+        CollectionPathHelper.explodePath(property).reduce((accumulatedPath, path) => {
+            accumulatedPath.push(path);
+            result.push(CollectionPathHelper.implodePath(accumulatedPath));
+            return accumulatedPath;
+        }, []);
 
-        if (!options.ignoreRoot) {
-            result.push('');
-        }
-
-        let explodedProperty = CollectionPathHelper.explodePath(property);
-
-        for (let i = 0; i < explodedProperty.length; i++) {
-            result.push(CollectionPathHelper.implodePath(explodedProperty.slice(0, i + 1)));
-        }
-
-        if (result.length > 0 && options.ignoreFull) {
-            result.pop();
-        }
-
+        if (result.length > 0 && options.ignoreFull) result.pop();
         return result;
-
     }
 
     /**
@@ -312,21 +293,13 @@ class CollectionPathHelper {
      * @return {String}
      */
     static replacePathArraysWithString(property, options) {
-        let defaultOptions = {
+        options = {...{
             string: '',
-        };
+        }, ...options};
 
-        options = {...defaultOptions, ...options};
-
-        let explodedPath = CollectionPathHelper.explodePath(property);
-
-        for (let i = 0; i < explodedPath.length; i++) {
-            if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
-                explodedPath[i] = options.string;
-            }
-        }
-
-        return CollectionPathHelper.implodePath(explodedPath);
+        return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map(ep => {
+            return CollectionPathHelper.getStartType(ep) === 'array' ? options.string : ep;
+        }));
     }
 }
 
