@@ -102,18 +102,13 @@ class CollectionPathHelper {
      */
     static getStartType(path) {
         if ((typeof path === 'string' || path instanceof String) && path.length > 0) {
-            if (path.charAt(0) === '[') {
-                let idx = path.indexOf(']', 1);
-                let subPath = path.substring(0, idx);
-                if (subPath.indexOf(',') === -1 && idx > -1) {
-                    return 'array';
-                }
+            var endBracket;
+            if (path[0] === "[" && (endBracket = path.indexOf("]", 1)) > -1) {
+                if (path.substring(0, endBracket).indexOf(",", 2) == -1) return "array";
             }
             return 'object';
-
         }
         return 'unknown';
-
     }
 
     /**
@@ -141,20 +136,17 @@ class CollectionPathHelper {
      * @return {String}
      */
     static implodePath(pathFragments) {
-        let path = '';
-        for (let i = 0; i < pathFragments.length; i++) {
-            if (CollectionPathHelper.getStartType(pathFragments[i]) === 'object') {
-                if (path === '') {
-                    path = `${path}${pathFragments[i]}`;
-                } else {
-                    path = `${path}.${pathFragments[i]}`;
-                }
-            } else if (CollectionPathHelper.getStartType(pathFragments[i]) === 'array') {
-                path = `${path}${pathFragments[i]}`;
+        return pathFragments.reduce((path, fragment) => {
+            switch (CollectionPathHelper.getStartType(fragment)) {
+                case 'object':
+                    path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
+                    break;
+                case 'array':
+                    path = `${path}${fragment}`;
+                    break;
             }
-        }
-
-        return path;
+            return path;
+        }, '');
     }
 
     /**
@@ -167,12 +159,10 @@ class CollectionPathHelper {
      * @returns {String}
      */
     static removePathLevels(path, options) {
-        let defaultOptions = {
+        options = {...{
             count: 1,
             termination: 'end'
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options };
 
         let pathFragments = CollectionPathHelper.explodePath(path);
 
@@ -192,7 +182,7 @@ class CollectionPathHelper {
      * @returns {*}
      */
     static getFirstDynamicVariableName(path) {
-        let regex = new RegExp(/[^{{\}\}]+(?=\}\})/g);
+        let regex = new RegExp(/[^{{\}\}]+(?=\}\})/);
         return path.match(regex)[0];
     }
 
@@ -203,7 +193,7 @@ class CollectionPathHelper {
      * @returns {boolean}
      */
     static isPathStartDynamic(path) {
-        return path.indexOf('{') === 0 || path.indexOf('{') === 1;
+        return [0, 1].includes(path.indexOf('{'));
     }
 
     /**
