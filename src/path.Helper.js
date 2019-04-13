@@ -83,13 +83,14 @@ class CollectionPathHelper {
         options = {...{
             discardedStrings: [''],
             global: false
-        }, ...options};
+        },
+        ...options};
 
         if (typeof property === 'string' || property instanceof String) {
             for (let i = 0; i < options.discardedStrings.length; i++) {
                 property = options.global
-                    ? property.split(options.discardedStrings[i]).join("")
-                    : property.replace(options.discardedStrings[i], "");
+                    ? property.split(options.discardedStrings[i]).join('')
+                    : property.replace(options.discardedStrings[i], '');
             }
         }
         return property;
@@ -103,8 +104,8 @@ class CollectionPathHelper {
     static getStartType(path) {
         if ((typeof path === 'string' || path instanceof String) && path.length > 0) {
             var endBracket;
-            if (path[0] === "[" && (endBracket = path.indexOf("]", 1)) > -1) {
-                if (path.substring(0, endBracket).indexOf(",", 2) == -1) return "array";
+            if (path[0] === '[' && (endBracket = path.indexOf(']', 1)) > -1) {
+                if (path.substring(0, endBracket).indexOf(',', 2) == -1) return 'array';
             }
             return 'object';
         }
@@ -138,12 +139,12 @@ class CollectionPathHelper {
     static implodePath(pathFragments) {
         return pathFragments.reduce((path, fragment) => {
             switch (CollectionPathHelper.getStartType(fragment)) {
-                case 'object':
-                    path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
-                    break;
-                case 'array':
-                    path = `${path}${fragment}`;
-                    break;
+            case 'object':
+                path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
+                break;
+            case 'array':
+                path = `${path}${fragment}`;
+                break;
             }
             return path;
         }, '');
@@ -162,7 +163,8 @@ class CollectionPathHelper {
         options = {...{
             count: 1,
             termination: 'end'
-        }, ...options };
+        },
+        ...options };
 
         let pathFragments = CollectionPathHelper.explodePath(path);
 
@@ -258,7 +260,8 @@ class CollectionPathHelper {
         options = {...{
             ignoreRoot: false,
             ignoreFull: false
-        }, ...options};
+        },
+        ...options};
 
         let result = [];
 
@@ -285,24 +288,38 @@ class CollectionPathHelper {
     static replacePathArraysWithString(property, options) {
         options = {...{
             string: '',
-        }, ...options};
+        },
+        ...options};
 
-        return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map(ep => {
+        return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map((ep) => {
             return CollectionPathHelper.getStartType(ep) === 'array' ? options.string : ep;
         }));
     }
 
+    /**
+     * @TODO WIP
+     * Method that selectively filters out certain notations or fragments from a collection path.
+     * Mainly designed for filtering out path fragments when working with recursive contexts in collections.
+     * @param {Object=} options
+     * @param {String=} options.path - the initial path on which the filtering out process will be performed
+     * @param {Boolean=} options.foArrayNotations - filter out array notations (E.g. "[2]", "[{{x}}]")
+     * @param {Boolean=} options.foObjectNotations - filter out object notations (E.g. "dolor", "(2, 3)", ".lorem")
+     * @param {Boolean=} options.foIntervalNotations - filter out interval notations (E.g. "(2, 3)", "[2, {{amet}}]", "({{sitConsecteur34_dolor}},3]"). Keep in mind that if you activate "foObjectNotations", interval notations will be filtered out automatically since those are a subset of object notations.
+     * @param {Boolean=} options.foInitialDot - filter out the initial dot in paths. (E.g ".lorem.ipsum[2]" will become "lorem.ipsum[2]")
+     * @return {*}
+     */
     static filterOutPath(options) {
         let defaultOptions = {
             path: '',
-            foArrayPath: false,
-            foObjectPath: false,
+            foArrayNotations: false,
+            foObjectNotations: false,
+            foIntervalNotations: false,
             foInitialDot: false
         };
 
         options = {...defaultOptions, ...options};
 
-        let convertedPath = path;
+        let convertedPath = options.path;
 
         if (options.foArrayPath) {
             convertedPath = convertedPath.replace(/\s*\[.*?\]\s*/gm, '');
@@ -316,6 +333,125 @@ class CollectionPathHelper {
             convertedPath = convertedPath.replace('.', '');
         }
         return convertedPath;
+    }
+
+    /**
+     * Gets an iterator name
+     * @param {*} index
+     * @param {Object=} options
+     * @param {String=} options.prefix
+     * @returns {*}
+     */
+    static getVarName(index, options) {
+        let defaultOptions = {
+            prefix: []
+        };
+
+        options = {...defaultOptions, ...options};
+
+        return `${options.prefix}${index}`;
+    }
+
+    /**
+     * This extracts the content out of array notations
+     * @param {*} property
+     * @param {Object=} options
+     * @return {String|Number}
+     */
+    static extractFromArrayNotation(property, options) {
+        let defaultOptions = {
+        };
+
+        options = {...defaultOptions, ...options};
+
+        if (!(typeof property === 'string' || property instanceof String)) {
+            return property;
+        }
+
+        let regex = /^\[([^,]{1,})\]$/g;
+
+        var matches = regex.exec(property);
+        if (matches !== null && typeof matches[1] !== 'undefined') {
+            if (!isNaN(parseFloat(matches[1])) && isFinite(matches[1])) {
+                return Number(matches[1]);
+            }
+            return matches[1];
+        }
+        return property;
+
+    }
+
+    /**
+     * Returns a collection of path iterators that can be easily predictable.
+     * By default it returns a key/value pair on an object
+     * @param {Object=} options
+     * @param {String=} options.path - the path from which the iterators values will be extracted
+     * @param {Boolean=} options.returnArray - return an array of objects which also tracks down NPath and Level
+     * @returns {Array}
+     */
+    static getPathIterators(options) {
+        let defaultOptions = {
+            path: '',
+            returnArray: false
+        };
+
+        options = {...defaultOptions, ...options};
+
+        let iterators = {};
+        if (options.returnArray === true) {
+            iterators = [];
+        }
+
+        if (!(typeof options.path === 'string' || options.path instanceof String)) {
+            return iterators;
+        }
+
+        let explodedPath = CollectionPathHelper.explodePath(options.path);
+
+        if (options.returnArray === true) {
+
+            for (let i = 0; i < explodedPath.length; i++) {
+
+                let vr = {};
+                vr.level = i;
+                vr.varName = CollectionPathHelper.getVarName(i, {prefix: 'itr'});
+                vr.NPath = CollectionPathHelper.implodePath(explodedPath.slice(0, i + 1));
+                if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
+                    vr.value = explodedPath[i].slice(1, explodedPath[i].length - 1);
+                } else {
+                    vr.value = explodedPath[i];
+                }
+
+                if (!isNaN(parseFloat(vr.value)) && isFinite(vr.value)) {
+                    vr.value = Number(vr.value);
+                }
+
+                iterators.push(vr);
+            }
+
+            return iterators;
+        }
+
+        for (let i = 0; i < explodedPath.length; i++) {
+
+            let varName = CollectionPathHelper.getVarName(i, {prefix: 'itr'});
+            let value = '';
+            if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
+                value = explodedPath[i].slice(1, explodedPath[i].length - 1);
+            } else {
+                value = explodedPath[i];
+            }
+
+            if (!isNaN(parseFloat(value)) && isFinite(value)) {
+                value = Number(value);
+            }
+
+            iterators[varName] = value;
+        }
+
+        return iterators;
+
+
     }
 }
 

@@ -1468,57 +1468,1057 @@ describe('CollectionPathHelper', () => {
         });
     });
 
-    describe('-> convertPath', () => {
-        it('should filter out the array notation from a path', async () => {
 
-            let initialPath = 'randomArrayOfObjects[2].randomSubArray[1]';
+    /** @TODO WIP */
+    // describe('-> filterOutPath', () => {
+    //     it('should return an empty string if the initial path is not a string (undefined)', async () => {
+    //
+    //         let initial;
+    //
+    //         let expected = '';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //     it('should return an empty string if the initial path is not a string (number)', async () => {
+    //
+    //         let initial = 2;
+    //
+    //         let expected = '';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //     it('should return an empty string if the initial path is not a string (null)', async () => {
+    //
+    //         let initial = null;
+    //
+    //         let expected = '';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //     it('should return an empty string if the initial path is not a string (boolean)', async () => {
+    //
+    //         let initial = false;
+    //
+    //         let expected = '';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //     it('should return an empty string if the initial path is an empty string', async () => {
+    //
+    //         let initial = '';
+    //
+    //         let expected = '';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //     it('should filter out the array notation from a path', async () => {
+    //
+    //         let initial = 'randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let expected = 'randomArrayOfObjects.randomSubArray';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //
+    //     it('should filter out the array notation from a path even when the first element is an array', async () => {
+    //
+    //         let initial = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let expected = 'randomArrayOfObjects.randomSubArray';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foArrayPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //
+    //     });
+    //
+    //     it('should filter out the object notation from a path', async () => {
+    //
+    //         let initial = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let expected = '[0][2][1]';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foObjectPath: true});
+    //         expect(result).to.deep.equal(expected);
+    //     });
+    //
+    //     it('should filter out the initial dot in a path', async () => {
+    //
+    //         let initial = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let expected = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foInitialDot: true});
+    //         expect(result).to.deep.equal(expected);
+    //     });
+    //
+    //     it('should filter out the initial dot in a path just if it start with a dot', async () => {
+    //
+    //         let initial = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let expected = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+    //
+    //         let result = CollectionPathHelper.filterOutPath({path: initial, foInitialDot: true});
+    //         expect(result).to.deep.equal(expected);
+    //     });
+    // });
 
-            let expectedResult = 'randomArrayOfObjects.randomSubArray';
+    describe('-> getPathIterators', () => {
+        it('should return empty string when path is not a string (undefined)', async () => {
 
-            let result = CollectionPathHelper.convertPath(initialPath, {foArrayPath: true});
-            expect(result).to.deep.equal(expectedResult);
+            let initial = {path: undefined};
 
+            let expected = {};
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (number)', async () => {
+
+            let initial = {path: 2};
+
+            let expected = {};
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (null)', async () => {
+
+            let initial = {path: null};
+
+            let expected = {};
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (boolean)', async () => {
+
+            let initial = {path: false};
+
+            let expected = {};
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string for empty path', async () => {
+
+            let initial = {path: ''};
+
+            let expected = {};
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
-        it('should filter out the array notation from a path even when the first element is an array', async () => {
+        it('should return iterators for a path (complex path) (1)', async () => {
 
-            let initialPath = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = {path: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'};
 
-            let expectedResult = 'randomArrayOfObjects.randomSubArray';
+            let expected = {
+                itr0: 'lorem',
+                itr1: 2,
+                itr2: '{{ipsum}}',
+                itr3: 3,
+                itr4: 'dolor',
+                itr5: '{{sit}}',
+                itr6: '[2, 3)',
+                itr7: 2,
+                itr8: '(2, 3)',
+                itr9: '({{consecteur}},3]',
+                itr10: '[2, {{amet}}]',
+            };
 
-            let result = CollectionPathHelper.convertPath(initialPath, {foArrayPath: true});
-            expect(result).to.deep.equal(expectedResult);
-
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
-        it('should filter out the object notation from a path', async () => {
+        it('should return iterators for a path (complex path) (2)', async () => {
 
-            let initialPath = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = {path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'};
 
-            let expectedResult = '[0][2][1]';
+            let expected = {
+                itr0: 'loremIpsum',
+                itr1: 'lor22_{{dolorSit33_Amet}}55em',
+                itr2: 2,
+                itr3: '{{ipsum}}',
+                itr4: 3,
+                itr5: 'dolor',
+                itr6: '21{{dolorSit_Amet23}}32',
+                itr7: '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                itr8: '{{n_2_x}}',
+                itr9: '(2, 3)',
+                itr10: '({{sitConsecteur34_dolor}},3]',
+                itr11: '[2, {{amet}}]',
+            };
 
-            let result = CollectionPathHelper.convertPath(initialPath, {foObjectPath: true});
-            expect(result).to.deep.equal(expectedResult);
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
-        it('should filter out the initial dot in a path', async () => {
+        it('should return iterators for a path (complex path) (3)', async () => {
 
-            let initialPath = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = {path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'};
 
-            let expectedResult = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let expected = {
+                itr0: '{{123loremIpsum_dolor34SitAmet567}}',
+                itr1: 3,
+                itr2: '{{x_nx_23}}',
+                itr3: 5,
+                itr4: 'loremIpsum'
+            };
 
-            let result = CollectionPathHelper.convertPath(initialPath, {foInitialDot: true});
-            expect(result).to.deep.equal(expectedResult);
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
         });
 
-        it('should filter out the initial dot in a path just if it start with a dot', async () => {
+        it('should return iterators for a path (complex path) (4)', async () => {
 
-            let initialPath = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = {path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'};
 
-            let expectedResult = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let expected = {
+                itr0: 'loremIpsum',
+                itr1: 'lor22_{{dolorSit33_Amet}}55em',
+                itr2: '{{ipsum}}',
+                itr3: 'dolor',
+                itr4: '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                itr5: '(2, 3)',
+                itr6: '({{sitConsecteur34_dolor}},3]',
+                itr7: '[2, {{amet}}]',
+            };
 
-            let result = CollectionPathHelper.convertPath(initialPath, {foInitialDot: true});
-            expect(result).to.deep.equal(expectedResult);
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval start', async () => {
+
+            let initial = {path: '[2].[2, 3)'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '[2, 3)'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval end', async () => {
+
+            let initial = {path: '[2].(2, 3]'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '(2, 3]'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with open interval', async () => {
+
+            let initial = {path: '[2].(2, 3)'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '(2, 3)'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with closed interval', async () => {
+
+            let initial = {path: '[2].[2, 3]'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '[2, 3]'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval start - no blank', async () => {
+
+            let initial = {path: '[2].[2,3)'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '[2,3)'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval end - no blank', async () => {
+
+            let initial = {path: '[2].(2,3]'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '(2,3]'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with open interval - no blank', async () => {
+
+            let initial = {path: '[2].(2,3)'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '(2,3)'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with closed interval - no blank', async () => {
+
+            let initial = {path: '[2].[2,3]'};
+
+            let expected = {
+                itr0: 2,
+                itr1: '[2,3]'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path', async () => {
+
+            let initial = {path: 'lorem[1].bla'};
+
+            let expected = {
+                itr0: 'lorem',
+                itr1: 1,
+                itr2: 'bla'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (double object)', async () => {
+
+            let initial = {path: 'lorem.ipsum[1].bla'};
+
+            let expected = {
+                itr0: 'lorem',
+                itr1: 'ipsum',
+                itr2: 1,
+                itr3: 'bla'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (double array)', async () => {
+
+            let initial = {path: 'lorem[1][3].bla'};
+
+            let expected = {
+                itr0: 'lorem',
+                itr1: 1,
+                itr2: 3,
+                itr3: 'bla'
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+
+        it('should return empty string when path is not a string (undefined) (return array)', async () => {
+
+            let initial = {path: undefined, returnArray: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (number) (return array)', async () => {
+
+            let initial = {path: 2, returnArray: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (null) (return array)', async () => {
+
+            let initial = {path: null, returnArray: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string when path is not a string (boolean) (return array)', async () => {
+
+            let initial = {path: false, returnArray: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should return empty string for empty path (return array)', async () => {
+
+            let initial = {path: '', returnArray: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (complex path) (1) (return array)', async () => {
+
+            let initial = {path: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'lorem',
+                    value: 'lorem'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'lorem[2]',
+                    value: 2
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'lorem[2].{{ipsum}}',
+                    value: '{{ipsum}}'
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'lorem[2].{{ipsum}}[3]',
+                    value: 3
+                },
+                {
+                    level: 4,
+                    varName: 'itr4',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor',
+                    value: 'dolor'
+                },
+                {
+                    level: 5,
+                    varName: 'itr5',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}]',
+                    value: '{{sit}}'
+                },
+                {
+                    level: 6,
+                    varName: 'itr6',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)',
+                    value: '[2, 3)'
+                },
+                {
+                    level: 7,
+                    varName: 'itr7',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2]',
+                    value: 2
+                },
+                {
+                    level: 8,
+                    varName: 'itr8',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3)',
+                    value: '(2, 3)'
+                },
+                {
+                    level: 9,
+                    varName: 'itr9',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3]',
+                    value: '({{consecteur}},3]'
+                },
+                {
+                    level: 10,
+                    varName: 'itr10',
+                    NPath: 'lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]',
+                    value: '[2, {{amet}}]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (complex path) (2) (return array)', async () => {
+
+            let initial = {path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'loremIpsum',
+                    value: 'loremIpsum'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em',
+                    value: 'lor22_{{dolorSit33_Amet}}55em'
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2]',
+                    value: 2
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}',
+                    value: '{{ipsum}}'
+                },
+                {
+                    level: 4,
+                    varName: 'itr4',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3]',
+                    value: 3
+                },
+                {
+                    level: 5,
+                    varName: 'itr5',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor',
+                    value: 'dolor'
+                },
+                {
+                    level: 6,
+                    varName: 'itr6',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32]',
+                    value: '21{{dolorSit_Amet23}}32'
+                },
+                {
+                    level: 7,
+                    varName: 'itr7',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    value: '[{{123lorem_33ipsumDolor}}321, sitAmet)'
+                },
+                {
+                    level: 8,
+                    varName: 'itr8',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}]',
+                    value: '{{n_2_x}}'
+                },
+                {
+                    level: 9,
+                    varName: 'itr9',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3)',
+                    value: '(2, 3)'
+                },
+                {
+                    level: 10,
+                    varName: 'itr10',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3]',
+                    value: '({{sitConsecteur34_dolor}},3]'
+                },
+                {
+                    level: 11,
+                    varName: 'itr11',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                    value: '[2, {{amet}}]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (complex path) (3) (return array)', async () => {
+
+            let initial = {path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[{{123loremIpsum_dolor34SitAmet567}}]',
+                    value: '{{123loremIpsum_dolor34SitAmet567}}'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[{{123loremIpsum_dolor34SitAmet567}}][3]',
+                    value: 3
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}]',
+                    value: '{{x_nx_23}}'
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5]',
+                    value: 5
+                },
+                {
+                    level: 4,
+                    varName: 'itr4',
+                    NPath: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]',
+                    value: 'loremIpsum'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (complex path) (4) (return array)', async () => {
+
+            let initial = {path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'loremIpsum',
+                    value: 'loremIpsum'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em',
+                    value: 'lor22_{{dolorSit33_Amet}}55em'
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}',
+                    value: '{{ipsum}}'
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor',
+                    value: 'dolor'
+                },
+                {
+                    level: 4,
+                    varName: 'itr4',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    value: '[{{123lorem_33ipsumDolor}}321, sitAmet)'
+                },
+                {
+                    level: 5,
+                    varName: 'itr5',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3)',
+                    value: '(2, 3)'
+                },
+                {
+                    level: 6,
+                    varName: 'itr6',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3]',
+                    value: '({{sitConsecteur34_dolor}},3]'
+                },
+                {
+                    level: 7,
+                    varName: 'itr7',
+                    NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                    value: '[2, {{amet}}]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval start (return array)', async () => {
+
+            let initial = {path: '[2].[2, 3)', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].[2, 3)',
+                    value: '[2, 3)'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval end (return array)', async () => {
+
+            let initial = {path: '[2].(2, 3]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].(2, 3]',
+                    value: '(2, 3]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with open interval (return array)', async () => {
+
+            let initial = {path: '[2].(2, 3)', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].(2, 3)',
+                    value: '(2, 3)'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with closed interval (return array)', async () => {
+
+            let initial = {path: '[2].[2, 3]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].[2, 3]',
+                    value: '[2, 3]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval start - no blank (return array)', async () => {
+
+            let initial = {path: '[2].[2,3)', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].[2,3)',
+                    value: '[2,3)'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with semi-closed interval end - no blank (return array)', async () => {
+
+            let initial = {path: '[2].(2,3]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].(2,3]',
+                    value: '(2,3]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with open interval - no blank (return array)', async () => {
+
+            let initial = {path: '[2].(2,3)', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].(2,3)',
+                    value: '(2,3)'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a simple path - with closed interval - no blank (return array)', async () => {
+
+            let initial = {path: '[2].[2,3]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: '[2]',
+                    value: 2
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: '[2].[2,3]',
+                    value: '[2,3]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (return array)', async () => {
+
+            let initial = {path: 'lorem[1].bla', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'lorem',
+                    value: 'lorem'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'lorem[1]',
+                    value: 1
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'lorem[1].bla',
+                    value: 'bla'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (double object) (return array)', async () => {
+
+            let initial = {path: 'lorem.ipsum[1].bla', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'lorem',
+                    value: 'lorem'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'lorem.ipsum',
+                    value: 'ipsum'
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'lorem.ipsum[1]',
+                    value: 1
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'lorem.ipsum[1].bla',
+                    value: 'bla'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (double array) (return array)', async () => {
+
+            let initial = {path: 'lorem[1][3].bla', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'lorem',
+                    value: 'lorem'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'lorem[1]',
+                    value: 1
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'lorem[1][3]',
+                    value: 3
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'lorem[1][3].bla',
+                    value: 'bla'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+    });
+
+
+    describe('-> extractFromArrayNotation', () => {
+        it('should not extract if array notation is invalid (interval)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('(2]');
+            expect(actual).to.be.equal('(2]');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with semi-closed interval start', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[2, 3)');
+            expect(actual).to.be.equal('[2, 3)');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with semi-closed interval end', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('(2, 3]');
+            expect(actual).to.be.equal('(2, 3]');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with open interval', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('(2, 3)');
+            expect(actual).to.be.equal('(2, 3)');
+        });
+
+        it('should not extract if array notation is invalid (interval) - closed interval', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[2, 3]');
+            expect(actual).to.be.equal('[2, 3]');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with semi-closed interval start - no blank', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[2,3)');
+            expect(actual).to.be.equal('[2,3)');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with semi-closed interval end - no blank', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('(2,3]');
+            expect(actual).to.be.equal('(2,3]');
+        });
+
+        it('should not extract if array notation is invalid (interval) - with open interval - no blank', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('(2,3)');
+            expect(actual).to.be.equal('(2,3)');
+        });
+
+        it('should not extract if array notation is invalid (interval) - closed interval - no blank', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[2,3]');
+            expect(actual).to.be.equal('[2,3]');
+        });
+
+        it('should not extract if array notation is invalid (string)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('lorem');
+            expect(actual).to.be.equal('lorem');
+        });
+
+        it('should not extract if array notation is invalid (object)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation({});
+            expect(actual).to.deep.equal({});
+        });
+
+        it('should not extract if array notation is invalid (array)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation([]);
+            expect(actual).to.deep.equal([]);
+        });
+
+        it('should not extract if array notation is invalid (undefined)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation(undefined);
+            expect(actual).to.be.equal(undefined);
+        });
+        it('should extract from array notation (string)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[bla]');
+            expect(actual).to.be.equal('bla');
+        });
+
+        it('should extract from array notation (interpolation)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[{{x}}]');
+            expect(actual).to.be.equal('{{x}}');
+        });
+
+        it('should extract from array notation (number)', () => {
+            let actual = CollectionPathHelper.extractFromArrayNotation('[2]');
+            expect(actual).to.be.equal(2);
         });
     });
 });

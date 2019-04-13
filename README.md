@@ -289,6 +289,15 @@ TBC
 ### replacePathArraysWithString
 TBC
 
+### filterOutPath
+TBC
+
+### extractFromArrayNotation
+TBC
+
+### getPathIterators
+TBC
+
 
 ## License
 
@@ -309,41 +318,51 @@ The following results were obtained running the benchmarks on the following conf
 - Storage: **256GB SAMSUNG SM961 M.2, PCIe NVMe (up to 3100MB/R, 1400MB/W)**
 - OS: **64 bit *nix based OS**
 
-```javascript
-name                                            opsPerSec    error  testsRan    cycles  length
-----------------------------------------------  -----------  -----  ----------  ------  ------
-getStartType (empty string)                     958755179.1  0.11   48315046    6       99
-getStartType (object start)                     198495861.1  0.28   10035291    6       92
-getStartType (array start)                      66854952.5   0.87   3491450     6       89
-getStartType (complex path) (1)                 415418628.8  0.3    20994108    6       96
-getStartType (complex path) (2)                 415905245.5  0.28   20991778    7       95
-getStartType (complex path) (3)                 68724726.5   0.43   3530065     7       95
-getStartType (complex path) (4)                 415635099.4  0.31   21026318    6       99
-explodePath (complex path) (1)                  430502.8     0.38   21883       4       96
-explodePath (complex path) (2)                  410008.3     0.55   22044       3       93
-explodePath (complex path) (3)                  458262.2     0.27   24617       3       94
-explodePath (complex path) (4)                  3243170.7    0.84   168553      6       94
-implodePath (complex path) (1)                  2299377      0.63   119499      5       85
-implodePath (complex path) (2)                  2097520.7    1.07   110925      6       94
-implodePath (complex path) (3)                  3310430.3    0.96   177971      6       90
-implodePath (complex path) (4)                  4424384.8    1.02   234918      4       93
-removePathLevels (complex path) (1)             310501.3     0.37   15954       5       91
-removePathLevels (complex path) (2)             287284.2     1.06   15258       3       94
-removePathLevels (complex path) (3)             319570.2     1.39   18157       3       89
-removePathLevels (complex path) (4)             923437.3     0.8    50180       3       93
-getSubPaths (complex path) (1)                  165839.6     0.96   8650        5       94
-getSubPaths (complex path) (2)                  155422.2     0.41   8120        4       96
-getSubPaths (complex path) (3)                  253834.6     1.29   14308       3       89
-getSubPaths (complex path) (4)                  439624.9     0.76   23319       5       90
-replacePathArraysWithString (simple path) (1)   334053.2     0.83   17152       4       96
-replacePathArraysWithString (simple path) (2)   756796.2     0.62   39676       3       96
-replacePathArraysWithString (complex path) (1)  289301.2     1.93   16513       3       88
-replacePathArraysWithString (complex path) (2)  280882.9     0.86   15584       3       91
-replacePathArraysWithString (complex path) (3)  333775.8     1.15   17735       4       90
-replacePathArraysWithString (complex path) (4)  890591       1.03   49206       3       91
-Lodash.get                                      6099310.1    1.18   327371      7       90
-get                                             4383100.5    0.38   224738      6       94
-Average                                         82989892.74  0.75   4197625.39  4.68    92.77
+name                                                opsPerSec     error  testsRan    cycles  length
+--------------------------------------------------  ------------  -----  ----------  ------  ------
+getStartType (empty string)                         954880478.4   0.12   48103993    8       92    
+getStartType (object start)                         953778419.3   0.12   48050763    8       98    
+getStartType (array start)                          110113594.3   0.49   5802481     10      95    
+getStartType (complex path) (1)                     953354248.5   0.1    48057563    6       96    
+getStartType (complex path) (2)                     953302562.2   0.09   47979481    6       92    
+getStartType (complex path) (3)                     72004349.5    0.32   3698421     6       94    
+getStartType (complex path) (4)                     416991862.7   0.07   20965058    6       93    
+explodePath (complex path) (1)                      428285        0.23   21771       4       96    
+explodePath (complex path) (2)                      408220.1      0.26   21592       3       95    
+explodePath (complex path) (3)                      449628.9      0.72   22932       3       91    
+explodePath (complex path) (4)                      3301315.7     0.58   173906      6       92    
+implodePath (complex path) (1)                      3792054.3     0.35   197862      5       95    
+implodePath (complex path) (2)                      3474607       0.35   180280      7       97    
+implodePath (complex path) (3)                      5738709.8     0.51   298694      4       92    
+implodePath (complex path) (4)                      6579527.1     0.35   343273      5       93    
+removePathLevels (complex path) (1)                 348253        0.45   17837       5       92    
+removePathLevels (complex path) (2)                 330963.9      0.33   16948       3       97    
+removePathLevels (complex path) (3)                 375752.1      0.48   19200       3       93    
+removePathLevels (complex path) (4)                 1016589.4     0.32   52783       3       97    
+getSubPaths (complex path) (1)                      236206.2      0.66   12109       5       97    
+getSubPaths (complex path) (2)                      218058.5      0.63   11174       3       96    
+getSubPaths (complex path) (3)                      324962        0.41   16685       3       94    
+getSubPaths (complex path) (4)                      623177.4      0.73   34992       3       90    
+replacePathArraysWithString (simple path) (1)       362761.3      0.54   18747       5       95    
+replacePathArraysWithString (simple path) (2)       803480        0.31   41275       6       94    
+replacePathArraysWithString (complex path) (1)      332857.1      0.57   17131       3       94    
+replacePathArraysWithString (complex path) (2)      319126.5      0.64   16340       3       93    
+replacePathArraysWithString (complex path) (3)      368790.8      0.91   19079       3       97    
+replacePathArraysWithString (complex path) (4)      944442.8      0.27   48496       7       97    
+extractFromArrayNotation (string)                   8247700.9     0.3    427474      6       96    
+extractFromArrayNotation (interpolation)            8020125.8     0.27   412150      6       95    
+extractFromArrayNotation (number)                   10666928.4    0.39   554166      9       89    
+getPathIterators (complex path) (1)                 131353.8      0.52   6805        4       94    
+getPathIterators (complex path) (2)                 120311.2      0.82   6303        3       96    
+getPathIterators (complex path) (3)                 206244.3      0.41   10630       6       93    
+getPathIterators (complex path) (4)                 238903.7      0.33   12333       5       97    
+getPathIterators (complex path) (1) (return array)  106796.9      0.47   5556        5       96    
+getPathIterators (complex path) (2) (return array)  98609.6       0.49   5108        6       95    
+getPathIterators (complex path) (3) (return array)  182040.9      0.35   9349        4       97    
+getPathIterators (complex path) (4) (return array)  205822.5      0.43   10590       7       92    
+Lodash.get                                          6139392.5     0.99   325734      6       92    
+get                                                 4338614.8     0.6    227072      8       91    
+Average                                             106759669.74  0.44   5387479.43  5.17    94.29 
 ```
 
 ## Where did it come from?

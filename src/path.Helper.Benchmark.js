@@ -103,6 +103,40 @@ suite.add('replacePathArraysWithString (complex path) (3)', () => {
 suite.add('replacePathArraysWithString (complex path) (4)', () => {
     PathHelper.replacePathArraysWithString('loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', {string: 'lorem'});
 });
+suite.add('extractFromArrayNotation (string)', () => {
+    PathHelper.extractFromArrayNotation('[bla]');
+});
+suite.add('extractFromArrayNotation (interpolation)', () => {
+    PathHelper.extractFromArrayNotation('[{{x}}]');
+});
+suite.add('extractFromArrayNotation (number)', () => {
+    PathHelper.extractFromArrayNotation('[2]');
+});
+suite.add('getPathIterators (complex path) (1)', () => {
+    PathHelper.getPathIterators({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'});
+});
+suite.add('getPathIterators (complex path) (2)', () => {
+    PathHelper.getPathIterators({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('getPathIterators (complex path) (3)', () => {
+    PathHelper.getPathIterators({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'});
+});
+suite.add('getPathIterators (complex path) (4)', () => {
+    PathHelper.getPathIterators({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('getPathIterators (complex path) (1) (return array)', () => {
+    PathHelper.getPathIterators({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', returnArray: true});
+});
+suite.add('getPathIterators (complex path) (2) (return array)', () => {
+    PathHelper.getPathIterators({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true});
+});
+suite.add('getPathIterators (complex path) (3) (return array)', () => {
+    PathHelper.getPathIterators({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', returnArray: true});
+});
+suite.add('getPathIterators (complex path) (4) (return array)', () => {
+    PathHelper.getPathIterators({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true});
+});
+
 suite.add('Lodash.get', () => {
     let collection = {id: 3, id2: {id3: [1, 'nana']}};
     Lodash.get(collection, 'id2.id3[1]');
