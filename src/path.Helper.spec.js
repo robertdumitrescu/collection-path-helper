@@ -12,7 +12,7 @@ describe('CollectionPathHelper', () => {
     describe('-> getStartType', () => {
         it('should return unknown for undefined', async () => {
 
-            let initial = undefined;
+            let initial;
 
             let expected = 'unknown';
 
@@ -1374,97 +1374,151 @@ describe('CollectionPathHelper', () => {
             expect(actual).to.deep.equal(expected);
 
         });
+    });
 
-        describe(' -> replacePathArraysWithString', () => {
-            it('should not do anything if what was passed is an empty string', () => {
+    describe(' -> replacePathArraysWithString', () => {
+        it('should not do anything if what was passed is an empty string', () => {
 
-                let initial = '';
+            let initial = '';
 
-                let expected = '';
+            let expected = '';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should not do anything to a path of only objects starting with dot', () => {
+        it('should not do anything to a path of only objects starting with dot', () => {
 
-                let initial = '.bla';
+            let initial = '.bla';
 
-                let expected = 'bla';
+            let expected = 'bla';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should not do anything to a path of only objects', () => {
+        it('should not do anything to a path of only objects', () => {
 
-                let initial = 'bla';
+            let initial = 'bla';
 
-                let expected = 'bla';
+            let expected = 'bla';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (path with dot)', () => {
+        it('should replace all arrays occurrences with a certain string (path with dot)', () => {
 
-                let initial = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
 
-                let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+            let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (normal path)', () => {
+        it('should replace all arrays occurrences with a certain string (normal path)', () => {
 
-                let initial = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
 
-                let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+            let expected = 'bla.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (path with multiple consecutive arrays)', () => {
+        it('should replace all arrays occurrences with a certain string (path with multiple consecutive arrays)', () => {
 
-                let initial = 'bla[0][2].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = 'bla[0][2].randomArrayOfObjects[2].randomSubArray[1]';
 
-                let expected = 'bla.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+            let expected = 'bla.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (path with interpolations)', () => {
+        it('should replace all arrays occurrences with a certain string (path with interpolations)', () => {
 
-                let initial = 'randomArrayOfObjects[2].{{y}}[1].lorem';
+            let initial = 'randomArrayOfObjects[2].{{y}}[1].lorem';
 
-                let expected = 'randomArrayOfObjects.lorem.{{y}}.lorem.lorem';
+            let expected = 'randomArrayOfObjects.lorem.{{y}}.lorem.lorem';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (path with interpolations in array)', () => {
+        it('should replace all arrays occurrences with a certain string (path with interpolations in array)', () => {
 
-                let initial = 'randomSubArray[{{x}}].{{y}}';
+            let initial = 'randomSubArray[{{x}}].{{y}}';
 
-                let expected = 'randomSubArray.lorem.{{y}}';
+            let expected = 'randomSubArray.lorem.{{y}}';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
 
-            it('should replace all arrays occurrences with a certain string (path starting with array)', () => {
+        it('should replace all arrays occurrences with a certain string (path starting with array)', () => {
 
-                let initial = '[0][1][3].randomArrayOfObjects[2].randomSubArray[1]';
+            let initial = '[0][1][3].randomArrayOfObjects[2].randomSubArray[1]';
 
-                let expected = 'lorem.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
+            let expected = 'lorem.lorem.lorem.randomArrayOfObjects.lorem.randomSubArray.lorem';
 
-                let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
-                expect(actual).to.deep.equal(expected);
-            });
+            let actual = CollectionPathHelper.replacePathArraysWithString(initial, {string: 'lorem'});
+            expect(actual).to.deep.equal(expected);
+        });
+    });
+
+    describe('-> convertPath', () => {
+        it('should filter out the array notation from a path', async () => {
+
+            let initialPath = 'randomArrayOfObjects[2].randomSubArray[1]';
+
+            let expectedResult = 'randomArrayOfObjects.randomSubArray';
+
+            let result = CollectionPathHelper.convertPath(initialPath, {foArrayPath: true});
+            expect(result).to.deep.equal(expectedResult);
+
+        });
+
+        it('should filter out the array notation from a path even when the first element is an array', async () => {
+
+            let initialPath = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+
+            let expectedResult = 'randomArrayOfObjects.randomSubArray';
+
+            let result = CollectionPathHelper.convertPath(initialPath, {foArrayPath: true});
+            expect(result).to.deep.equal(expectedResult);
+
+        });
+
+        it('should filter out the object notation from a path', async () => {
+
+            let initialPath = '[0]randomArrayOfObjects[2].randomSubArray[1]';
+
+            let expectedResult = '[0][2][1]';
+
+            let result = CollectionPathHelper.convertPath(initialPath, {foObjectPath: true});
+            expect(result).to.deep.equal(expectedResult);
+        });
+
+        it('should filter out the initial dot in a path', async () => {
+
+            let initialPath = '.bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+            let expectedResult = 'bla[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+            let result = CollectionPathHelper.convertPath(initialPath, {foInitialDot: true});
+            expect(result).to.deep.equal(expectedResult);
+        });
+
+        it('should filter out the initial dot in a path just if it start with a dot', async () => {
+
+            let initialPath = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+            let expectedResult = '[0].randomArrayOfObjects[2].randomSubArray[1]';
+
+            let result = CollectionPathHelper.convertPath(initialPath, {foInitialDot: true});
+            expect(result).to.deep.equal(expectedResult);
         });
     });
 });

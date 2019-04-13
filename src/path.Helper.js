@@ -328,6 +328,32 @@ class CollectionPathHelper {
 
         return CollectionPathHelper.implodePath(explodedPath);
     }
+
+    static filterOutPath(options) {
+        let defaultOptions = {
+            path: '',
+            foArrayPath: false,
+            foObjectPath: false,
+            foInitialDot: false
+        };
+
+        options = {...defaultOptions, ...options};
+
+        let convertedPath = path;
+
+        if (options.foArrayPath) {
+            convertedPath = convertedPath.replace(/\s*\[.*?\]\s*/gm, '');
+        }
+
+        if (options.foObjectPath) {
+            convertedPath = convertedPath.replace(/[a-zA-Z.]+/gm, '');
+        }
+
+        if (options.foInitialDot && convertedPath.startsWith('.')) {
+            convertedPath = convertedPath.replace('.', '');
+        }
+        return convertedPath;
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = CollectionPathHelper; }

@@ -19,7 +19,7 @@
   "scripts": {
     "test": "mocha src/path.Helper.spec.js --reporter dot",
     "test-watch": "npm-watch",
-    "build": "node node node_modules/gulp/bin/gulp.js",
+    "build": "node node_modules/gulp/bin/gulp.js",
     "benchmark": "node src/path.Helper.Benchmark.js",
     "test-umd-node": "node tests/node.spec.js"
   },
