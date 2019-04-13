@@ -80,25 +80,18 @@ class CollectionPathHelper {
      * @return {boolean|String}
      */
     static getRemainingString(property, options) {
-        let defaultOptions = {
+        options = {...{
             discardedStrings: [''],
             global: false
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options};
 
         if (typeof property === 'string' || property instanceof String) {
-            if (options.global) {
-                for (let i = 0; i < options.discardedStrings.length; i++) {
-                    property = property.split(options.discardedStrings[i]).join('');
-                }
-            } else {
-                for (let i = 0; i < options.discardedStrings.length; i++) {
-                    property = property.replace(options.discardedStrings[i], '');
-                }
+            for (let i = 0; i < options.discardedStrings.length; i++) {
+                property = options.global
+                    ? property.split(options.discardedStrings[i]).join("")
+                    : property.replace(options.discardedStrings[i], "");
             }
         }
-
         return property;
     }
 
@@ -109,18 +102,13 @@ class CollectionPathHelper {
      */
     static getStartType(path) {
         if ((typeof path === 'string' || path instanceof String) && path.length > 0) {
-            if (path.charAt(0) === '[') {
-                let idx = path.indexOf(']', 1);
-                let subPath = path.substring(0, idx);
-                if (subPath.indexOf(',') === -1 && idx > -1) {
-                    return 'array';
-                }
+            var endBracket;
+            if (path[0] === "[" && (endBracket = path.indexOf("]", 1)) > -1) {
+                if (path.substring(0, endBracket).indexOf(",", 2) == -1) return "array";
             }
             return 'object';
-
         }
         return 'unknown';
-
     }
 
     /**
@@ -148,20 +136,17 @@ class CollectionPathHelper {
      * @return {String}
      */
     static implodePath(pathFragments) {
-        let path = '';
-        for (let i = 0; i < pathFragments.length; i++) {
-            if (CollectionPathHelper.getStartType(pathFragments[i]) === 'object') {
-                if (path === '') {
-                    path = `${path}${pathFragments[i]}`;
-                } else {
-                    path = `${path}.${pathFragments[i]}`;
-                }
-            } else if (CollectionPathHelper.getStartType(pathFragments[i]) === 'array') {
-                path = `${path}${pathFragments[i]}`;
+        return pathFragments.reduce((path, fragment) => {
+            switch (CollectionPathHelper.getStartType(fragment)) {
+                case 'object':
+                    path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
+                    break;
+                case 'array':
+                    path = `${path}${fragment}`;
+                    break;
             }
-        }
-
-        return path;
+            return path;
+        }, '');
     }
 
     /**
@@ -174,12 +159,10 @@ class CollectionPathHelper {
      * @returns {String}
      */
     static removePathLevels(path, options) {
-        let defaultOptions = {
+        options = {...{
             count: 1,
             termination: 'end'
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options };
 
         let pathFragments = CollectionPathHelper.explodePath(path);
 
@@ -199,7 +182,7 @@ class CollectionPathHelper {
      * @returns {*}
      */
     static getFirstDynamicVariableName(path) {
-        let regex = new RegExp(/[^{{\}\}]+(?=\}\})/g);
+        let regex = new RegExp(/[^{{\}\}]+(?=\}\})/);
         return path.match(regex)[0];
     }
 
@@ -210,7 +193,7 @@ class CollectionPathHelper {
      * @returns {boolean}
      */
     static isPathStartDynamic(path) {
-        return path.indexOf('{') === 0 || path.indexOf('{') === 1;
+        return [0, 1].includes(path.indexOf('{'));
     }
 
     /**
@@ -272,36 +255,24 @@ class CollectionPathHelper {
      * @return {String[]}
      */
     static getSubPaths(property, options) {
-        let defaultOptions = {
+        options = {...{
             ignoreRoot: false,
             ignoreFull: false
-        };
-
-        options = {...defaultOptions, ...options};
+        }, ...options};
 
         let result = [];
 
-        if (!(typeof property === 'string' || property instanceof String)) {
-            return result;
-        }
+        if (!(typeof property === 'string' || property instanceof String)) return result;
+        if (!options.ignoreRoot) result.push('');
 
+        CollectionPathHelper.explodePath(property).reduce((accumulatedPath, path) => {
+            accumulatedPath.push(path);
+            result.push(CollectionPathHelper.implodePath(accumulatedPath));
+            return accumulatedPath;
+        }, []);
 
-        if (!options.ignoreRoot) {
-            result.push('');
-        }
-
-        let explodedProperty = CollectionPathHelper.explodePath(property);
-
-        for (let i = 0; i < explodedProperty.length; i++) {
-            result.push(CollectionPathHelper.implodePath(explodedProperty.slice(0, i + 1)));
-        }
-
-        if (result.length > 0 && options.ignoreFull) {
-            result.pop();
-        }
-
+        if (result.length > 0 && options.ignoreFull) result.pop();
         return result;
-
     }
 
     /**
@@ -312,21 +283,13 @@ class CollectionPathHelper {
      * @return {String}
      */
     static replacePathArraysWithString(property, options) {
-        let defaultOptions = {
+        options = {...{
             string: '',
-        };
+        }, ...options};
 
-        options = {...defaultOptions, ...options};
-
-        let explodedPath = CollectionPathHelper.explodePath(property);
-
-        for (let i = 0; i < explodedPath.length; i++) {
-            if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
-                explodedPath[i] = options.string;
-            }
-        }
-
-        return CollectionPathHelper.implodePath(explodedPath);
+        return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map(ep => {
+            return CollectionPathHelper.getStartType(ep) === 'array' ? options.string : ep;
+        }));
     }
 
     static filterOutPath(options) {
