@@ -390,68 +390,29 @@ class CollectionPathHelper {
      * @returns {Array}
      */
     static getPathIterators(options) {
-        let defaultOptions = {
+        options = {...{
             path: '',
             returnArray: false
-        };
+        }, ...options};
 
-        options = {...defaultOptions, ...options};
-
-        let iterators = {};
-        if (options.returnArray === true) {
-            iterators = [];
-        }
-
-        if (!(typeof options.path === 'string' || options.path instanceof String)) {
-            return iterators;
-        }
-
-        let explodedPath = CollectionPathHelper.explodePath(options.path);
-
-        if (options.returnArray === true) {
-
-            for (let i = 0; i < explodedPath.length; i++) {
-
-                let vr = {};
-                vr.level = i;
-                vr.varName = CollectionPathHelper.getVarName(i, {prefix: 'itr'});
-                vr.NPath = CollectionPathHelper.implodePath(explodedPath.slice(0, i + 1));
-                if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
-                    vr.value = explodedPath[i].slice(1, explodedPath[i].length - 1);
-                } else {
-                    vr.value = explodedPath[i];
-                }
-
-                if (!isNaN(parseFloat(vr.value)) && isFinite(vr.value)) {
-                    vr.value = Number(vr.value);
-                }
-
-                iterators.push(vr);
-            }
-
-            return iterators;
-        }
-
-        for (let i = 0; i < explodedPath.length; i++) {
-
-            let varName = CollectionPathHelper.getVarName(i, {prefix: 'itr'});
-            let value = '';
-            if (CollectionPathHelper.getStartType(explodedPath[i]) === 'array') {
-                value = explodedPath[i].slice(1, explodedPath[i].length - 1);
-            } else {
-                value = explodedPath[i];
-            }
-
-            if (!isNaN(parseFloat(value)) && isFinite(value)) {
-                value = Number(value);
-            }
-
-            iterators[varName] = value;
-        }
-
-        return iterators;
-
-
+        return !(typeof options.path === 'string' || options.path instanceof String) ?
+            options.returnArray ? [] : {} :
+            options.returnArray ?
+            this.explodePath(options.path).reduce((accumulator, ep, i, original) => {
+                let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                accumulator.push({
+                    level: i,
+                    varName: this.getVarName(i, {prefix: 'itr'}),
+                    NPath: this.implodePath(original.slice(0, i + 1)),
+                    value: isFinite(value) ? Number(value) : value
+                });
+                return accumulator;
+            }, []) :
+            this.explodePath(options.path).reduce((accumulator, ep, i) => {
+                let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                accumulator[this.getVarName(i, {prefix: 'itr'})] = isFinite(value) ? Number(value) : value;
+                return accumulator;
+            }, {});
     }
 }
 
