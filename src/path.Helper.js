@@ -393,27 +393,134 @@ class CollectionPathHelper {
         options = {...{
             path: '',
             returnArray: false
-        }, ...options};
+        },
+        ...options};
 
-        return !(typeof options.path === 'string' || options.path instanceof String) ?
-            options.returnArray ? [] : {} :
-            options.returnArray ?
-            this.explodePath(options.path).reduce((accumulator, ep, i, original) => {
-                let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
-                accumulator.push({
-                    level: i,
-                    varName: this.getVarName(i, {prefix: 'itr'}),
-                    NPath: this.implodePath(original.slice(0, i + 1)),
-                    value: isFinite(value) ? Number(value) : value
-                });
-                return accumulator;
-            }, []) :
-            this.explodePath(options.path).reduce((accumulator, ep, i) => {
-                let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
-                accumulator[this.getVarName(i, {prefix: 'itr'})] = isFinite(value) ? Number(value) : value;
-                return accumulator;
-            }, {});
+        return !(typeof options.path === 'string' || options.path instanceof String)
+            ? options.returnArray ? [] : {}
+            : options.returnArray
+                ? this.explodePath(options.path).reduce((accumulator, ep, i, original) => {
+                    let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                    accumulator.push({
+                        level: i,
+                        varName: this.getVarName(i, {prefix: 'itr'}),
+                        NPath: this.implodePath(original.slice(0, i + 1)),
+                        value: isFinite(value) ? Number(value) : value
+                    });
+                    return accumulator;
+                }, [])
+                : this.explodePath(options.path).reduce((accumulator, ep, i) => {
+                    let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                    accumulator[this.getVarName(i, {prefix: 'itr'})] = isFinite(value) ? Number(value) : value;
+                    return accumulator;
+                }, {});
     }
+
+    /**
+     * For a given path will return a signature
+     * @param {Object=} options
+     * @param {Object=|Array=} options.path - the path from which the signature will be extracted
+     * @returns {Object}
+     */
+    static getPathSignature(options) {
+
+        let signature = {length: 0, objects: 0, arrays: 0, schema: [], objProps: []};
+
+        if (!(typeof options.path === 'string' || options.path instanceof String)) {
+            return signature;
+        }
+
+        let exploded = CollectionPathHelper.explodePath(options.path);
+
+        signature.length = exploded.length;
+
+        for (let ei = 0; ei < exploded.length; ei++) {
+            if (CollectionPathHelper.getStartType(exploded[ei]) === 'object') {
+                signature.objects = signature.objects + 1;
+                signature.schema.push('object');
+                signature.objProps.push(exploded[ei]);
+            } else {
+                signature.arrays = signature.arrays + 1;
+                signature.schema.push('array');
+            }
+        }
+
+        return signature;
+
+
+    }
+
+    /**
+     * For a given collection it will return an array of all the possible paths
+     * @param {Object=} options
+     * @param {Object=|Array=} options.collection - the collection from which all the possible paths will be extracted
+     * @param {Object=} transience - Object to store transient state of the processing
+     * @returns {Array}
+     */
+    // static getAllPaths(options, transience) {
+    //
+    //
+    //     if (BoolValidator.isObject(collection)) {
+    //
+    //         if (options.transience.cursor.charAt(0) === '.') {
+    //             options.transience.cursor = options.transience.cursor.replace('.', '');
+    //         }
+    //
+    //         options.transience.level += 1;
+    //         for (let key in collection) {
+    //
+    //             /** Updating cursor */
+    //             options.transience.cursor = `${options.transience.cursor}.${key}`;
+    //             options.transience.context = collection[key];
+    //             options.transience.currentIterators = ObjectHelper.getPathIterators(options.transience.cursor);
+    //
+    //             /** Push the iterator */
+    //             options.transience.iterators.push({
+    //                 contextPath: options.transience.cursor,
+    //                 varName: ObjectHelper.getVarName(options.transience.level),
+    //                 domainLevel: 0,
+    //                 level: options.transience.level,
+    //                 value: key
+    //             });
+    //
+    //
+    //             /** Recursive logic */
+    //             if (BoolValidator.objectIsPopulated(collection[key])) {
+    //                 collection[key] = await ObjectHelper.query(collection[key], options);
+    //             } else if (BoolValidator.arrayIsPopulated(collection[key])) {
+    //                 collection[key] = await ObjectHelper.query(collection[key], options);
+    //             }
+    //
+    //             options.transience.cursor = PathHelper.removePathLevels(options.transience.cursor);
+    //
+    //         }
+    //         options.transience.level -= 1;
+    //
+    //     } else if (BoolValidator.isArray(collection)) {
+    //         options.transience.level += 1;
+    //         for (let i = 0; i < collection.length; i++) {
+    //             options.transience.cursor = `${options.transience.cursor}[${i}]`;
+    //             options.transience.context = collection[i];
+    //             options.transience.currentIterators = ObjectHelper.getPathIterators(options.transience.cursor);
+    //
+    //             /** Push the iterator */
+    //             options.transience.iterators.push({
+    //                 contextPath: options.transience.cursor,
+    //                 varName: ObjectHelper.getVarName(options.transience.level),
+    //                 domainLevel: 0,
+    //                 level: options.transience.level,
+    //                 value: i
+    //             });
+    //
+    //             collection[i] = await ObjectHelper.query(collection[i], options);
+    //
+    //             options.transience.cursor = PathHelper.removePathLevels(options.transience.cursor);
+    //         }
+    //         options.transience.level -= 1;
+    //     } else {
+    //         return collection;
+    //     }
+    // }
 }
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = CollectionPathHelper; }
