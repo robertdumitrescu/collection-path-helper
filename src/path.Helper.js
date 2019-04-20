@@ -2,7 +2,7 @@ const lodashGet = require('lodash/get');
 const lodashSet = require('lodash/set');
 
 /**
- * @class ObjectHelper
+ * @class CollectionPathHelper
  * @constructor
  */
 class CollectionPathHelper {
@@ -382,6 +382,15 @@ class CollectionPathHelper {
     }
 
     /**
+     * Returns true or false if a fragment is an iterator or not
+     * @param {String} fragment
+     */
+    static isPathItr(fragment) {
+        let regex = /^([\[|\.]?itr\d*[\]]?)$/g;
+        return regex.test(fragment);
+    }
+
+    /**
      * Returns a collection of path iterators that can be easily predictable.
      * By default it returns a key/value pair on an object
      * @param {Object=} options
@@ -420,11 +429,16 @@ class CollectionPathHelper {
      * For a given path will return a signature
      * @param {Object=} options
      * @param {Object=|Array=} options.path - the path from which the signature will be extracted
+     * @param {Boolean=} options.getPath - (true|false) If true with also include a path with iterators for array fragments
      * @returns {Object}
      */
     static getPathSignature(options) {
 
         let signature = {length: 0, objects: 0, arrays: 0, schema: [], objProps: []};
+
+        if (options.getPath && options.getPath === true) {
+            signature.path = [];
+        }
 
         if (!(typeof options.path === 'string' || options.path instanceof String)) {
             return signature;
@@ -436,18 +450,26 @@ class CollectionPathHelper {
 
         for (let ei = 0; ei < exploded.length; ei++) {
             if (CollectionPathHelper.getStartType(exploded[ei]) === 'object') {
-                signature.objects = signature.objects + 1;
+                signature.objects += 1;
                 signature.schema.push('object');
                 signature.objProps.push(exploded[ei]);
+                if (signature.path) {
+                    signature.path.push(exploded[ei]);
+                }
             } else {
-                signature.arrays = signature.arrays + 1;
+                signature.arrays += 1;
                 signature.schema.push('array');
+                if (signature.path) {
+                    signature.path.push(`[itr${ei}]`);
+                }
             }
         }
 
+        if (signature.path) {
+            signature.path = CollectionPathHelper.implodePath(signature.path);
+        }
+
         return signature;
-
-
     }
 
     /**

@@ -1615,6 +1615,69 @@ describe('CollectionPathHelper', () => {
     //     });
     // });
 
+    describe('-> isPathItr', () => {
+        it('should return false for undefined', async () => {
+            let actual = CollectionPathHelper.isPathItr(undefined);
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for boolean true', async () => {
+            let actual = CollectionPathHelper.isPathItr(true);
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for boolean false', async () => {
+            let actual = CollectionPathHelper.isPathItr(false);
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for null', async () => {
+            let actual = CollectionPathHelper.isPathItr(null);
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for empty string', async () => {
+            let actual = CollectionPathHelper.isPathItr('');
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for empty object', async () => {
+            let actual = CollectionPathHelper.isPathItr({});
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for empty array', async () => {
+            let actual = CollectionPathHelper.isPathItr([]);
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for similar but invalid iterator definition', async () => {
+            let actual = CollectionPathHelper.isPathItr('itra');
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for similar but invalid iterator definition', async () => {
+            let actual = CollectionPathHelper.isPathItr('aitr');
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for interpolated iterator within object', async () => {
+            let actual = CollectionPathHelper.isPathItr('{{itr0}}');
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return false for interpolated iterator within array', async () => {
+            let actual = CollectionPathHelper.isPathItr('[{{itr0}}]');
+            expect(actual).to.deep.equal(false);
+        });
+        it('should return true for an object iterator', async () => {
+            let actual = CollectionPathHelper.isPathItr('itr0');
+            expect(actual).to.deep.equal(true);
+        });
+        it('should return true for an object iterator with dot', async () => {
+            let actual = CollectionPathHelper.isPathItr('.itr0');
+            expect(actual).to.deep.equal(true);
+        });
+        it('should return true for an array iterator', async () => {
+            let actual = CollectionPathHelper.isPathItr('[itr0]');
+            expect(actual).to.deep.equal(true);
+        });
+        it('should return true for an array iterator with double digit', async () => {
+            let actual = CollectionPathHelper.isPathItr('[itr22]');
+            expect(actual).to.deep.equal(true);
+        });
+    });
+
     describe('-> getPathIterators', () => {
         it('should return empty string when path is not a string (undefined)', async () => {
 
@@ -2924,6 +2987,238 @@ describe('CollectionPathHelper', () => {
             expect(actual).to.deep.equal(expected);
         });
 
+        it('should get a signature from a simple path - getPath', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '[{{x}}].randomArrayOfObjects[2]', getPath: true});
+            let expected = {path: '[itr0].randomArrayOfObjects[itr2]', length: 3, objects: 1, arrays: 2, schema: ['array', 'object', 'array'], objProps: ['randomArrayOfObjects']};
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (1) - getPath', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', getPath: true});
+            let expected = {
+                length: 11,
+                objects: 7,
+                path: 'lorem[itr1].{{ipsum}}[itr3].dolor[itr5].[2, 3)[itr7].(2, 3).({{consecteur}},3].[2, {{amet}}]',
+                arrays: 4,
+                schema: [
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'lorem',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[2, 3)',
+                    '(2, 3)',
+                    '({{consecteur}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (2) - getPath', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true});
+            let expected = {
+                length: 12,
+                objects: 8,
+                path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[itr2].{{ipsum}}[itr4].dolor[itr6].[{{123lorem_33ipsumDolor}}321, sitAmet)[itr8].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                arrays: 4,
+                schema: [
+                    'object',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (3) - getPath', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum][{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', getPath: true});
+            let expected = {
+                length: 10,
+                objects: 0,
+                path: '[itr0][itr1][itr2][itr3][itr4][itr5][itr6][itr7][itr8][itr9]',
+                arrays: 10,
+                schema: [
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array'
+                ],
+                objProps: []
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (4) - getPath', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}].loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true});
+            let expected = {
+                length: 16,
+                objects: 16,
+                path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}].loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                arrays: 0,
+                schema: [
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]',
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+    });
+
+    describe('-> getSchema', () => {
+        it('should get a schema out of undefined', async () => {
+            let initial = {collection: undefined};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of true boolean', async () => {
+            let initial = {collection: true};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of false boolean', async () => {
+            let initial = {collection: false};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of empty string', async () => {
+            let initial = {collection: ''};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of empty object', async () => {
+            let initial = {collection: {}};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of empty array', async () => {
+            let initial = {collection: []};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of number', async () => {
+            let initial = {collection: 3};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of NaN', async () => {
+            let initial = {collection: NaN};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of null', async () => {
+            let initial = {collection: null};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of strings', async () => {
+            let initial = {collection: ['lorem', 'ipsum', 'dolor']};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of booleans', async () => {
+            let initial = {collection: [true, false, true]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of numbers', async () => {
+            let initial = {collection: [1, 5, 8]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of numbers and strings', async () => {
+            let initial = {collection: [1, 5, 'lorem', 8, 'ipsum']};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of numbers, strings and undefined values', async () => {
+            let initial = {collection: [6, undefined, 'ipsum', 3, 1, 'lorem', undefined]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of empty objects', async () => {
+            let initial = {collection: [{}, {}, {}]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of objects - all objects same property', async () => {
+            let initial = {collection: [{prop1: 'prop1String'}, {prop1: 8}, {prop1: undefined}, {prop1: null}]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
+        it('should get a schema out of an array of objects - 2 objects same property, 2 different property', async () => {
+            let initial = {collection: [{prop1: 'prop1String'}, {prop1: 8}, {prop2: undefined}, {prop3: null}]};
+            let actual = await CollectionPathHelper.getSchema(initial);
+            expect(actual).to.be.equal('(2]');
+        });
 
     });
 
