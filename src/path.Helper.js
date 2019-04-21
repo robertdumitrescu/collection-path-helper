@@ -118,6 +118,9 @@ class CollectionPathHelper {
      * @returns {String[]}
      */
     static explodePath(path) {
+        if (Array.isArray(path)) {
+            return path;
+        }
         return path.split('.').reduce((result, partial) => {
             var fragmentPartial;
             while ((fragmentPartial = partial.indexOf('[', 1)) !== -1) {
@@ -410,6 +413,7 @@ class CollectionPathHelper {
             : options.returnArray
                 ? this.explodePath(options.path).reduce((accumulator, ep, i, original) => {
                     let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                    if (CollectionPathHelper.isPathItr(value)) { value = '__iterator__'; }
                     accumulator.push({
                         level: i,
                         varName: this.getVarName(i, {prefix: 'itr'}),
@@ -420,6 +424,7 @@ class CollectionPathHelper {
                 }, [])
                 : this.explodePath(options.path).reduce((accumulator, ep, i) => {
                     let value = (this.getStartType(ep) === 'array') ? ep.slice(1, ep.length - 1) : ep;
+                    if (CollectionPathHelper.isPathItr(value)) { value = '__iterator__'; }
                     accumulator[this.getVarName(i, {prefix: 'itr'})] = isFinite(value) ? Number(value) : value;
                     return accumulator;
                 }, {});
@@ -470,6 +475,134 @@ class CollectionPathHelper {
         }
 
         return signature;
+    }
+
+    /**
+     * Verifies if options.subpath is a subpath of options.path. E.g. p1.p2[2] is a subpath of p1.p2[2].p3
+     * @param {Object=} options
+     * @param {Object} options.subpath - the path which will be verified against options.path
+     * @param {Object} options.sameSizeCheck - the path which will be verified against options.path
+     * @param {Object} options.path - The path to which the subpath will be verified against
+     * @returns {Boolean}
+     */
+    static isSubPath(options) {
+        if (typeof options.subpath === 'string' || options.subpath instanceof String) {
+            options.subpath = CollectionPathHelper.getPathIterators({path: options.subpath});
+        } else if (!(options.subpath !== null && typeof options.subpath === 'object' && !Array.isArray(options.subpath))) {
+            return false;
+        }
+
+        if (typeof options.path === 'string' || options.path instanceof String) {
+            options.path = CollectionPathHelper.getPathIterators({path: options.path});
+        } else if (!(options.path !== null && typeof options.path === 'object' && !Array.isArray(options.path))) {
+            return false;
+        }
+
+        if (options.sameSizeCheck && (Object.keys(options.subpath).length !== Object.keys(options.path).length)) {
+            return false;
+        }
+
+        for (let property in options.subpath) {
+            if (options.path[property] === '__iterator__') {
+                continue;
+            } else if (options.subpath[property] !== options.path[property]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @TODO add unit tests about booleans, nulls, undefined and other similar stuff (safe tests)
+     * @param {Object} options
+     * @param {Object} options.in - the data from which options.path will extract data
+     * @param {Object} options.path - the path that will point to the data desired to be extracted
+     * @param {Boolean} options.source - include the source with each value. Instead of being just the value in the array, now you will have an object with {value, source}
+     * @param {Object} options.default - the default which will be returned if the data couldn't be found
+     * @param {Object=} transience - Object to store transient state of the processing
+     * @param {Object=} transience.initial - the pristine initial collection that was passed
+     * @param {Object=} transience.level - The level of the iteration
+     * @param {Object=} transience.cursor - The current cursor. Basically this indicates where the method is processing currently
+     * @param {Object=} transience.pathItrSign - Passed path iterator signature. Based on this we will take the decision if it matches or not a value.
+     * @param {Object=} transience.result - The composed result
+     */
+    static getComposite(options, transience) {
+
+        if (typeof transience === 'undefined') {
+            let defaultOptions = {
+                default: undefined
+            };
+            options = {...defaultOptions, ...options};
+            transience = {};
+            transience.level = -1;
+            transience.cursor = '';
+            transience.pathItrSign = CollectionPathHelper.getPathIterators({path: options.path});
+            transience.result = [];
+        }
+
+        if (options.in !== null && typeof options.in === 'object' && !Array.isArray(options.in)) {
+
+            if (transience.cursor.charAt(0) === '.') {
+                transience.cursor = transience.cursor.replace('.', '');
+            }
+
+            transience.level += 1;
+            Object.entries(options.in).forEach(([key, value]) => {
+                /** Updating cursor */
+                transience.cursor = `${transience.cursor}.${key}`;
+
+                let cursorItrSign = CollectionPathHelper.getPathIterators({path: transience.cursor});
+                /** Continue just if is a subpath */
+                if (CollectionPathHelper.isSubPath({subpath: cursorItrSign, path: transience.pathItrSign})) {
+                    let compRes = CollectionPathHelper.isSubPath({subpath: cursorItrSign, path: transience.pathItrSign, sameSizeCheck: true});
+                    if (compRes) {
+                        transience.result.push(value);
+                    }
+
+                    /** Recursive logic */
+                    if ((value !== null && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length > 0) || (Array.isArray(value) && value.length > 0)) {
+                        CollectionPathHelper.getComposite({in: value}, transience);
+                    }
+                }
+
+                transience.cursor = CollectionPathHelper.removePathLevels(transience.cursor);
+            });
+            transience.level -= 1;
+
+        } else if (Array.isArray(options.in)) {
+            transience.level += 1;
+            for (let i = 0; i < options.in.length; i++) {
+                transience.cursor = `${transience.cursor}[${i}]`;
+
+                let cursorItrSign = CollectionPathHelper.getPathIterators({path: transience.cursor});
+                /** Continue just if is a subpath */
+                if (CollectionPathHelper.isSubPath({subpath: cursorItrSign, path: transience.pathItrSign})) {
+                    if (CollectionPathHelper.isSubPath({subpath: cursorItrSign, path: transience.pathItrSign, sameSizeCheck: true})) {
+                        transience.result.push(options.in[i]);
+                    }
+
+                    CollectionPathHelper.getComposite({in: options.in[i]}, transience);
+                }
+
+                transience.cursor = CollectionPathHelper.removePathLevels(transience.cursor);
+            }
+            transience.level -= 1;
+        } else {
+            // transience.schema = CollectionPathHelper.getComposite({in: options.in, cursor: transience.cursor, schema: transience.schema});
+        }
+
+        /** Cleanup stage. This should be executed the last time before the main return */
+        if (transience.level === -1) {
+            /** Building the result */
+            if (transience.result.length === 0) {
+                return options.default;
+            } if (transience.result.length === 1) {
+                return transience.result[0];
+            }
+            return transience.result;
+
+        }
     }
 
     /**

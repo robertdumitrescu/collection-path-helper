@@ -5,6 +5,7 @@ const Benchmark = require('benchmark');
 const Lodash = require('lodash');
 const cTable = require('console.table');
 const suite = new Benchmark.Suite;
+const data = require('./fixtures/data');
 
 const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
 
@@ -135,6 +136,51 @@ suite.add('getPathIterators (complex path) (3) (return array)', () => {
 });
 suite.add('getPathIterators (complex path) (4) (return array)', () => {
     PathHelper.getPathIterators({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true});
+});
+suite.add('getPathSignature (complex path) (1)', () => {
+    PathHelper.getPathSignature({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'});
+});
+suite.add('getPathSignature (complex path) (2)', () => {
+    PathHelper.getPathSignature({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('getPathSignature (complex path) (3)', () => {
+    PathHelper.getPathSignature({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'});
+});
+suite.add('getPathSignature (complex path) (4)', () => {
+    PathHelper.getPathSignature({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('getPathSignature (complex path) (1) (getPath: true)', () => {
+    PathHelper.getPathSignature({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', getPath: true});
+});
+suite.add('getPathSignature (complex path) (2) (getPath: true)', () => {
+    PathHelper.getPathSignature({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true});
+});
+suite.add('getPathSignature (complex path) (3) (getPath: true)', () => {
+    PathHelper.getPathSignature({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', getPath: true});
+});
+suite.add('getPathSignature (complex path) (4) (getPath: true)', () => {
+    PathHelper.getPathSignature({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true});
+});
+suite.add('isSubPath (complex path) (1)', () => {
+    PathHelper.isSubPath({subpath: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3]', path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]'});
+});
+suite.add('isSubPath (complex path) (2)', () => {
+    PathHelper.isSubPath({subpath: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}]', path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('isSubPath (complex path) (3)', () => {
+    PathHelper.isSubPath({subpath: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5]', path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'});
+});
+suite.add('isSubPath (complex path) (4)', () => {
+    PathHelper.isSubPath({subpath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3]', path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]'});
+});
+suite.add('getComposite (complex data) (1)', () => {
+    PathHelper.getComposite({in: data, path: 'web-app.servlet[0].init-param.markers[itr6].name'});
+});
+suite.add('getComposite (complex data) (2)', () => {
+    PathHelper.getComposite({in: data, path: 'web-app.servlet[0].init-param.markStates.itr6[itr7].name'});
+});
+suite.add('getComposite (complex data) (3)', () => {
+    PathHelper.getComposite({in: data, path: 'web-app.servlet[itr3].init-param.markStates.itr6[itr7].name'});
 });
 
 suite.add('Lodash.get', () => {

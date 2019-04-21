@@ -97,29 +97,29 @@ let data = {
                     markStates: {
                         mark1: [
                             {
-                                name: 'Rixos The Palm Dubai',
+                                name: 'Rixos The Palm Dubai2',
                                 position: [25.1212, 55.1535],
                             },
                             {
-                                name: 'Shangri-La Hotel',
+                                name: 'Shangri-La Hotel2',
                                 location: [25.2084, 55.2719]
                             },
                             {
-                                name: 'Grand Hyatt',
+                                name: 'Grand Hyatt2',
                                 location: [25.2285, 55.3273]
                             }
                         ],
                         mark2: [
                             {
-                                name: 'Rixos The Palm Dubai',
+                                name: 'Rixos The Palm Dubai3',
                                 position: [25.1212, 55.1535],
                             },
                             {
-                                name: 'Shangri-La Hotel',
+                                name: 'Shangri-La Hotel3',
                                 location: [25.2084, 55.2719]
                             },
                             {
-                                name: 'Grand Hyatt',
+                                name: 'Grand Hyatt3',
                                 location: [25.2285, 55.3273]
                             }
                         ],
@@ -150,7 +150,51 @@ let data = {
                 'servlet-class': 'org.cofax.cds.EmailServlet',
                 'init-param': {
                     mailHost: 'mail1',
-                    mailHostOverride: 'mail2'
+                    mailHostOverride: 'mail2',
+                    markers: [
+                        {
+                            name: 'Rixos The Palm Dubai4',
+                            position: [25.1212, 55.1535],
+                        },
+                        {
+                            name: 'Shangri-La Hotel4',
+                            location: [25.2084, 55.2719]
+                        },
+                        {
+                            name: 'Grand Hyatt4',
+                            location: [25.2285, 55.3273]
+                        }
+                    ],
+                    markStates: {
+                        mark1: [
+                            {
+                                name: 'Rixos The Palm Dubai5',
+                                position: [25.1212, 55.1535],
+                            },
+                            {
+                                name: 'Shangri-La Hotel5',
+                                location: [25.2084, 55.2719]
+                            },
+                            {
+                                name: 'Grand Hyatt5',
+                                location: [25.2285, 55.3273]
+                            }
+                        ],
+                        mark2: [
+                            {
+                                name: 'Rixos The Palm Dubai6',
+                                position: [25.1212, 55.1535],
+                            },
+                            {
+                                name: 'Shangri-La Hotel6',
+                                location: [25.2084, 55.2719]
+                            },
+                            {
+                                name: 'Grand Hyatt6',
+                                location: [25.2285, 55.3273]
+                            }
+                        ],
+                    },
                 }
             },
             {

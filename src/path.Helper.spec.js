@@ -999,6 +999,10 @@ describe('CollectionPathHelper', () => {
     });
 
     describe('-> get', () => {
+        let data;
+        before(() => {
+            data = require('./fixtures/data');
+        });
         it('should a specific property from an object', async () => {
 
             let initial = {id: 3, id2: 'nana'};
@@ -1059,8 +1063,48 @@ describe('CollectionPathHelper', () => {
             let actual = CollectionPathHelper.get(initial, '');
             expect(actual).to.deep.equal(expected);
         });
-    });
+        it('should get a real world example (1)', async () => {
 
+            let initial = data;
+
+            let expected = [
+                {
+                    name: 'Rixos The Palm Dubai',
+                    position: [
+                        25.1212,
+                        55.1535
+                    ]
+                },
+                {
+                    name: 'Shangri-La Hotel',
+                    location: [
+                        25.2084,
+                        55.2719
+                    ]
+                },
+                {
+                    name: 'Grand Hyatt',
+                    location: [
+                        25.2285,
+                        55.3273
+                    ]
+                }
+            ];
+
+            let actual = CollectionPathHelper.get(initial, 'web-app.servlet[0].init-param.markers');
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a real world example (2)', async () => {
+
+            let initial = data;
+
+            let expected = 'Shangri-La Hotel';
+
+            let actual = CollectionPathHelper.get(initial, 'web-app.servlet[0].init-param.markers[1].name');
+            expect(actual).to.deep.equal(expected);
+        });
+    });
     describe('-> set', () => {
         it('should set an empty path on object', async () => {
 
@@ -1770,6 +1814,29 @@ describe('CollectionPathHelper', () => {
             expect(actual).to.deep.equal(expected);
         });
 
+        it('should return iterators for a path (complex path) (2) - with itr', async () => {
+
+            let initial = {path: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].itr8.({{sitConsecteur34_dolor}},3].[2, {{amet}}]'};
+
+            let expected = {
+                itr0: '__iterator__',
+                itr1: 'lor22_{{dolorSit33_Amet}}55em',
+                itr2: 2,
+                itr3: '{{ipsum}}',
+                itr4: '__iterator__',
+                itr5: 'dolor',
+                itr6: '21{{dolorSit_Amet23}}32',
+                itr7: '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                itr8: '{{n_2_x}}',
+                itr9: '__iterator__',
+                itr10: '({{sitConsecteur34_dolor}},3]',
+                itr11: '[2, {{amet}}]',
+            };
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
         it('should return iterators for a path (complex path) (3)', async () => {
 
             let initial = {path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum][{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]'};
@@ -2165,6 +2232,89 @@ describe('CollectionPathHelper', () => {
                     level: 11,
                     varName: 'itr11',
                     NPath: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                    value: '[2, {{amet}}]'
+                }
+            ];
+
+            let actual = CollectionPathHelper.getPathIterators(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should return iterators for a path (complex path) (2) (return array) - with itr', async () => {
+
+            let initial = {path: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].itr11.({{sitConsecteur34_dolor}},3].[2, {{amet}}]', returnArray: true};
+
+            let expected = [
+                {
+                    level: 0,
+                    varName: 'itr0',
+                    NPath: 'itr0',
+                    value: '__iterator__'
+                },
+                {
+                    level: 1,
+                    varName: 'itr1',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em',
+                    value: 'lor22_{{dolorSit33_Amet}}55em'
+                },
+                {
+                    level: 2,
+                    varName: 'itr2',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2]',
+                    value: 2
+                },
+                {
+                    level: 3,
+                    varName: 'itr3',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}',
+                    value: '{{ipsum}}'
+                },
+                {
+                    level: 4,
+                    varName: 'itr4',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5]',
+                    value: '__iterator__'
+                },
+                {
+                    level: 5,
+                    varName: 'itr5',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor',
+                    value: 'dolor'
+                },
+                {
+                    level: 6,
+                    varName: 'itr6',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32]',
+                    value: '21{{dolorSit_Amet23}}32'
+                },
+                {
+                    level: 7,
+                    varName: 'itr7',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    value: '[{{123lorem_33ipsumDolor}}321, sitAmet)'
+                },
+                {
+                    level: 8,
+                    varName: 'itr8',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}]',
+                    value: '{{n_2_x}}'
+                },
+                {
+                    level: 9,
+                    varName: 'itr9',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].itr11',
+                    value: '__iterator__'
+                },
+                {
+                    level: 10,
+                    varName: 'itr10',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].itr11.({{sitConsecteur34_dolor}},3]',
+                    value: '({{sitConsecteur34_dolor}},3]'
+                },
+                {
+                    level: 11,
+                    varName: 'itr11',
+                    NPath: 'itr0.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[itr5].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].itr11.({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
                     value: '[2, {{amet}}]'
                 }
             ];
@@ -3133,95 +3283,290 @@ describe('CollectionPathHelper', () => {
         });
     });
 
-    describe('-> getSchema', () => {
-        it('should get a schema out of undefined', async () => {
-            let initial = {collection: undefined};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+    describe('-> isSubPath', () => {
+        it('should return false when subpath is undefined', async () => {
+            let initial = {subpath: undefined, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of true boolean', async () => {
-            let initial = {collection: true};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is true boolean', async () => {
+            let initial = {subpath: true, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of false boolean', async () => {
-            let initial = {collection: false};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is false boolean', async () => {
+            let initial = {subpath: false, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of empty string', async () => {
-            let initial = {collection: ''};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is null', async () => {
+            let initial = {subpath: null, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of empty object', async () => {
-            let initial = {collection: {}};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return true when subpath is empty string and path is an empty object', async () => {
+            let initial = {subpath: '', path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(true);
         });
-        it('should get a schema out of empty array', async () => {
-            let initial = {collection: []};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is empty array', async () => {
+            let initial = {subpath: [], path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of number', async () => {
-            let initial = {collection: 3};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is populated array', async () => {
+            let initial = {subpath: [1, 2, 3], path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of NaN', async () => {
-            let initial = {collection: NaN};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when subpath is number', async () => {
+            let initial = {subpath: 3, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of null', async () => {
-            let initial = {collection: null};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is undefined', async () => {
+            let initial = {subpath: {}, path: undefined};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of strings', async () => {
-            let initial = {collection: ['lorem', 'ipsum', 'dolor']};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is true boolean', async () => {
+            let initial = {subpath: {}, path: true};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of booleans', async () => {
-            let initial = {collection: [true, false, true]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is false boolean', async () => {
+            let initial = {subpath: {}, path: false};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of numbers', async () => {
-            let initial = {collection: [1, 5, 8]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is null', async () => {
+            let initial = {subpath: {}, path: null};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of numbers and strings', async () => {
-            let initial = {collection: [1, 5, 'lorem', 8, 'ipsum']};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return true when path is empty string and subpath an empty object', async () => {
+            let initial = {subpath: {}, path: ''};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(true);
         });
-        it('should get a schema out of an array of numbers, strings and undefined values', async () => {
-            let initial = {collection: [6, undefined, 'ipsum', 3, 1, 'lorem', undefined]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is empty array', async () => {
+            let initial = {subpath: {}, path: []};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of empty objects', async () => {
-            let initial = {collection: [{}, {}, {}]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is populated array', async () => {
+            let initial = {subpath: {}, path: [1, 2, 3]};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of objects - all objects same property', async () => {
-            let initial = {collection: [{prop1: 'prop1String'}, {prop1: 8}, {prop1: undefined}, {prop1: null}]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false when path is number', async () => {
+            let initial = {subpath: {}, path: 3};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-        it('should get a schema out of an array of objects - 2 objects same property, 2 different property', async () => {
-            let initial = {collection: [{prop1: 'prop1String'}, {prop1: 8}, {prop2: undefined}, {prop3: null}]};
-            let actual = await CollectionPathHelper.getSchema(initial);
-            expect(actual).to.be.equal('(2]');
+        it('should return false subpath and path are having different number of props', async () => {
+            let initial = {subpath: {p1: 1, p2: 2}, path: {p2: 2}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
         });
-
+        it('should return false when subpath and path are having different properties', async () => {
+            let initial = {
+                subpath: {
+                    itr0: 1,
+                    itr1: 2
+                },
+                path: {
+                    itr1: 1,
+                    itr2: 2
+                }
+            };
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
+        });
+        it('should return false when subpath and path are having different values', async () => {
+            let initial = {
+                subpath: {
+                    itr0: 1,
+                    itr1: 2
+                },
+                path: {
+                    itr0: 1,
+                    itr1: 3
+                }
+            };
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(false);
+        });
+        it('should return true when both subpath and path are empty objects (empty path)', async () => {
+            let initial = {subpath: {}, path: {}};
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(true);
+        });
+        it('should return true when props from subpath are within props from path', async () => {
+            let initial = {
+                subpath: {
+                    itr0: 1,
+                    itr1: 2
+                },
+                path: {
+                    itr0: 1,
+                    itr1: '__iterator__'
+                }
+            };
+            let actual = await CollectionPathHelper.isSubPath(initial);
+            expect(actual).to.be.equal(true);
+        });
     });
 
+    describe('-> getComposite', () => {
+        let data;
+        let simpleData;
+        before(() => {
+            data = require('./fixtures/data');
+            simpleData = {
+                p1: {
+                    p2: [
+                        {
+                            p3: 3,
+                            p4: 4
+                        },
+                        {
+                            p3: 33,
+                            p4: 44,
+                            p5: [{p6: 6}, {p6: 66}]
+                        }
+                    ],
+                    p3: [
+                        {
+                            p3: 3.2,
+                            p4: 4.2
+                        },
+                        {
+                            p3: 33.2,
+                            p4: 44.2,
+                            p5: [{p6: 6.2}, {p6: 66.2}]
+                        }
+                    ]
+                }
+            };
+        });
+        it('simple - should get one result - simple array', async () => {
+            let initial = {
+                in: [1, 2, 3],
+                path: '[1]'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal(2);
+        });
+        it('simple - should get a composite result - simple array', async () => {
+            let initial = {
+                in: [1, 2, 3],
+                path: '[itr0]'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([1, 2, 3]);
+        });
+        it('simple - should get a composite result on level 1 specific - simple nested array', async () => {
+            let initial = {
+                in: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                path: '[1][itr1]'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([4, 5, 6]);
+        });
+        it('simple - should get a composite result on level 1 non specific - simple nested array', async () => {
+            let initial = {
+                in: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                path: '[itr0][itr1]'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        });
+        it('simple - should get one result - simple object', async () => {
+            let initial = {
+                in: {p1: 1, p2: 2, p3: 3},
+                path: '.p2'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal(2);
+        });
+        it('simple - should get a composite result - simple object', async () => {
+            let initial = {
+                in: {p1: 1, p2: 2, p3: 3},
+                path: '.itr0'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([1, 2, 3]);
+        });
+        it('simple - should get a composite result on level 1 specific - simple nested object', async () => {
+            let initial = {
+                in: {p1: {p1: 1, p2: 2, p3: 3}, p2: {p4: 4, p5: 5, p6: 6}, p3: {p7: 7, p8: 8, p9: 9}},
+                path: '.p2.itr1'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([4, 5, 6]);
+        });
+        it('simple - should get a composite result on level 1 non specific - simple nested object', async () => {
+            let initial = {
+                in: {p1: {p1: 1, p2: 2, p3: 3}, p2: {p4: 4, p5: 5, p6: 6}, p3: {p7: 7, p8: 8, p9: 9}},
+                path: '.itr0.itr1'
+            };
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        });
+        it('should get a composite result - non specific on itr2', async () => {
+            let initial = {in: simpleData, path: 'p1.p2[itr2].p3'};
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([3, 33]);
+        });
+        it('should get a composite result non specific on itr1 and itr2', async () => {
+            let initial = {in: simpleData, path: 'p1.itr1[itr2].p3'};
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal([3, 33, 3.2, 33.2]);
+        });
+        it('complex - get non specific on itr 6', async () => {
+            let initial = {in: data, path: 'web-app.servlet[0].init-param.markers[itr6].name'};
+            let expected = [
+                'Rixos The Palm Dubai',
+                'Shangri-La Hotel',
+                'Grand Hyatt'
+            ];
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('complex - get non specific on itr6 and itr7', async () => {
+            let initial = {in: data, path: 'web-app.servlet[0].init-param.markStates.itr6[itr7].name'};
+            let expected = [
+                'Rixos The Palm Dubai2',
+                'Shangri-La Hotel2',
+                'Grand Hyatt2',
+                'Rixos The Palm Dubai3',
+                'Shangri-La Hotel3',
+                'Grand Hyatt3'
+            ];
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('complex - get non specific on itr3, itr6 and itr7', async () => {
+            let initial = {in: data, path: 'web-app.servlet[itr3].init-param.markStates.itr6[itr7].name'};
+            let expected = [
+                'Rixos The Palm Dubai2',
+                'Shangri-La Hotel2',
+                'Grand Hyatt2',
+                'Rixos The Palm Dubai3',
+                'Shangri-La Hotel3',
+                'Grand Hyatt3',
+                'Rixos The Palm Dubai5',
+                'Shangri-La Hotel5',
+                'Grand Hyatt5',
+                'Rixos The Palm Dubai6',
+                'Shangri-La Hotel6',
+                'Grand Hyatt6'
+            ];
+            let actual = await CollectionPathHelper.getComposite(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+    });
     // describe('-> getAllPaths', () => {
     //     it('should not extract if array notation is invalid (interval)', () => {
     //         let actual = CollectionPathHelper.extractFromArrayNotation('(2]');
