@@ -1,6 +1,6 @@
 {
   "name": "collection-path-helper",
-  "version": "1.1.0",
+  "version": "1.1.15",
   "description": "Library for manipulating collection paths. Used mainly for iterating over nested collection and extracting data.",
   "keywords": [
     "collection path",
@@ -20,6 +20,7 @@
     "test": "mocha src/path.Helper.spec.js --reporter dot",
     "test-watch": "npm-watch",
     "build": "node node_modules/gulp/bin/gulp.js",
+    "publish": "./bumpVersion.sh",
     "benchmark": "node src/path.Helper.Benchmark.js",
     "test-umd-node": "node tests/node.spec.js"
   },
