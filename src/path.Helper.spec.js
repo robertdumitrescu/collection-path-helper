@@ -1106,14 +1106,70 @@ describe('CollectionPathHelper', () => {
         });
     });
     describe('-> set', () => {
+        it('should set an empty path on empty array', async () => {
+
+            let collection = [];
+            let value = 'lorem';
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(collection, '', value);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should set an empty path on populated array', async () => {
+
+            let collection = [1, 2, 3];
+            let value = 'lorem';
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(collection, '', value);
+            console.log(typeof actual);
+            console.log(actual.constructor.name);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should set an named path on populated array', async () => {
+
+            let collection = [1, 2, 3];
+            let value = 'lorem';
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(collection, 'bla', value);
+            console.log(typeof actual);
+            console.log(actual.constructor.name);
+            console.log(JSON.stringify(actual, null, 4));
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should set an empty path on null', async () => {
+
+            let collection = [];
+            let value = 'lorem';
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(collection, '[0]', value);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should set an empty path on empty object', async () => {
+
+            let collection = {};
+            let value = 'lorem';
+
+            let expected = {'': 'lorem'};
+
+            let actual = CollectionPathHelper.set(collection, '', value);
+            expect(actual).to.deep.equal(expected);
+        });
         it('should set an empty path on object', async () => {
 
             let collection = {id: 3, id2: 'nana'};
             let value = [1, 2, 3];
 
-            let expected = [1, 2, 3];
+            let expected = {id: 3, id2: 'nana', '': [1, 2, 3]};
 
             let actual = CollectionPathHelper.set(collection, '', value);
+            console.log(JSON.stringify(actual));
             expect(actual).to.deep.equal(expected);
         });
 
@@ -1138,6 +1194,106 @@ describe('CollectionPathHelper', () => {
             let actual = CollectionPathHelper.set(collection, '[2]', value);
             expect(actual).to.deep.equal(expected);
         });
+
+        it('should create a simple path', async () => {
+
+            let collection = [];
+            let value = 'lorem';
+
+            let expected = [
+                null,
+                null,
+                null,
+                {
+                    randomArrayOfObjects: [
+                        null,
+                        null,
+                        'lorem'
+                    ]
+                }
+            ];
+
+            let actual = CollectionPathHelper.set(collection, '[3].randomArrayOfObjects[2]', value);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should create a complex path (0)', async () => {
+
+            let collection = {};
+            let value = 'lorem';
+
+            let expected = {
+                "lorem": {
+                    "[2]": {
+                        "ipsum": {
+                            "[3]": {
+                                "dolor": {
+                                    "[11]": {
+                                        "[2, 3)": {
+                                            "[2]": {
+                                                "(2, 3)": {
+                                                    "(-1,3]": {
+                                                        "[2, 9]": "lorem"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            let actual = CollectionPathHelper.set({data: collection, path: '.lorem[2].ipsum[3].dolor[11].[2, 3)[2].(2, 3).(-1,3].[2, 9]', value: value});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should create a complex path (1)', async () => {
+
+            let collection = {};
+            let value = 'lorem';
+
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
+
+            let actual = CollectionPathHelper.set({data: collection, path: '.loremIpsum.lor22_dolorSit33_Amet55em[2].ipsum[3].dolor[3].[123lorem_33ipsumDolor321, sitAmet)[12].(2, 3).(sitConsecteur34_dolor,3].[2,amet]', value: value});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should create a complex path (2)', async () => {
+
+            let collection = [];
+            let value = 'lorem';
+
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
+
+            let actual = CollectionPathHelper.set(collection, '[6][5][4][3][2][1][0]', value);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should create a complex path (3)', async () => {
+
+            let collection = [];
+            let value = 'lorem';
+
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
+
+            let actual = CollectionPathHelper.set(collection, '[0][0][0][0][0][0][0]', value);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should create a complex path (4)', async () => {
+
+            let collection = {};
+            let value = 'lorem';
+
+            let expected = [1, 2, {id: 3, id2: 'nana'}];
+
+            let actual = CollectionPathHelper.set(collection, 'loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet].loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet]', value);
+            expect(actual).to.deep.equal(expected);
+        });
+
 
         it('should set a a real life collection', async () => {
 
@@ -3237,6 +3393,151 @@ describe('CollectionPathHelper', () => {
 
         it('should get a signature from a complex path (4) - getPath', () => {
             let actual = CollectionPathHelper.getPathSignature({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}].loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true});
+            let expected = {
+                length: 16,
+                objects: 16,
+                path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}].loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                arrays: 0,
+                schema: [
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]',
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a simple path - getPath (arrayNotation as 0)', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '[{{x}}].randomArrayOfObjects[2]', getPath: true, arrayNotation: 0});
+            let expected = {path: '[0].randomArrayOfObjects[0]', length: 3, objects: 1, arrays: 2, schema: ['array', 'object', 'array'], objProps: ['randomArrayOfObjects']};
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (1) - getPath (arrayNotation as 0)', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '.lorem[2].{{ipsum}}[3].dolor[{{sit}}].[2, 3)[2].(2, 3).({{consecteur}},3].[2, {{amet}}]', getPath: true, arrayNotation: 0});
+            let expected = {
+                length: 11,
+                objects: 7,
+                path: 'lorem[0].{{ipsum}}[0].dolor[0].[2, 3)[0].(2, 3).({{consecteur}},3].[2, {{amet}}]',
+                arrays: 4,
+                schema: [
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'lorem',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[2, 3)',
+                    '(2, 3)',
+                    '({{consecteur}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (2) - getPath (arrayNotation as 0)', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '.loremIpsum.lor22_{{dolorSit33_Amet}}55em[2].{{ipsum}}[3].dolor[21{{dolorSit_Amet23}}32].[{{123lorem_33ipsumDolor}}321, sitAmet)[{{n_2_x}}].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true, arrayNotation: 0});
+            let expected = {
+                length: 12,
+                objects: 8,
+                path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em[0].{{ipsum}}[0].dolor[0].[{{123lorem_33ipsumDolor}}321, sitAmet)[0].(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]',
+                arrays: 4,
+                schema: [
+                    'object',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'array',
+                    'object',
+                    'object',
+                    'object'
+                ],
+                objProps: [
+                    'loremIpsum',
+                    'lor22_{{dolorSit33_Amet}}55em',
+                    '{{ipsum}}',
+                    'dolor',
+                    '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                    '(2, 3)',
+                    '({{sitConsecteur34_dolor}},3]',
+                    '[2, {{amet}}]'
+                ]
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (3) - getPath (arrayNotation as 0)', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: '[{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum][{{123loremIpsum_dolor34SitAmet567}}][3][{{x_nx_23}}][5][loremIpsum]', getPath: true, arrayNotation: 0});
+            let expected = {
+                length: 10,
+                objects: 0,
+                path: '[0][0][0][0][0][0][0][0][0][0]',
+                arrays: 10,
+                schema: [
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array',
+                    'array'
+                ],
+                objProps: []
+            };
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should get a signature from a complex path (4) - getPath (arrayNotation as 0)', () => {
+            let actual = CollectionPathHelper.getPathSignature({path: 'loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}].loremIpsum.lor22_{{dolorSit33_Amet}}55em.{{ipsum}}.dolor.[{{123lorem_33ipsumDolor}}321, sitAmet).(2, 3).({{sitConsecteur34_dolor}},3].[2, {{amet}}]', getPath: true, arrayNotation: 0});
             let expected = {
                 length: 16,
                 objects: 16,

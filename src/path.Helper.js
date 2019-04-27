@@ -228,25 +228,69 @@ class CollectionPathHelper {
     }
 
     /**
-     * Get By path
-     * @param {Array|Object|*} collection
-     * @param {String} path
-     * @param {*} value
+     * Set by path
+     * @param {Object} options
+     * @param {Object|Array|*} options.data
+     * @param {Array|String} options.path
+     * @param {*} options.value
+     * @param {String} options.mode - ("lodash" or "precise"). Defaults to "precise"
+     * @param {Object=} transience - Used to track processing progress
      * @returns {*}
      */
-    static set(collection, path, value) {
-        if (path.length === 0) {
-            return value;
+    static set(options, transience) {
+        options = {...{
+            data: null,
+            path: '',
+            value: null,
+            mode: 'lodash'
+        },
+        ...options };
+
+        if (typeof transience === 'undefined') {
+            transience = {
+                data: options.data
+            }
         }
-        if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
-            return collection;
+        // if (path.length === 0) {
+        //     return value;
+        // }
+        // if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
+        //     return collection;
+        // }
+        //
+
+        if (options.mode === 'precise') {
+            /** @TODO WIP - This is work in progress */
+            options.path = CollectionPathHelper.explodePath(options.path);
+            let key = '';
+            for (let i = 0; i < options.path.length; i++) {
+                if (CollectionPathHelper.getStartType(options.path[i]) === 'array') {
+                    key = CollectionPathHelper.extractFromArrayNotation(options.path[i]);
+                    if (!Array.isArray(transience.data)) {
+                        transience.data = [];
+                    }
+                } else if (CollectionPathHelper.getStartType(options.path[i]) === 'object') {
+                    key = options.path[i];
+                    if (!Array.isArray(transience.data)) {
+                        transience.data = {};
+                    }
+                }
+
+                console.log('bla');
+
+                if (i === (options.path.length - 1)) {
+                    transience.data[key] = options.value;
+                    return options.data;
+                } else {
+                    CollectionPathHelper.set(options, {data: transience.data[key]});
+                }
+            }
+        } else {
+            return lodashSet(options.data, options.path, options.value);
         }
 
-        if ((typeof path === 'string' || path instanceof String) && path.startsWith('.')) {
-            path = path.replace('.', '');
-        }
 
-        return lodashSet(collection, path, value);
+        // return lodashSet(collection, path, value);
     }
 
     /**
@@ -435,11 +479,19 @@ class CollectionPathHelper {
      * @param {Object=} options
      * @param {Object=|Array=} options.path - the path from which the signature will be extracted
      * @param {Boolean=} options.getPath - (true|false) If true with also include a path with iterators for array fragments
+     * @param {*=} options.arrayNotation - ("iterator"|*) If this is set as "iterator" then array notations will have iterator in them. If not arrays will have whatever is passed
      * @returns {Object}
      */
     static getPathSignature(options) {
 
+        options = {...{
+            getPath: false,
+            arrayNotation: 'iterator'
+        },
+        ...options};
+
         let signature = {length: 0, objects: 0, arrays: 0, schema: [], objProps: []};
+
 
         if (options.getPath && options.getPath === true) {
             signature.path = [];
@@ -465,7 +517,11 @@ class CollectionPathHelper {
                 signature.arrays += 1;
                 signature.schema.push('array');
                 if (signature.path) {
-                    signature.path.push(`[itr${ei}]`);
+                    if (options.arrayNotation === 'iterator') {
+                        signature.path.push(`[itr${ei}]`);
+                    } else {
+                        signature.path.push(`[${options.arrayNotation}]`);
+                    }
                 }
             }
         }
@@ -504,7 +560,7 @@ class CollectionPathHelper {
 
         for (let property in options.subpath) {
             if (options.path[property] === '__iterator__') {
-                continue;
+
             } else if (options.subpath[property] !== options.path[property]) {
                 return false;
             }
