@@ -249,7 +249,7 @@ class CollectionPathHelper {
         if (typeof transience === 'undefined') {
             transience = {
                 data: options.data
-            }
+            };
         }
         // if (path.length === 0) {
         //     return value;
@@ -260,7 +260,7 @@ class CollectionPathHelper {
         //
 
         if (options.mode === 'precise') {
-            /** @TODO WIP - This is work in progress */
+            /** Mode: "precise" @TODO WIP - This is work in progress */
             options.path = CollectionPathHelper.explodePath(options.path);
             let key = '';
             for (let i = 0; i < options.path.length; i++) {
@@ -286,11 +286,9 @@ class CollectionPathHelper {
                 }
             }
         } else {
+            /** Mode: "lodash" */
             return lodashSet(options.data, options.path, options.value);
         }
-
-
-        // return lodashSet(collection, path, value);
     }
 
     /**
