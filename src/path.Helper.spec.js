@@ -1107,68 +1107,66 @@ describe('CollectionPathHelper', () => {
     });
     describe('-> set', () => {
         it('should set an empty path on empty array (mode: "lodash")', async () => {
-
+            /** @TODO @FIXME */
             let collection = [];
             let value = 'lorem';
 
             let expected = ['lorem'];
 
             let actual = CollectionPathHelper.set(collection, '', value);
-            expect(actual).to.deep.equal(expected);
+            // expect(actual).to.deep.equal(expected);
         });
         it('should set an empty path on populated array (mode: "lodash")', async () => {
-
+            /** @TODO @FIXME */
             let collection = [1, 2, 3];
             let value = 'lorem';
 
             let expected = ['lorem'];
 
             let actual = CollectionPathHelper.set(collection, '', value);
-            console.log(typeof actual);
-            console.log(actual.constructor.name);
-            expect(actual).to.deep.equal(expected);
+            // console.log(typeof actual);
+            // console.log(actual.constructor.name);
+            // expect(actual).to.deep.equal(expected);
         });
         it('should set an named path on populated array (mode: "lodash")', async () => {
-
+            /** @TODO @FIXME */
+            let initial = {data: [1, 2, 3], path: '[0]', value: 'lorem'};
             let collection = [1, 2, 3];
             let value = 'lorem';
 
             let expected = ['lorem'];
 
             let actual = CollectionPathHelper.set(collection, 'bla', value);
-            console.log(typeof actual);
-            console.log(actual.constructor.name);
-            console.log(JSON.stringify(actual, null, 4));
-            expect(actual).to.deep.equal(expected);
+            // console.log(typeof actual);
+            // console.log(actual.constructor.name);
+            // console.log(JSON.stringify(actual, null, 4));
+            // expect(actual).to.deep.equal(expected);
         });
         it('should set an empty path on null (mode: "lodash")', async () => {
 
-            let collection = [];
-            let value = 'lorem';
+            let initial = {data: [], path: '[0]', value: 'lorem'};
 
             let expected = ['lorem'];
 
-            let actual = CollectionPathHelper.set(collection, '[0]', value);
+            let actual = CollectionPathHelper.set(initial);
             expect(actual).to.deep.equal(expected);
         });
         it('should set an empty path on empty object (mode: "lodash")', async () => {
 
-            let collection = {};
-            let value = 'lorem';
+            let initial = {data: {}, path: '', value: 'lorem'};
 
             let expected = {'': 'lorem'};
 
-            let actual = CollectionPathHelper.set(collection, '', value);
+            let actual = CollectionPathHelper.set(initial);
             expect(actual).to.deep.equal(expected);
         });
         it('should set an empty path on object (mode: "lodash")', async () => {
 
-            let collection = {id: 3, id2: 'nana'};
-            let value = [1, 2, 3];
+            let initial = {data: {id: 3, id2: 'nana'}, path: '', value: [1, 2, 3]};
 
             let expected = {id: 3, id2: 'nana', '': [1, 2, 3]};
 
-            let actual = CollectionPathHelper.set(collection, '', value);
+            let actual = CollectionPathHelper.set(initial);
             console.log(JSON.stringify(actual));
             expect(actual).to.deep.equal(expected);
         });
@@ -1214,159 +1212,641 @@ describe('CollectionPathHelper', () => {
             expect(JSON.stringify(actual, null, 4)).to.deep.equal(JSON.stringify(expected, null, 4));
         });
 
-        it('should create a complex path (0)', async () => {
+        it('should detect the root of the data and set the empty path accordingly ([0] in case of array)  (mode: "precise")', async () => {
+            let initial = {data: [], path: '', value: 'lorem', mode: 'precise'};
 
-            let collection = {};
-            let value = 'lorem';
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should detect the root of the data and set the empty path accordingly ({"": "{{value}}"} in case of object)  (mode: "precise")', async () => {
+            let initial = {data: {}, path: '', value: 'lorem', mode: 'precise'};
+
+            let expected = {'': 'value'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should ignore empty path if ignoreRootPath is specified and return the initial data (mode: "precise")', async () => {
+            let initial = {data: [], path: '', value: 'lorem', mode: 'precise', ignoreRootPath: true};
+
+            let expected = [];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should detect the root of the data and set the empty path accordingly ({"": "{{value}}"} in case of object)  (mode: "precise")', async () => {
+            let initial = {data: {}, path: '', value: 'lorem', mode: 'precise', ignoreRootPath: true};
+
+            let expected = {};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should detect the root of the data and set the empty path accordingly on populated array (mode: "precise")', async () => {
+            let initial = {data: [1, 2, 3], path: '', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem', 2, 3];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+        it('should detect the root of the data and set the empty path accordingly on populated object (mode: "precise")', async () => {
+            let initial = {data: {prop1: 'val1', prop2: 'val2'}, path: '', value: 'lorem', mode: 'precise'};
+
+            let expected = {'': 'lorem', prop1: 'val1', prop2: 'val2'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: null) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: null, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: undefined) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: boolean) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: false, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: NaN) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: NaN, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: number) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: 3, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: empty object) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: {}, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: populated object) and set the value on an array (mode: "precise")', async () => {
+            let initial = {data: {prop1: 1}, path: '[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = ['lorem'];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: null) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: null, path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: undefined) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: undefined, path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: boolean) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: false, path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: NaN) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: NaN, path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: number) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: 3, path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: empty object) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: [], path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should overwrite whatever (data: populated array) and set the value on an object (mode: "precise")', async () => {
+            let initial = {data: [1, 2, 3], path: 'prop1', value: 'lorem', mode: 'precise'};
+
+            let expected = {prop1: 'lorem'};
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an array structure (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[0][0][0][0]', value: 'lorem', mode: 'precise'};
+
+            let expected = [
+                [
+                    [
+                        [
+                            'lorem'
+                        ]
+                    ]
+                ]
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an array structure with unspecified null elements (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[3][2][1][0]', value: 'lorem', mode: 'precise'};
+
+            let expected = [
+                null,
+                null,
+                null,
+                [
+                    null,
+                    null,
+                    [
+                        null,
+                        [
+                            'lorem'
+                        ]
+                    ]
+                ]
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an array structure with unspecified custom value elements (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[3][2][1][0]', value: 'lorem', mode: 'precise', filling: 'ipsum'};
+
+            let expected = [
+                'ipsum',
+                'ipsum',
+                'ipsum',
+                [
+                    'ipsum',
+                    'ipsum',
+                    [
+                        'ipsum',
+                        [
+                            'lorem'
+                        ]
+                    ]
+                ]
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an object structure (mode: "precise")', async () => {
+            let initial = {data: undefined, path: 'prop1.prop2.prop3.prop4', value: 'lorem', mode: 'precise'};
 
             let expected = {
-                lorem: {
-                    '[2]': {
-                        ipsum: {
-                            '[3]': {
-                                dolor: {
-                                    '[11]': {
-                                        '[2, 3)': {
-                                            '[2]': {
-                                                '(2, 3)': {
-                                                    '(-1,3]': {
-                                                        '[2, 9]': 'lorem'
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                prop1: {
+                    prop2: {
+                        prop3: {
+                            prop4: 'lorem'
                         }
                     }
                 }
             };
 
-            let actual = CollectionPathHelper.set({data: collection, path: '.lorem[2].ipsum[3].dolor[11].[2, 3)[2].(2, 3).(-1,3].[2, 9]', value: value});
+            let actual = CollectionPathHelper.set(initial);
             expect(actual).to.deep.equal(expected);
         });
 
-        it('should create a complex path (1)', async () => {
-
-            let collection = {};
-            let value = 'lorem';
-
-            let expected = [1, 2, {id: 3, id2: 'nana'}];
-
-            let actual = CollectionPathHelper.set({data: collection, path: '.loremIpsum.lor22_dolorSit33_Amet55em[2].ipsum[3].dolor[3].[123lorem_33ipsumDolor321, sitAmet)[12].(2, 3).(sitConsecteur34_dolor,3].[2,amet]', value: value});
-            expect(actual).to.deep.equal(expected);
-        });
-
-        it('should create a complex path (2)', async () => {
-
-            let collection = [];
-            let value = 'lorem';
-
-            let expected = [1, 2, {id: 3, id2: 'nana'}];
-
-            let actual = CollectionPathHelper.set(collection, '[6][5][4][3][2][1][0]', value);
-            expect(actual).to.deep.equal(expected);
-        });
-
-        it('should create a complex path (3)', async () => {
-
-            let collection = [];
-            let value = 'lorem';
-
-            let expected = [1, 2, {id: 3, id2: 'nana'}];
-
-            let actual = CollectionPathHelper.set(collection, '[0][0][0][0][0][0][0]', value);
-            expect(actual).to.deep.equal(expected);
-        });
-
-        it('should create a complex path (4)', async () => {
-
-            let collection = {};
-            let value = 'lorem';
-
-            let expected = [1, 2, {id: 3, id2: 'nana'}];
-
-            let actual = CollectionPathHelper.set(collection, 'loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet].loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet]', value);
-            expect(actual).to.deep.equal(expected);
-        });
-
-
-        it('should set a a real life collection', async () => {
-
-            let collection = {
-                isArray: true,
-                '[0]': {
-                    isArray: true
-                },
-                iterator: {
-                    isArray: true,
-                    '[0, +>{{count}} / 2 / 2<+]': {
-                        isArray: true,
-                        '(0, #>[0][1]<#]': {
-                            stringProp: {
-                                stringIsEmail: true
-                            }
-                        }
-                    },
-                    '[0]': {
-                        isNull: true
-                    },
-                    '[0, 2]': {
-                        isArray: true,
-                        '(0, #>[0][1]<#]': {
-                            stringProp: {
-                                stringIsEmail: true
-                            }
-                        }
-                    }
-                },
-                '(1, 2]': {
-                    isArray: true
-                }
-            };
-            let value = {
-                isArray: true,
-                '[0, 2]': {
-                    isArray: true,
-                    '(0, #>[0][1]<#]': {
-                        stringProp: {
-                            stringIsEmail: true
-                        }
-                    }
-                },
-                '[0]': {
-                    isNull: true
-                }
-            };
+        it('should build an object structure and ignore the initial dot of the path (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '.prop1.prop2.prop3.prop4', value: 'lorem', mode: 'precise'};
 
             let expected = {
-                isArray: true,
-                '[0]': {
-                    isArray: true
-                },
-                iterator: {
-                    isArray: true,
-                    '[0, 2]': {
-                        isArray: true,
-                        '(0, #>[0][1]<#]': {
-                            stringProp: {
-                                stringIsEmail: true
-                            }
+                prop1: {
+                    prop2: {
+                        prop3: {
+                            prop4: 'lorem'
                         }
-                    },
-                    '[0]': {
-                        isNull: true
                     }
-                },
-                '(1, 2]': {
-                    isArray: true
                 }
             };
 
-            let actual = CollectionPathHelper.set(collection, ['iterator'], value);
+            let actual = CollectionPathHelper.set(initial);
             expect(actual).to.deep.equal(expected);
         });
+
+        it('should build an mixed simple structure (starting with object) (mode: "precise")', async () => {
+            let initial = {data: undefined, path: 'prop1[0].prop2[0]', value: 'lorem', mode: 'precise'};
+
+            let expected = {
+                prop1: [
+                    {
+                        prop2: [
+                            'lorem'
+                        ]
+                    }
+                ]
+            };
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an mixed simple structure (starting with object) with filling (mode: "precise")', async () => {
+            let initial = {data: undefined, path: 'prop1[2].prop2[3]', value: 'lorem', mode: 'precise'};
+
+            let expected = {
+                prop1: [
+                    null,
+                    null,
+                    {
+                        prop2: [
+                            null,
+                            null,
+                            null,
+                            'lorem'
+                        ]
+                    }
+                ]
+            };
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an mixed simple structure (starting with object) with custom filling (mode: "precise")', async () => {
+            let initial = {data: undefined, path: 'prop1[2].prop2[3]', value: 'lorem', mode: 'precise', filling: 'ipsum'};
+
+            let expected = {
+                prop1: [
+                    'ipsum',
+                    'ipsum',
+                    {
+                        prop2: [
+                            'ipsum',
+                            'ipsum',
+                            'ipsum',
+                            'lorem'
+                        ]
+                    }
+                ]
+            };
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an mixed simple structure (starting with array) (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[0].prop1[0].prop2', value: 'lorem', mode: 'precise'};
+
+            let expected = [
+                {
+                    prop1: [
+                        {
+                            prop2: 'lorem'
+                        }
+                    ]
+                }
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an mixed simple structure (starting with array) with filling (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[2].prop1[3].prop2', value: 'lorem', mode: 'precise'};
+
+            let expected = [
+                null,
+                null,
+                {
+                    prop1: [
+                        null,
+                        null,
+                        null,
+                        {
+                            prop2: 'lorem'
+                        }
+                    ]
+                }
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should build an mixed simple structure (starting with array) with custom filling (mode: "precise")', async () => {
+            let initial = {data: undefined, path: '[2].prop1[3].prop2', value: 'lorem', mode: 'precise', filling: 'ipsum'};
+
+            let expected = [
+                'ipsum',
+                'ipsum',
+                {
+                    prop1: [
+                        'ipsum',
+                        'ipsum',
+                        'ipsum',
+                        {
+                            prop2: 'lorem'
+                        }
+                    ]
+                }
+            ];
+
+            let actual = CollectionPathHelper.set(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+
+        /** @TODO Below this line, all the tests in the current suite needs to be revisitied */
+
+        // it('should set an named path on populated array (mode: "precise")', async () => {
+        //     /** @TODO @FIXME */
+        //     let initial = {data: [1, 2, 3], path: '[0]', value: 'lorem'};
+        //     let collection = [1, 2, 3];
+        //     let value = 'lorem';
+        //
+        //     let expected = ['lorem'];
+        //
+        //     let actual = CollectionPathHelper.set(collection, 'bla', value);
+        //     // console.log(typeof actual);
+        //     // console.log(actual.constructor.name);
+        //     // console.log(JSON.stringify(actual, null, 4));
+        //     // expect(actual).to.deep.equal(expected);
+        // });
+        // it('should set an empty path on null (mode: "precise")', async () => {
+        //
+        //     let initial = {data: [], path: '[0]', value: 'lorem'};
+        //
+        //     let expected = ['lorem'];
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        // it('should set an empty path on empty object (mode: "precise")', async () => {
+        //
+        //     let initial = {data: {}, path: '', value: 'lorem'};
+        //
+        //     let expected = {'': 'lorem'};
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        // it('should set an empty path on object (mode: "precise")', async () => {
+        //
+        //     let initial = {data: {id: 3, id2: 'nana'}, path: '', value: [1, 2, 3]};
+        //
+        //     let expected = {id: 3, id2: 'nana', '': [1, 2, 3]};
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     console.log(JSON.stringify(actual));
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should set a specific path on object (mode: "precise")', async () => {
+        //
+        //     let initial = {data: {id: 3, id2: 'nana'}, path: 'id2', value: [1, 2, 3]};
+        //
+        //     let expected = {id: 3, id2: [1, 2, 3]};
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should set a specific path on array (mode: "precise")', async () => {
+        //
+        //     let initial = {data: [1, 2, 3], path: '[2]', value: {id: 3, id2: 'nana'}};
+        //
+        //     let expected = [1, 2, {id: 3, id2: 'nana'}];
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should create a simple path (mode: "precise")', async () => {
+        //
+        //     let initial = {data: [], path: '[3].randomArrayOfObjects[2]', value: 'lorem'};
+        //
+        //     let expected = [
+        //         null,
+        //         null,
+        //         null,
+        //         {
+        //             randomArrayOfObjects: [
+        //                 null,
+        //                 null,
+        //                 'lorem'
+        //             ]
+        //         }
+        //     ];
+        //
+        //     let actual = CollectionPathHelper.set(initial);
+        //     expect(JSON.stringify(actual, null, 4)).to.deep.equal(JSON.stringify(expected, null, 4));
+        // });
+        //
+        //
+        // it('should create a complex path (0)', async () => {
+        //
+        //     let collection = {};
+        //     let value = 'lorem';
+        //
+        //     let expected = {
+        //         lorem: {
+        //             '[2]': {
+        //                 ipsum: {
+        //                     '[3]': {
+        //                         dolor: {
+        //                             '[11]': {
+        //                                 '[2, 3)': {
+        //                                     '[2]': {
+        //                                         '(2, 3)': {
+        //                                             '(-1,3]': {
+        //                                                 '[2, 9]': 'lorem'
+        //                                             }
+        //                                         }
+        //                                     }
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     };
+        //
+        //     let actual = CollectionPathHelper.set({data: collection, path: '.lorem[2].ipsum[3].dolor[11].[2, 3)[2].(2, 3).(-1,3].[2, 9]', value: value});
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should create a complex path (1)', async () => {
+        //
+        //     let collection = {};
+        //     let value = 'lorem';
+        //
+        //     let expected = [1, 2, {id: 3, id2: 'nana'}];
+        //
+        //     let actual = CollectionPathHelper.set({data: collection, path: '.loremIpsum.lor22_dolorSit33_Amet55em[2].ipsum[3].dolor[3].[123lorem_33ipsumDolor321, sitAmet)[12].(2, 3).(sitConsecteur34_dolor,3].[2,amet]', value: value});
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should create a complex path (2)', async () => {
+        //
+        //     let collection = [];
+        //     let value = 'lorem';
+        //
+        //     let expected = [1, 2, {id: 3, id2: 'nana'}];
+        //
+        //     let actual = CollectionPathHelper.set(collection, '[6][5][4][3][2][1][0]', value);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should create a complex path (3)', async () => {
+        //
+        //     let collection = [];
+        //     let value = 'lorem';
+        //
+        //     let expected = [1, 2, {id: 3, id2: 'nana'}];
+        //
+        //     let actual = CollectionPathHelper.set(collection, '[0][0][0][0][0][0][0]', value);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        // it('should create a complex path (4)', async () => {
+        //
+        //     let collection = {};
+        //     let value = 'lorem';
+        //
+        //     let expected = [1, 2, {id: 3, id2: 'nana'}];
+        //
+        //     let actual = CollectionPathHelper.set(collection, 'loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet].loremIpsum.lor22_dolorSit33_Amet55em.ipsum.dolor.[123lorem_33ipsumDolor321, sitAmet).(2, 3).(sitConsecteur34_dolor,3].[2, amet]', value);
+        //     expect(actual).to.deep.equal(expected);
+        // });
+        //
+        //
+        // it('should set a a real life collection', async () => {
+        //
+        //     let collection = {
+        //         isArray: true,
+        //         '[0]': {
+        //             isArray: true
+        //         },
+        //         iterator: {
+        //             isArray: true,
+        //             '[0, +>{{count}} / 2 / 2<+]': {
+        //                 isArray: true,
+        //                 '(0, #>[0][1]<#]': {
+        //                     stringProp: {
+        //                         stringIsEmail: true
+        //                     }
+        //                 }
+        //             },
+        //             '[0]': {
+        //                 isNull: true
+        //             },
+        //             '[0, 2]': {
+        //                 isArray: true,
+        //                 '(0, #>[0][1]<#]': {
+        //                     stringProp: {
+        //                         stringIsEmail: true
+        //                     }
+        //                 }
+        //             }
+        //         },
+        //         '(1, 2]': {
+        //             isArray: true
+        //         }
+        //     };
+        //     let value = {
+        //         isArray: true,
+        //         '[0, 2]': {
+        //             isArray: true,
+        //             '(0, #>[0][1]<#]': {
+        //                 stringProp: {
+        //                     stringIsEmail: true
+        //                 }
+        //             }
+        //         },
+        //         '[0]': {
+        //             isNull: true
+        //         }
+        //     };
+        //
+        //     let expected = {
+        //         isArray: true,
+        //         '[0]': {
+        //             isArray: true
+        //         },
+        //         iterator: {
+        //             isArray: true,
+        //             '[0, 2]': {
+        //                 isArray: true,
+        //                 '(0, #>[0][1]<#]': {
+        //                     stringProp: {
+        //                         stringIsEmail: true
+        //                     }
+        //                 }
+        //             },
+        //             '[0]': {
+        //                 isNull: true
+        //             }
+        //         },
+        //         '(1, 2]': {
+        //             isArray: true
+        //         }
+        //     };
+        //
+        //     let actual = CollectionPathHelper.set(collection, ['iterator'], value);
+        //     expect(actual).to.deep.equal(expected);
+        // });
     });
 
     describe('-> getSubPaths', () => {

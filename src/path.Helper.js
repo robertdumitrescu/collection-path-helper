@@ -234,6 +234,8 @@ class CollectionPathHelper {
      * @param {Array|String} options.path
      * @param {*} options.value
      * @param {String} options.mode - ("lodash" or "precise"). Defaults to "precise"
+     * @param {Boolean=} options.ignoreRootPath - (true|false). If this is true, if an empty path is passed, the initial data will be returned with no alterations (This works only on mode: "precise")
+     * @param {*=} options.filling - The value passed to this parameter will be used to create dummy elements during array creation (This works only on mode: "precise")
      * @param {Object=} transience - Used to track processing progress
      * @returns {*}
      */
@@ -242,10 +244,13 @@ class CollectionPathHelper {
             data: null,
             path: '',
             value: null,
-            mode: 'lodash'
+            mode: 'lodash',
+            ignoreRootPath: false,
+            filling: null
         },
         ...options };
 
+        /** Might be unnecesary*/
         if (typeof transience === 'undefined') {
             transience = {
                 data: options.data
