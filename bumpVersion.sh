@@ -19,6 +19,14 @@
 # number), give user a chance to review and update the changelist
 # manually if needed and create a GIT tag.
 
+# Build before bumping version
+echo 'Running "npm run build"'
+npm run build
+
+# Add the entire dist folder to git staging area
+echo 'Running "git add -A"'
+git add -A
+
 NOW="$(date +'%B %d, %Y')"
 RED="\033[1;31m"
 GREEN="\033[0;32m"
@@ -66,7 +74,8 @@ if [ -f VERSION ]; then
 #    read
     echo -e "$PUSHING_MSG"
 #    git add CHANGELOG.md VERSION
-    git commit -m "Bump version to ${INPUT_STRING}."
+    git commit -am "Bump version to ${INPUT_STRING}."
+    git push
     git tag -a -m "Tag version ${INPUT_STRING}." "v$INPUT_STRING"
     git push origin --tags
 else
