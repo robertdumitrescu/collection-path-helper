@@ -482,7 +482,7 @@ class CollectionPathHelper {
      * @param {Object=} options
      * @param {Object=|Array=} options.path - the path from which the signature will be extracted
      * @param {Boolean=} options.getPath - (true|false) If true with also include a path with iterators for array fragments
-     * @param {*=} options.arrayNotation - ("iterator"|*) If this is set as "iterator" then array notations will have iterator in them. If not arrays will have whatever is passed
+     * @param {*=} options.arrayNotation - ("iterator"|"actual"|*) If this is set as "iterator" then array notations will have iterator in them. If this is set to "actual" it will have the actual values of the arrayNotations. If not arrays will have whatever is passed
      * @returns {Object}
      */
     static getPathSignature(options) {
@@ -522,6 +522,8 @@ class CollectionPathHelper {
                 if (signature.path) {
                     if (options.arrayNotation === 'iterator') {
                         signature.path.push(`[itr${ei}]`);
+                    } else if(options.arrayNotation === 'actual') {
+                        signature.path.push(exploded[ei]);
                     } else {
                         signature.path.push(`[${options.arrayNotation}]`);
                     }
