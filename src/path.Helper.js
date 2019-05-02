@@ -185,9 +185,9 @@ class CollectionPathHelper {
         }
         if (options.pathIsString && path.length > 0) {
             return CollectionPathHelper.implodePath(pathFragments);
-        } else {
-            return pathFragments;
         }
+        return pathFragments;
+
     }
 
     /**
@@ -501,9 +501,11 @@ class CollectionPathHelper {
         options = {...{
             getPath: false,
             arrayNotation: 'iterator',
-            pathIsString: typeof options.path === 'string' || options.path instanceof String,
+            // pathIsString: typeof options.path === 'string' || options.path instanceof String,
         },
         ...options};
+
+        options.pathIsString = typeof options.path === 'string' || options.path instanceof String;
 
         let signature = {length: 0, objects: 0, arrays: 0, schema: [], objProps: []};
 
@@ -512,15 +514,14 @@ class CollectionPathHelper {
             signature.path = [];
         }
 
-        if (!(typeof options.path === 'string' || options.path instanceof String)) {
-            return signature;
-        }
-
+        /** Try to work with either strings, either arrays of path fragments. If not, return the empty signature*/
         let exploded;
-        if(options.pathIsString && options.path.length > 0){
+        if (options.pathIsString && options.path.length > 0) {
             exploded = CollectionPathHelper.explodePath(options.path);
-        } else {
+        } else if (Array.isArray(options.path)) {
             exploded = options.path;
+        } else {
+            return signature;
         }
 
         signature.length = exploded.length;
