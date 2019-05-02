@@ -974,7 +974,8 @@ class CollectionPathHelper {
    * For a given path will return a signature
    * @param {Object=} options
    * @param {Object=|Array=} options.path - the path from which the signature will be extracted
-   * @param {Boolean=} options.getPath - (true|false) If true with also include a path with iterators for array fragments
+   * @param {Boolean=} options.getPathAsString - (true|false) If true with also include a path with iterators for array fragments (as string)
+   * @param {Boolean=} options.getPathAsArray - (true|false) If true with also include a path with iterators for array fragments (as array)
    * @param {*=} options.arrayNotation - ("iterator"|"actual"|*) If this is set as "iterator" then array notations will have iterator in them. If this is set to "actual" it will have the actual values of the arrayNotations. If not arrays will have whatever is passed
    * @param {*=} options.pathIsString - Used for transient state
    * @returns {Object}
@@ -983,7 +984,8 @@ class CollectionPathHelper {
 
   static getPathSignature(options) {
     options = (0, _objectSpread2.default)({}, {
-      getPath: false,
+      getPathAsString: false,
+      getPathAsArray: false,
       arrayNotation: 'iterator' // pathIsString: typeof options.path === 'string' || options.path instanceof String,
 
     }, options);
@@ -996,10 +998,10 @@ class CollectionPathHelper {
       objProps: []
     };
 
-    if (options.getPath && options.getPath === true) {
+    if (options.getPathAsString && options.getPathAsString === true || options.getPathAsArray && options.getPathAsArray === true) {
       signature.path = [];
     }
-    /** Try to work with either strings, either arrays of path fragments. If not, return the empty signature*/
+    /** Try to work with either strings, either arrays of path fragments. If not, return the empty signature */
 
 
     let exploded;
@@ -1040,7 +1042,13 @@ class CollectionPathHelper {
     }
 
     if (signature.path) {
-      signature.path = CollectionPathHelper.implodePath(signature.path);
+      if (options.getPathAsString === true) {
+        signature.stringPath = CollectionPathHelper.implodePath(signature.path);
+      } else {
+        signature.arrayPath = signature.path;
+      }
+
+      delete signature.path;
     }
 
     return signature;
