@@ -632,6 +632,7 @@ class CollectionPathHelper {
    * @param {Object=} options
    * @param {Number=} options.count - Default: 1
    * @param {String=} options.termination Default: 'end' - (Possible options: "start" and "end")
+   * @param {String=} options.pathIsString Used for storing transience state
    * @returns {String}
    */
 
@@ -639,9 +640,16 @@ class CollectionPathHelper {
   static removePathLevels(path, options) {
     options = (0, _objectSpread2.default)({}, {
       count: 1,
-      termination: 'end'
+      termination: 'end',
+      pathIsString: typeof path === 'string' || path instanceof String
     }, options);
-    let pathFragments = CollectionPathHelper.explodePath(path);
+    let pathFragments;
+
+    if (options.pathIsString && path.length > 0) {
+      pathFragments = CollectionPathHelper.explodePath(path);
+    } else {
+      pathFragments = path;
+    }
 
     if (options.termination === 'end') {
       pathFragments.splice(pathFragments.length - options.count, options.count);
@@ -649,7 +657,11 @@ class CollectionPathHelper {
       pathFragments.splice(0, options.count);
     }
 
-    return CollectionPathHelper.implodePath(pathFragments);
+    if (options.pathIsString && path.length > 0) {
+      return CollectionPathHelper.implodePath(pathFragments);
+    } else {
+      return pathFragments;
+    }
   }
   /**
    * This will get the name of the first dynamic variable defined in path
@@ -724,7 +736,7 @@ class CollectionPathHelper {
       ignoreRootPath: false,
       filling: null
     }, options);
-    /** Might be unnecesary*/
+    /** Might be unnecesary */
 
     if (typeof transience === 'undefined') {
       transience = {
@@ -764,11 +776,11 @@ class CollectionPathHelper {
         if (i === options.path.length - 1) {
           transience.data[key] = options.value;
           return options.data;
-        } else {
-          CollectionPathHelper.set(options, {
-            data: transience.data[key]
-          });
         }
+
+        CollectionPathHelper.set(options, {
+          data: transience.data[key]
+        });
       }
     } else {
       /** Mode: "lodash" */

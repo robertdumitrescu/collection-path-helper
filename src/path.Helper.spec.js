@@ -1301,11 +1301,40 @@ describe('CollectionPathHelper', () => {
             expect(actual).to.deep.equal(expected);
         });
 
-        it('should act on a real life example (array)', async () => {
+        it('should act on a real life example 1 (array)', async () => {
 
             let initial = ['[0]', 'title'];
 
             let expected = ['[0]'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should act on a real life example 2 (array)', async () => {
+
+            let initial = [
+                'colors',
+                '[0]',
+                'category'
+            ];
+
+            let expected = [
+                'colors',
+                '[0]',
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should act on a real life example 3 (array)', async () => {
+
+            let initial = [
+            ];
+
+            let expected = [
+            ];
 
             let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
