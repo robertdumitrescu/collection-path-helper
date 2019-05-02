@@ -897,6 +897,419 @@ describe('CollectionPathHelper', () => {
             let actual = CollectionPathHelper.removePathLevels(initial);
             expect(actual).to.deep.equal(expected);
         });
+
+
+        it('should remove one level from the end if options are not specified when last level is array (array)', async () => {
+
+            let initial = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]'];
+
+            let expected = ['randomArrayOfObjects', '[2]', 'randomSubArray'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the end (complex path) (1) (array)', async () => {
+
+            let initial = [
+                'lorem',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[{{sit}}]',
+                '[2, 3)',
+                '[2]',
+                '(2, 3)',
+                '({{consecteur}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let expected = [
+                'lorem',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[{{sit}}]',
+                '[2, 3)',
+                '[2]',
+                '(2, 3)',
+                '({{consecteur}},3]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (1) (array)', async () => {
+
+            let initial = [
+                'lorem',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[{{sit}}]',
+                '[2, 3)',
+                '[2]',
+                '(2, 3)',
+                '({{consecteur}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let expected = [
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[{{sit}}]',
+                '[2, 3)',
+                '[2]',
+                '(2, 3)',
+                '({{consecteur}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (2) (array)', async () => {
+
+            let initial = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[21{{dolorSit_Amet23}}32]',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '[{{n_2_x}}]',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let expected = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[21{{dolorSit_Amet23}}32]',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '[{{n_2_x}}]',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (2) (array)', async () => {
+
+            let initial = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[21{{dolorSit_Amet23}}32]',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '[{{n_2_x}}]',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let expected = [
+                'lor22_{{dolorSit33_Amet}}55em',
+                '[2]',
+                '{{ipsum}}',
+                '[3]',
+                'dolor',
+                '[21{{dolorSit_Amet23}}32]',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '[{{n_2_x}}]',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (3) (array)', async () => {
+
+            let initial = [
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]',
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]'
+            ];
+
+            let expected = [
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]',
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (3) (array)', async () => {
+
+            let initial = [
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]',
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]'
+            ];
+
+            let expected = [
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]',
+                '[{{123loremIpsum_dolor34SitAmet567}}]',
+                '[3]',
+                '[{{x_nx_23}}]',
+                '[5]',
+                '[loremIpsum]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end (complex path) (4) (array)', async () => {
+
+            let initial = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]',
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+            let expected = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]',
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the start (complex path) (4) (array)', async () => {
+
+            let initial = [
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]',
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let expected = [
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]',
+                'loremIpsum',
+                'lor22_{{dolorSit33_Amet}}55em',
+                '{{ipsum}}',
+                'dolor',
+                '[{{123lorem_33ipsumDolor}}321, sitAmet)',
+                '(2, 3)',
+                '({{sitConsecteur34_dolor}},3]',
+                '[2, {{amet}}]'
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+
+        });
+
+        it('should remove one level from the end if options are not specified when last level is object (array)', async () => {
+
+            let initial = [
+                'randomArrayOfObjects',
+                '[2]',
+                'randomSubArray',
+                '[1]',
+                'lorem'
+            ];
+            let x = CollectionPathHelper.explodePath(initial);
+            let expected = [
+                'randomArrayOfObjects',
+                '[2]',
+                'randomSubArray',
+                '[1]',
+            ];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the end if options are not specified when last level is dynamic object property (array)', async () => {
+
+            let initial = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]', '{{y}}'];
+
+            let expected = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove two levels from the end when last level is dynamic object property (array)', async () => {
+
+            let initial = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]', '{{y}}'];
+
+            let expected = ['randomArrayOfObjects', '[2]', 'randomSubArray'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove two levels from the end when last 2 levels are dynamic (array)', async () => {
+
+            let initial = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[{{x}}]', '{{y}}'];
+
+            let expected = ['randomArrayOfObjects', '[2]', 'randomSubArray'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the start if options are not specified when first level is array (array)', async () => {
+
+            let initial = ['[1]', 'randomArrayOfObjects', '[2]', 'randomSubArray', '[1]'];
+
+            let expected = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the start if options are not specified when first level is object (array)', async () => {
+
+            let initial = ['randomArrayOfObjects', '[2]', 'randomSubArray', '[1]', 'lorem'];
+
+            let expected = ['[2]', 'randomSubArray', '[1]', 'lorem'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove one level from the start if options are not specified when first level is dynamic object property (array)', async () => {
+
+            let initial = ['{{x}}', '[2]', 'randomSubArray', '[1]', '{{y}}'];
+
+            let expected = ['[2]', 'randomSubArray', '[1]', '{{y}}'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove two levels from the start when first level is dynamic object property (array)', async () => {
+
+            let initial = ['{{t}}', '[2]', 'randomSubArray', '[1]', '{{y}}'];
+
+            let expected = ['randomSubArray', '[1]', '{{y}}'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should remove two levels from the start when last 2 levels are dynamic (array)', async () => {
+
+            let initial = ['{{t}}', '[{{z}}]', 'randomSubArray', '[{{x}}]', '{{y}}'];
+
+            let expected = ['randomSubArray', '[{{x}}]', '{{y}}'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial, {count: 2, termination: 'start'});
+            expect(actual).to.deep.equal(expected);
+        });
+
+        it('should act on a real life example (array)', async () => {
+
+            let initial = ['[0]', 'title'];
+
+            let expected = ['[0]'];
+
+            let actual = CollectionPathHelper.removePathLevels(initial);
+            expect(actual).to.deep.equal(expected);
+        });
     });
 
     describe('-> getFirstDynamicVariableName', () => {

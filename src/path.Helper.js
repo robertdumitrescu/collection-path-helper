@@ -160,24 +160,34 @@ class CollectionPathHelper {
      * @param {Object=} options
      * @param {Number=} options.count - Default: 1
      * @param {String=} options.termination Default: 'end' - (Possible options: "start" and "end")
+     * @param {String=} options.pathIsString Used for storing transience state
      * @returns {String}
      */
     static removePathLevels(path, options) {
         options = {...{
             count: 1,
-            termination: 'end'
+            termination: 'end',
+            pathIsString: typeof path === 'string' || path instanceof String,
         },
         ...options };
 
-        let pathFragments = CollectionPathHelper.explodePath(path);
+        let pathFragments;
+        if (options.pathIsString && path.length > 0) {
+            pathFragments = CollectionPathHelper.explodePath(path);
+        } else {
+            pathFragments = path;
+        }
 
         if (options.termination === 'end') {
             pathFragments.splice(pathFragments.length - options.count, options.count);
         } else if (options.termination === 'start') {
             pathFragments.splice(0, options.count);
         }
-
-        return CollectionPathHelper.implodePath(pathFragments);
+        if (options.pathIsString && path.length > 0) {
+            return CollectionPathHelper.implodePath(pathFragments);
+        } else {
+            return pathFragments;
+        }
     }
 
     /**
@@ -250,7 +260,7 @@ class CollectionPathHelper {
         },
         ...options };
 
-        /** Might be unnecesary*/
+        /** Might be unnecesary */
         if (typeof transience === 'undefined') {
             transience = {
                 data: options.data
@@ -286,9 +296,9 @@ class CollectionPathHelper {
                 if (i === (options.path.length - 1)) {
                     transience.data[key] = options.value;
                     return options.data;
-                } else {
-                    CollectionPathHelper.set(options, {data: transience.data[key]});
                 }
+                CollectionPathHelper.set(options, {data: transience.data[key]});
+
             }
         } else {
             /** Mode: "lodash" */
@@ -522,7 +532,7 @@ class CollectionPathHelper {
                 if (signature.path) {
                     if (options.arrayNotation === 'iterator') {
                         signature.path.push(`[itr${ei}]`);
-                    } else if(options.arrayNotation === 'actual') {
+                    } else if (options.arrayNotation === 'actual') {
                         signature.path.push(exploded[ei]);
                     } else {
                         signature.path.push(`[${options.arrayNotation}]`);
