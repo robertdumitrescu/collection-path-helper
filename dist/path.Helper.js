@@ -141,7 +141,7 @@ module.exports = assocIndexOf;
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isKeyable = __webpack_require__(50);
+var isKeyable = __webpack_require__(49);
 
 /**
  * Gets the data for `map`.
@@ -198,7 +198,7 @@ module.exports = isArray;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(24);
+    isObjectLike = __webpack_require__(23);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -244,7 +244,7 @@ module.exports = Symbol;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(20);
+var freeGlobal = __webpack_require__(19);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -259,8 +259,8 @@ module.exports = root;
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsNative = __webpack_require__(32),
-    getValue = __webpack_require__(37);
+var baseIsNative = __webpack_require__(31),
+    getValue = __webpack_require__(36);
 
 /**
  * Gets the native function at `key` of `object`.
@@ -320,9 +320,9 @@ module.exports = isObject;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(3),
-    isKey = __webpack_require__(19),
-    stringToPath = __webpack_require__(25),
-    toString = __webpack_require__(54);
+    isKey = __webpack_require__(18),
+    stringToPath = __webpack_require__(24),
+    toString = __webpack_require__(53);
 
 /**
  * Casts `value` to a path array if it's not one.
@@ -347,8 +347,8 @@ module.exports = castPath;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(5),
-    getRawTag = __webpack_require__(22),
-    objectToString = __webpack_require__(23);
+    getRawTag = __webpack_require__(21),
+    objectToString = __webpack_require__(22);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -455,11 +455,15 @@ module.exports = toKey;
 
 var _interopRequireDefault = __webpack_require__(14);
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(15));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(15));
 
-const lodashGet = __webpack_require__(17);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-const lodashSet = __webpack_require__(57);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+const lodashGet = __webpack_require__(16);
+
+const lodashSet = __webpack_require__(56);
 /**
  * @class CollectionPathHelper
  * @constructor
@@ -507,7 +511,7 @@ class CollectionPathHelper {
       validator: 'stringStartsWith',
       varName: 'property'
     };
-    options = (0, _objectSpread2.default)({}, defaultOptions, options);
+    options = _objectSpread({}, defaultOptions, {}, options);
 
     if (!(typeof property || property instanceof String)) {
       return false;
@@ -540,10 +544,10 @@ class CollectionPathHelper {
 
 
   static getRemainingString(property, options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       discardedStrings: [''],
       global: false
-    }, options);
+    }, {}, options);
 
     if (typeof property === 'string' || property instanceof String) {
       for (let i = 0; i < options.discardedStrings.length; i++) {
@@ -638,11 +642,11 @@ class CollectionPathHelper {
 
 
   static removePathLevels(path, options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       count: 1,
       termination: 'end',
       pathIsString: typeof path === 'string' || path instanceof String
-    }, options);
+    }, {}, options);
     let pathFragments;
 
     if (options.pathIsString && path.length > 0) {
@@ -688,27 +692,35 @@ class CollectionPathHelper {
   }
   /**
    * Get By path
-   * @param collection
-   * @param path
-   * @param def
+   * @param {Object} options
+   * @param {Object|Array} options.collection
+   * @param {Array<String>|String} options.path
+   * @param {*} options.default
    * @returns {*}
    */
 
 
-  static get(collection, path, def) {
-    if (!((typeof path === 'string' || path instanceof String) && path.length > 0 || Array.isArray(path) && path.length > 0)) {
-      return collection;
+  static get(options) {
+    if (!((typeof options.path === 'string' || options.path instanceof String) && options.path.length > 0 || Array.isArray(options.path) && options.path.length > 0)) {
+      return options.collection;
     }
 
-    if ((typeof path === 'string' || path instanceof String) && path.startsWith('.')) {
-      path = path.replace('.', '');
+    if ((typeof options.path === 'string' || options.path instanceof String) && options.path.startsWith('.')) {
+      options.path = options.path.replace('.', '');
     }
 
-    let result = lodashGet(collection, path, 'undefined');
+    let result = lodashGet(options.collection, options.path, options.default);
 
-    if (result === 'undefined') {
-      path = CollectionPathHelper.explodePath(path);
-      result = lodashGet(collection, path, 'undefined');
+    if (result === options.default) {
+      options.path = CollectionPathHelper.explodePath(options.path);
+
+      for (let i = 0; i < options.path.length; i++) {
+        if (CollectionPathHelper.getStartType(options.path[i])) {
+          options.path[i] = CollectionPathHelper.extractFromArrayNotation(options.path[i]);
+        }
+      }
+
+      result = lodashGet(options.collection, options.path, options.default);
     }
 
     return result;
@@ -728,28 +740,21 @@ class CollectionPathHelper {
 
 
   static set(options, transience) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       data: null,
       path: '',
       value: null,
       mode: 'lodash',
       ignoreRootPath: false,
       filling: null
-    }, options);
+    }, {}, options);
     /** Might be unnecesary */
 
     if (typeof transience === 'undefined') {
       transience = {
         data: options.data
       };
-    } // if (path.length === 0) {
-    //     return value;
-    // }
-    // if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
-    //     return collection;
-    // }
-    //
-
+    }
 
     if (options.mode === 'precise') {
       /** Mode: "precise" @TODO WIP - This is work in progress */
@@ -800,10 +805,10 @@ class CollectionPathHelper {
 
 
   static getSubPaths(property, options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       ignoreRoot: false,
       ignoreFull: false
-    }, options);
+    }, {}, options);
     let result = [];
     if (!(typeof property === 'string' || property instanceof String)) return result;
     if (!options.ignoreRoot) result.push('');
@@ -825,9 +830,9 @@ class CollectionPathHelper {
 
 
   static replacePathArraysWithString(property, options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       string: ''
-    }, options);
+    }, {}, options);
     return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map(ep => {
       return CollectionPathHelper.getStartType(ep) === 'array' ? options.string : ep;
     }));
@@ -854,7 +859,7 @@ class CollectionPathHelper {
       foIntervalNotations: false,
       foInitialDot: false
     };
-    options = (0, _objectSpread2.default)({}, defaultOptions, options);
+    options = _objectSpread({}, defaultOptions, {}, options);
     let convertedPath = options.path;
 
     if (options.foArrayPath) {
@@ -884,7 +889,7 @@ class CollectionPathHelper {
     let defaultOptions = {
       prefix: []
     };
-    options = (0, _objectSpread2.default)({}, defaultOptions, options);
+    options = _objectSpread({}, defaultOptions, {}, options);
     return `${options.prefix}${index}`;
   }
   /**
@@ -897,7 +902,7 @@ class CollectionPathHelper {
 
   static extractFromArrayNotation(property, options) {
     let defaultOptions = {};
-    options = (0, _objectSpread2.default)({}, defaultOptions, options);
+    options = _objectSpread({}, defaultOptions, {}, options);
 
     if (!(typeof property === 'string' || property instanceof String)) {
       return property;
@@ -937,10 +942,10 @@ class CollectionPathHelper {
 
 
   static getPathIterators(options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       path: '',
       returnArray: false
-    }, options);
+    }, {}, options);
     return !(typeof options.path === 'string' || options.path instanceof String) ? options.returnArray ? [] : {} : options.returnArray ? this.explodePath(options.path).reduce((accumulator, ep, i, original) => {
       let value = this.getStartType(ep) === 'array' ? ep.slice(1, ep.length - 1) : ep;
 
@@ -983,12 +988,12 @@ class CollectionPathHelper {
 
 
   static getPathSignature(options) {
-    options = (0, _objectSpread2.default)({}, {
+    options = _objectSpread({}, {
       getPathAsString: false,
       getPathAsArray: false,
       arrayNotation: 'iterator' // pathIsString: typeof options.path === 'string' || options.path instanceof String,
 
-    }, options);
+    }, {}, options);
     options.pathIsString = typeof options.path === 'string' || options.path instanceof String;
     let signature = {
       length: 0,
@@ -1113,7 +1118,7 @@ class CollectionPathHelper {
       let defaultOptions = {
         default: undefined
       };
-      options = (0, _objectSpread2.default)({}, defaultOptions, options);
+      options = _objectSpread({}, defaultOptions, {}, options);
       transience = {};
       transience.level = -1;
       transience.cursor = '';
@@ -1305,33 +1310,6 @@ module.exports = _interopRequireDefault;
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var defineProperty = __webpack_require__(16);
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-module.exports = _objectSpread;
-
-/***/ }),
-/* 16 */
 /***/ (function(module, exports) {
 
 function _defineProperty(obj, key, value) {
@@ -1352,10 +1330,10 @@ function _defineProperty(obj, key, value) {
 module.exports = _defineProperty;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGet = __webpack_require__(18);
+var baseGet = __webpack_require__(17);
 
 /**
  * Gets the value at `path` of `object`. If the resolved value is
@@ -1391,7 +1369,7 @@ module.exports = get;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var castPath = __webpack_require__(9),
@@ -1421,7 +1399,7 @@ module.exports = baseGet;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(3),
@@ -1456,7 +1434,7 @@ module.exports = isKey;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -1464,10 +1442,10 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(21)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(20)))
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1493,7 +1471,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(5);
@@ -1545,7 +1523,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -1573,7 +1551,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -1608,10 +1586,10 @@ module.exports = isObjectLike;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoizeCapped = __webpack_require__(26);
+var memoizeCapped = __webpack_require__(25);
 
 /** Used to match property names within property paths. */
 var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
@@ -1641,10 +1619,10 @@ module.exports = stringToPath;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoize = __webpack_require__(27);
+var memoize = __webpack_require__(26);
 
 /** Used as the maximum memoize cache size. */
 var MAX_MEMOIZE_SIZE = 500;
@@ -1673,10 +1651,10 @@ module.exports = memoizeCapped;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MapCache = __webpack_require__(28);
+var MapCache = __webpack_require__(27);
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -1752,14 +1730,14 @@ module.exports = memoize;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var mapCacheClear = __webpack_require__(29),
-    mapCacheDelete = __webpack_require__(49),
-    mapCacheGet = __webpack_require__(51),
-    mapCacheHas = __webpack_require__(52),
-    mapCacheSet = __webpack_require__(53);
+var mapCacheClear = __webpack_require__(28),
+    mapCacheDelete = __webpack_require__(48),
+    mapCacheGet = __webpack_require__(50),
+    mapCacheHas = __webpack_require__(51),
+    mapCacheSet = __webpack_require__(52);
 
 /**
  * Creates a map cache object to store key-value pairs.
@@ -1790,12 +1768,12 @@ module.exports = MapCache;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Hash = __webpack_require__(30),
-    ListCache = __webpack_require__(42),
-    Map = __webpack_require__(48);
+var Hash = __webpack_require__(29),
+    ListCache = __webpack_require__(41),
+    Map = __webpack_require__(47);
 
 /**
  * Removes all key-value entries from the map.
@@ -1817,14 +1795,14 @@ module.exports = mapCacheClear;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hashClear = __webpack_require__(31),
-    hashDelete = __webpack_require__(38),
-    hashGet = __webpack_require__(39),
-    hashHas = __webpack_require__(40),
-    hashSet = __webpack_require__(41);
+var hashClear = __webpack_require__(30),
+    hashDelete = __webpack_require__(37),
+    hashGet = __webpack_require__(38),
+    hashHas = __webpack_require__(39),
+    hashSet = __webpack_require__(40);
 
 /**
  * Creates a hash object.
@@ -1855,7 +1833,7 @@ module.exports = Hash;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(0);
@@ -1876,13 +1854,13 @@ module.exports = hashClear;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(33),
-    isMasked = __webpack_require__(34),
+var isFunction = __webpack_require__(32),
+    isMasked = __webpack_require__(33),
     isObject = __webpack_require__(8),
-    toSource = __webpack_require__(36);
+    toSource = __webpack_require__(35);
 
 /**
  * Used to match `RegExp`
@@ -1929,7 +1907,7 @@ module.exports = baseIsNative;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
@@ -1972,10 +1950,10 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var coreJsData = __webpack_require__(35);
+var coreJsData = __webpack_require__(34);
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
@@ -1998,7 +1976,7 @@ module.exports = isMasked;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(6);
@@ -2010,7 +1988,7 @@ module.exports = coreJsData;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -2042,7 +2020,7 @@ module.exports = toSource;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -2061,7 +2039,7 @@ module.exports = getValue;
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -2084,7 +2062,7 @@ module.exports = hashDelete;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(0);
@@ -2120,7 +2098,7 @@ module.exports = hashGet;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(0);
@@ -2149,7 +2127,7 @@ module.exports = hashHas;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(0);
@@ -2178,14 +2156,14 @@ module.exports = hashSet;
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var listCacheClear = __webpack_require__(43),
-    listCacheDelete = __webpack_require__(44),
-    listCacheGet = __webpack_require__(45),
-    listCacheHas = __webpack_require__(46),
-    listCacheSet = __webpack_require__(47);
+var listCacheClear = __webpack_require__(42),
+    listCacheDelete = __webpack_require__(43),
+    listCacheGet = __webpack_require__(44),
+    listCacheHas = __webpack_require__(45),
+    listCacheSet = __webpack_require__(46);
 
 /**
  * Creates an list cache object.
@@ -2216,7 +2194,7 @@ module.exports = ListCache;
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -2235,7 +2213,7 @@ module.exports = listCacheClear;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(1);
@@ -2276,7 +2254,7 @@ module.exports = listCacheDelete;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(1);
@@ -2301,7 +2279,7 @@ module.exports = listCacheGet;
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(1);
@@ -2323,7 +2301,7 @@ module.exports = listCacheHas;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(1);
@@ -2355,7 +2333,7 @@ module.exports = listCacheSet;
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(7),
@@ -2368,7 +2346,7 @@ module.exports = Map;
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(2);
@@ -2392,7 +2370,7 @@ module.exports = mapCacheDelete;
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports) {
 
 /**
@@ -2413,7 +2391,7 @@ module.exports = isKeyable;
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(2);
@@ -2435,7 +2413,7 @@ module.exports = mapCacheGet;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(2);
@@ -2457,7 +2435,7 @@ module.exports = mapCacheHas;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(2);
@@ -2485,10 +2463,10 @@ module.exports = mapCacheSet;
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(55);
+var baseToString = __webpack_require__(54);
 
 /**
  * Converts `value` to a string. An empty string is returned for `null`
@@ -2519,11 +2497,11 @@ module.exports = toString;
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(5),
-    arrayMap = __webpack_require__(56),
+    arrayMap = __webpack_require__(55),
     isArray = __webpack_require__(3),
     isSymbol = __webpack_require__(4);
 
@@ -2562,7 +2540,7 @@ module.exports = baseToString;
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports) {
 
 /**
@@ -2589,10 +2567,10 @@ module.exports = arrayMap;
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseSet = __webpack_require__(58);
+var baseSet = __webpack_require__(57);
 
 /**
  * Sets the value at `path` of `object`. If a portion of `path` doesn't exist,
@@ -2630,12 +2608,12 @@ module.exports = set;
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assignValue = __webpack_require__(59),
+var assignValue = __webpack_require__(58),
     castPath = __webpack_require__(9),
-    isIndex = __webpack_require__(62),
+    isIndex = __webpack_require__(61),
     isObject = __webpack_require__(8),
     toKey = __webpack_require__(12);
 
@@ -2683,10 +2661,10 @@ module.exports = baseSet;
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseAssignValue = __webpack_require__(60),
+var baseAssignValue = __webpack_require__(59),
     eq = __webpack_require__(11);
 
 /** Used for built-in method references. */
@@ -2717,10 +2695,10 @@ module.exports = assignValue;
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(61);
+var defineProperty = __webpack_require__(60);
 
 /**
  * The base implementation of `assignValue` and `assignMergeValue` without
@@ -2748,7 +2726,7 @@ module.exports = baseAssignValue;
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(7);
@@ -2765,7 +2743,7 @@ module.exports = defineProperty;
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
