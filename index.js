@@ -1,1 +1,3 @@
-module.exports = require('./dist/path.Helper');
+/** @type {CollectionPathHelper} */
+let pathHelper = require('./dist/path.Helper');
+module.exports = pathHelper;
