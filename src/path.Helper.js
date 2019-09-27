@@ -81,10 +81,10 @@ class CollectionPathHelper {
      */
     static getRemainingString(property, options) {
         options = {...{
-            discardedStrings: [''],
-            global: false
-        },
-        ...options};
+                discardedStrings: [''],
+                global: false
+            },
+            ...options};
 
         if (typeof property === 'string' || property instanceof String) {
             for (let i = 0; i < options.discardedStrings.length; i++) {
@@ -142,12 +142,12 @@ class CollectionPathHelper {
     static implodePath(pathFragments) {
         return pathFragments.reduce((path, fragment) => {
             switch (CollectionPathHelper.getStartType(fragment)) {
-            case 'object':
-                path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
-                break;
-            case 'array':
-                path = `${path}${fragment}`;
-                break;
+                case 'object':
+                    path = (path === '') ? `${path}${fragment}` : `${path}.${fragment}`;
+                    break;
+                case 'array':
+                    path = `${path}${fragment}`;
+                    break;
             }
             return path;
         }, '');
@@ -165,11 +165,11 @@ class CollectionPathHelper {
      */
     static removePathLevels(path, options) {
         options = {...{
-            count: 1,
-            termination: 'end',
-            pathIsString: typeof path === 'string' || path instanceof String,
-        },
-        ...options };
+                count: 1,
+                termination: 'end',
+                pathIsString: typeof path === 'string' || path instanceof String,
+            },
+            ...options };
 
         let pathFragments;
         if (options.pathIsString && path.length > 0) {
@@ -213,25 +213,32 @@ class CollectionPathHelper {
 
     /**
      * Get By path
-     * @param collection
-     * @param path
-     * @param def
+     * @param {Object} options
+     * @param {Object|Array} options.collection
+     * @param {Array<String>|String} options.path
+     * @param {*} options.default
      * @returns {*}
      */
-    static get(collection, path, def) {
-        if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
-            return collection;
+    static get(options) {
+        if (!(((typeof options.path === 'string' || options.path instanceof String) && options.path.length > 0) || (Array.isArray(options.path) && options.path.length > 0))) {
+            return options.collection;
         }
-        if ((typeof path === 'string' || path instanceof String) && path.startsWith('.')) {
-            path = path.replace('.', '');
+        if ((typeof options.path === 'string' || options.path instanceof String) && options.path.startsWith('.')) {
+            options.path = options.path.replace('.', '');
         }
 
-        let result = lodashGet(collection, path, 'undefined');
+        let result = lodashGet(options.collection, options.path, options.default);
 
-        if (result === 'undefined') {
-            path = CollectionPathHelper.explodePath(path);
+        if (result === options.default) {
+            options.path = CollectionPathHelper.explodePath(options.path);
 
-            result = lodashGet(collection, path, 'undefined');
+            for (let i = 0; i < options.path.length; i++) {
+                if (CollectionPathHelper.getStartType(options.path[i])) {
+                    options.path[i] = CollectionPathHelper.extractFromArrayNotation(options.path[i]);
+                }
+            }
+
+            result = lodashGet(options.collection, options.path, options.default);
         }
 
         return result;
@@ -251,14 +258,14 @@ class CollectionPathHelper {
      */
     static set(options, transience) {
         options = {...{
-            data: null,
-            path: '',
-            value: null,
-            mode: 'lodash',
-            ignoreRootPath: false,
-            filling: null
-        },
-        ...options };
+                data: null,
+                path: '',
+                value: null,
+                mode: 'lodash',
+                ignoreRootPath: false,
+                filling: null
+            },
+            ...options };
 
         /** Might be unnecesary */
         if (typeof transience === 'undefined') {
@@ -266,13 +273,6 @@ class CollectionPathHelper {
                 data: options.data
             };
         }
-        // if (path.length === 0) {
-        //     return value;
-        // }
-        // if (!(((typeof path === 'string' || path instanceof String) && path.length > 0) || (Array.isArray(path) && path.length > 0))) {
-        //     return collection;
-        // }
-        //
 
         if (options.mode === 'precise') {
             /** Mode: "precise" @TODO WIP - This is work in progress */
@@ -318,10 +318,10 @@ class CollectionPathHelper {
      */
     static getSubPaths(property, options) {
         options = {...{
-            ignoreRoot: false,
-            ignoreFull: false
-        },
-        ...options};
+                ignoreRoot: false,
+                ignoreFull: false
+            },
+            ...options};
 
         let result = [];
 
@@ -347,9 +347,9 @@ class CollectionPathHelper {
      */
     static replacePathArraysWithString(property, options) {
         options = {...{
-            string: '',
-        },
-        ...options};
+                string: '',
+            },
+            ...options};
 
         return CollectionPathHelper.implodePath(CollectionPathHelper.explodePath(property).map((ep) => {
             return CollectionPathHelper.getStartType(ep) === 'array' ? options.string : ep;
@@ -460,10 +460,10 @@ class CollectionPathHelper {
      */
     static getPathIterators(options) {
         options = {...{
-            path: '',
-            returnArray: false
-        },
-        ...options};
+                path: '',
+                returnArray: false
+            },
+            ...options};
 
         return !(typeof options.path === 'string' || options.path instanceof String)
             ? options.returnArray ? [] : {}
@@ -500,12 +500,12 @@ class CollectionPathHelper {
     static getPathSignature(options) {
 
         options = {...{
-            getPathAsString: false,
-            getPathAsArray: false,
-            arrayNotation: 'iterator',
-            // pathIsString: typeof options.path === 'string' || options.path instanceof String,
-        },
-        ...options};
+                getPathAsString: false,
+                getPathAsArray: false,
+                arrayNotation: 'iterator',
+                // pathIsString: typeof options.path === 'string' || options.path instanceof String,
+            },
+            ...options};
 
         options.pathIsString = typeof options.path === 'string' || options.path instanceof String;
 
